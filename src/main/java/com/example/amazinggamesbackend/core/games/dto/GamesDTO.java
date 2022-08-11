@@ -11,13 +11,15 @@ import lombok.*;
 public class GamesDTO {
 
     private String title;
-    private String group;
+    private String groupe;
     private double price;
     private String description;
     private double rating;
     private boolean availability;
 
-    public static GamesDTO from(GamesEntity gameEntity){
-        return GamesDTO.builder().availability(gameEntity.isAvailability()).build();
+    public static GamesDTO from (GamesEntity gameEntity){
+        return GamesDTO.builder()
+                .availability(gameEntity.isAvailability())
+                .build();
     }
 }

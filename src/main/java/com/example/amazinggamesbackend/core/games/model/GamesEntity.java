@@ -14,11 +14,60 @@ public class GamesEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String title;
-    private String group;
+    private String groupe;
     private double price;
     private String description;
     private double rating;
     private boolean availability;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getGroupe() {
+        return groupe;
+    }
+
+    public void setGroupe(String groupe) {
+        this.groupe = groupe;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+
 
 
     public boolean isAvailability() {
@@ -32,7 +81,7 @@ public class GamesEntity {
 
     public void fromDTO(GamesDTO gamesDTO){
         this.title = gamesDTO.getTitle();
-        this.group = gamesDTO.getGroup();
+        this.groupe = gamesDTO.getGroupe();
         this.price = gamesDTO.getPrice();
         this.description = gamesDTO.getDescription();
         this.rating = gamesDTO.getRating();
