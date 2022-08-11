@@ -10,15 +10,19 @@ import javax.persistence.Id;
 @Entity
 public class GamesEntity {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
     private String title;
     private String groupe;
     private double price;
     private String description;
     private double rating;
     private boolean availability;
+    private int quantity;
     public Integer getId() {
         return id;
     }
@@ -26,7 +30,6 @@ public class GamesEntity {
     public void setId(Integer id) {
         this.id = id;
     }
-
     public String getTitle() {
         return title;
     }
@@ -67,6 +70,15 @@ public class GamesEntity {
         this.rating = rating;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+
 
 
 
@@ -74,9 +86,7 @@ public class GamesEntity {
         return availability;
     }
 
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
+
 
 
     public void fromDTO(GamesDTO gamesDTO){
@@ -86,6 +96,7 @@ public class GamesEntity {
         this.description = gamesDTO.getDescription();
         this.rating = gamesDTO.getRating();
         this.availability = gamesDTO.isAvailability();
+        this.quantity = gamesDTO.getQuantity();
     }
 
 }

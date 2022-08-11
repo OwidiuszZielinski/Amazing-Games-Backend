@@ -23,10 +23,23 @@ public class GamesService {
         return (ArrayList<GamesEntity>) gamesRepository.findAll();
 
     }
-    public GamesEntity getGameById(int id){
-        return gamesRepository.findById(id).get();
+    public GamesEntity getGameByTitle(String title){
+        return gamesRepository.findAll().stream().filter(e->e.getTitle().equalsIgnoreCase(title)).findFirst().get();
     }
-    public ArrayList<GamesEntity> availablegamelist(){
+    public ArrayList<GamesEntity> availableGameList(){
        return new ArrayList<GamesEntity>(gamesRepository.findAll().stream().filter(gamesEntity -> gamesEntity.isAvailability()==true).toList());
+    }
+    public void deleteGameByTitle(String title){
+        gamesRepository.delete(gamesRepository.findAll().stream().filter(e->e.getTitle().equalsIgnoreCase(title)).findFirst().get());
+    }
+    public GamesEntity editGameByTitle(String title,GamesEntity gamesEntity){
+        GamesEntity getgame = gamesRepository.findAll().stream().filter(e->e.getTitle().equalsIgnoreCase(title)).findFirst().get();
+        getgame.setTitle(gamesEntity.getTitle());
+        getgame.setGroupe(gamesEntity.getGroupe());
+        getgame.setDescription(gamesEntity.getDescription());
+        getgame.setPrice(gamesEntity.getPrice());
+        getgame.setRating(gamesEntity.getRating());
+        getgame.setQuantity(gamesEntity.getQuantity());
+        return  gamesRepository.save(getgame);
     }
 }

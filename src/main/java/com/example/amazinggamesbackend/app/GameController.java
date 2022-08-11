@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.DocFlavor;
 import java.util.List;
 
 
@@ -28,14 +29,26 @@ public class GameController {
     public List<GamesEntity> getGames(){
         return gamesService.gamelist();
     }
-    @Operation(summary = "get game by id")
-    @GetMapping("/game/{Id}")
-    public GamesEntity getGameById(@PathVariable int Id){
-        return gamesService.getGameById(Id);
+    @Operation(summary = "get game by title")
+    @GetMapping("/game/{title}")
+    public GamesEntity getGameById(@PathVariable String title){
+        return gamesService.getGameByTitle(title);
     }
     @Operation(summary = "get available games")
     @GetMapping("/allgames/available")
     public List<GamesEntity> getAvailableGames(){
-        return gamesService.availablegamelist();
+        return gamesService.availableGameList();
     }
+    @Operation(summary = "delete game by title")
+    @DeleteMapping("/deletegame/{title}")
+    public void deleteGameByTitle(@PathVariable String title){
+        gamesService.deleteGameByTitle(title);
+    }
+    @Operation(summary = "edit game by title")
+    @PutMapping("/editgame/{title}")
+    public String editGameByTitle(@PathVariable String title, @RequestBody GamesEntity gamesEntity){
+        gamesService.editGameByTitle(title,gamesEntity);
+        return "edit sccuessfull";
+    }
+
 }
