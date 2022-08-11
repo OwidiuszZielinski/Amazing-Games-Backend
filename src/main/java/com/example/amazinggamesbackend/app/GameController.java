@@ -19,36 +19,36 @@ public class GameController {
     @Autowired
     private GamesService gamesService;
     @Operation(summary = "add game")
-    @PostMapping("/addgame")
+    @PostMapping("/games")
     public String addGame(@RequestBody GamesDTO gamesDTO){
         gamesService.addGame(gamesDTO);
         return "game successfully added";
     }
     @Operation(summary = "get all games")
-    @GetMapping("/allgames")
+    @GetMapping("/games")
     public List<GamesEntity> getGames(){
         return gamesService.gamelist();
     }
-    @Operation(summary = "get game by title")
-    @GetMapping("/game/{title}")
-    public GamesEntity getGameById(@PathVariable String title){
-        return gamesService.getGameByTitle(title);
+    @Operation(summary = "get game by id")
+    @GetMapping("/games/{Id}")
+    public GamesEntity getGameById(@PathVariable int Id){
+        return gamesService.getGameById(Id);
     }
     @Operation(summary = "get available games")
-    @GetMapping("/allgames/available")
+    @GetMapping("games/available")
     public List<GamesEntity> getAvailableGames(){
         return gamesService.availableGameList();
     }
-    @Operation(summary = "delete game by title")
-    @DeleteMapping("/deletegame/{title}")
-    public void deleteGameByTitle(@PathVariable String title){
-        gamesService.deleteGameByTitle(title);
+    @Operation(summary = "delete game by id")
+    @DeleteMapping("games/{Id}")
+    public void deleteGameById(@PathVariable int Id){
+        gamesService.deleteGameById(Id);
     }
-    @Operation(summary = "edit game by title")
-    @PutMapping("/editgame/{title}")
-    public String editGameByTitle(@PathVariable String title, @RequestBody GamesEntity gamesEntity){
-        gamesService.editGameByTitle(title,gamesEntity);
-        return "edit sccuessfull";
+    @Operation(summary = "edit game by id")
+    @PutMapping("games/{Id}/")
+    public GamesEntity editGameById( @RequestBody GamesEntity gamesEntity,@PathVariable int Id){
+        return gamesService.editGameById(Id,gamesEntity);
+
     }
 
 }
