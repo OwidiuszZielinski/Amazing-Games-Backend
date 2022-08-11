@@ -1,16 +1,12 @@
 package com.example.amazinggamesbackend.app;
 
-import com.example.amazinggamesbackend.core.games.GamesRepository;
 import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.dto.GamesDTO;
 import com.example.amazinggamesbackend.core.games.model.GamesEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +27,15 @@ public class GameController {
     @GetMapping("/allgames")
     public List<GamesEntity> getGames(){
         return gamesService.gamelist();
+    }
+    @Operation(summary = "get game by id")
+    @GetMapping("/game/{Id}")
+    public GamesEntity getGameById(@PathVariable int Id){
+        return gamesService.getGameById(Id);
+    }
+    @Operation(summary = "get available games")
+    @GetMapping("/allgames/available")
+    public List<GamesEntity> getAvailableGames(){
+        return gamesService.availablegamelist();
     }
 }
