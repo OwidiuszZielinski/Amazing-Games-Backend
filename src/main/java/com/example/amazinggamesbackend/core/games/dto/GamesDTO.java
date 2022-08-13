@@ -11,7 +11,7 @@ import lombok.*;
 public class GamesDTO {
 
     private String title;
-    private String groupe;
+    private String gameGroup;
     private double price;
     private String description;
     private double rating;
