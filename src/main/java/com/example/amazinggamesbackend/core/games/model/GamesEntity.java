@@ -22,7 +22,7 @@ public class GamesEntity {
         return type;
     }
 
-    public void setGameGroup(String type) {
+    public void setType(String type) {
         this.type = type;
     }
 
