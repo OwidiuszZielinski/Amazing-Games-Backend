@@ -35,7 +35,7 @@ public class GamesService {
     public GamesEntity editGameById(int id,GamesEntity gamesEntity){
         GamesEntity getgame = gamesRepository.findById(id).get();
         getgame.setTitle(gamesEntity.getTitle());
-        getgame.setGameGroup(gamesEntity.getGameGroup());
+        getgame.setGameGroup(gamesEntity.getType());
         getgame.setDescription(gamesEntity.getDescription());
         getgame.setPrice(gamesEntity.getPrice());
         getgame.setRating(gamesEntity.getRating());
