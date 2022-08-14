@@ -18,15 +18,15 @@ public class GamesEntity {
 
     private String title;
 
-    public String getGameGroup() {
-        return gameGroup;
+    public String getType() {
+        return type;
     }
 
-    public void setGameGroup(String gameGroup) {
-        this.gameGroup = gameGroup;
+    public void setGameGroup(String type) {
+        this.type = type;
     }
 
-    private String gameGroup;
+    private String type;
     private double price;
     private String description;
     private double rating;
@@ -94,7 +94,7 @@ public class GamesEntity {
 
     public void fromDTO(GamesDTO gamesDTO){
         this.title = gamesDTO.getTitle();
-        this.gameGroup = gamesDTO.getGameGroup();
+        this.type = gamesDTO.getType();
         this.price = gamesDTO.getPrice();
         this.description = gamesDTO.getDescription();
         this.rating = gamesDTO.getRating();
