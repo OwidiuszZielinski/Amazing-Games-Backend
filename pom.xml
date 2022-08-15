@@ -19,11 +19,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jooq</artifactId>
-
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
@@ -75,71 +70,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-
-				<!-- Specify the maven code generator plugin -->
-				<!-- Use org.jooq                for the Open Source Edition
-                         org.jooq.pro            for commercial editions with Java 17 support,
-                         org.jooq.pro-java-11    for commercial editions with Java 11 support,
-                         org.jooq.pro-java-8     for commercial editions with Java 8 support,
-                         org.jooq.trial          for the free trial edition with Java 17 support,
-                         org.jooq.trial-java-11  for the free trial edition with Java 11 support,
-                         org.jooq.trial-java-8   for the free trial edition with Java 8 support
-
-                     Note: Only the Open Source Edition is hosted on Maven Central.
-                           Import the others manually from your distribution -->
-				<groupId>org.jooq</groupId>
-				<artifactId>jooq-codegen-maven</artifactId>
-				<version>3.17.2</version>
-
-				<!-- The plugin should hook into the generate goal -->
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-					</execution>
-				</executions>
-
-				<!-- Manage the plugin's dependency. In this example, we'll use a PostgreSQL database -->
-				<dependencies>
-					<dependency>
-						<groupId>org.postgresql</groupId>
-						<artifactId>postgresql</artifactId>
-						<version>9.4.1212</version>
-					</dependency>
-				</dependencies>
-
-				<!-- Specify the plugin configuration.
-                     The configuration format is the same as for the standalone code generator -->
-				<configuration>
-
-					<!-- JDBC connection parameters -->
-					<jdbc>
-						<driver>org.postgresql.Driver</driver>
-						<url>jdbc:postgresql:postgres</url>
-						<user>postgres</user>
-						<password>mysecretpassword</password>
-					</jdbc>
-
-					<!-- Generator parameters -->
-					<generator>
-						<database>
-							<name>org.jooq.meta.postgres.PostgresDatabase</name>
-							<includes>.*</includes>
-							<excludes></excludes>
-							<!-- In case your database supports catalogs, e.g. SQL Server:
-                            <inputCatalog>public</inputCatalog>
-                              -->
-							<inputSchema>public</inputSchema>
-						</database>
-						<target>
-							<packageName>com.example.amazinggamesbackend</packageName>
-							<directory>target/generated-sources/jooq</directory>
-						</target>
-					</generator>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
