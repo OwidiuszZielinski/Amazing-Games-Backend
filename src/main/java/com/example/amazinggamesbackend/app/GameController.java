@@ -45,7 +45,7 @@ public class GameController {
         gamesService.deleteGameById(Id);
     }
     @Operation(summary = "edit game by id")
-    @PutMapping("games/{Id}/")
+    @PatchMapping("games/{Id}")
     public GamesEntity editGameById( @RequestBody GamesEntity gamesEntity,@PathVariable int Id){
         return gamesService.editGameById(Id,gamesEntity);
 
