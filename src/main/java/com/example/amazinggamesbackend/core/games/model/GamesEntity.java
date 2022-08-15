@@ -66,11 +66,16 @@ public class GamesEntity {
     }
 
     public double getRating() {
+
         return rating;
     }
 
     public void setRating(double rating) {
-        this.rating = rating;
+        if (rating <= 10 && rating >=0) {
+            this.rating = rating;
+        }
+        else
+            throw new IllegalArgumentException("bad rating value");
     }
 
     public int getQuantity() {
@@ -78,7 +83,11 @@ public class GamesEntity {
     }
 
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        if (quantity <= 1000 && quantity >= 0 ) {
+            this.quantity= quantity;
+        }
+        else
+            throw new IllegalArgumentException("bad quantity value");
     }
 
 
