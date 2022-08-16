@@ -31,7 +31,7 @@ public class GamesEntity {
     private String description;
     private double rating;
     private boolean availability;
-    private int quantity;
+
     public Integer getId() {
         return id;
     }
@@ -78,18 +78,6 @@ public class GamesEntity {
             throw new IllegalArgumentException("bad rating value");
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        if (quantity <= 1000 && quantity >= 0 ) {
-            this.quantity= quantity;
-        }
-        else
-            throw new IllegalArgumentException("bad quantity value");
-    }
-
 
 
 
@@ -108,7 +96,6 @@ public class GamesEntity {
         this.description = gamesDTO.getDescription();
         this.rating = gamesDTO.getRating();
         this.availability = gamesDTO.isAvailability();
-        this.quantity = gamesDTO.getQuantity();
     }
 
 }

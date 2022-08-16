@@ -29,16 +29,6 @@ public class GameController {
     public List<GamesEntity> getGames(){
         return gamesService.gamelist();
     }
-    @Operation(summary = "get game by id")
-    @GetMapping("/games/{Id}")
-    public GamesEntity getGameById(@PathVariable int Id){
-        return gamesService.getGameById(Id);
-    }
-    @Operation(summary = "get available games")
-    @GetMapping("games/available")
-    public List<GamesEntity> getAvailableGames(){
-        return gamesService.availableGameList();
-    }
     @Operation(summary = "delete game by id")
     @DeleteMapping("games/{Id}")
     public void deleteGameById(@PathVariable int Id){

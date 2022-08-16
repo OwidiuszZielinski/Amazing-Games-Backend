@@ -16,7 +16,7 @@ public class GamesDTO {
     private String description;
     private double rating;
     private boolean availability;
-    private int quantity;
+
 
     public static GamesDTO from (GamesEntity gameEntity){
         return GamesDTO.builder()
