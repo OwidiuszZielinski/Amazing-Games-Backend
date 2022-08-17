@@ -1,6 +1,7 @@
-package com.example.amazinggamesbackend.core.users.model;
+package com.example.amazinggamesbackend.core.users;
 
 import com.example.amazinggamesbackend.core.users.dto.UsersDTO;
+import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

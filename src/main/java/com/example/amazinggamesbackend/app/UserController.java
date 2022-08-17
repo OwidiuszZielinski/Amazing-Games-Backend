@@ -1,9 +1,8 @@
 package com.example.amazinggamesbackend.app;
 
-import com.example.amazinggamesbackend.core.games.GamesService;
-import com.example.amazinggamesbackend.core.games.dto.GamesDTO;
+
 import com.example.amazinggamesbackend.core.users.dto.UsersDTO;
-import com.example.amazinggamesbackend.core.users.model.UserService;
+import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
