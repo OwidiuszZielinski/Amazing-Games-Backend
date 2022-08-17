@@ -23,12 +23,6 @@ public class GamesService {
         return (ArrayList<GamesEntity>) gamesRepository.findAll();
 
     }
-    public GamesEntity getGameById(int Id){
-        return gamesRepository.findById(Id).get();
-    }
-    public ArrayList<GamesEntity> availableGameList(){
-        return new ArrayList<GamesEntity>(gamesRepository.findAll().stream().filter(gamesEntity -> gamesEntity.isAvailability()==true).toList());
-    }
     public void deleteGameById(int Id){
         gamesRepository.delete(gamesRepository.findById(Id).get());
     }
@@ -39,7 +33,6 @@ public class GamesService {
         getgame.setDescription(gamesEntity.getDescription());
         getgame.setPrice(gamesEntity.getPrice());
         getgame.setRating(gamesEntity.getRating());
-        getgame.setQuantity(gamesEntity.getQuantity());
         return gamesRepository.save(getgame);
     }
 }
