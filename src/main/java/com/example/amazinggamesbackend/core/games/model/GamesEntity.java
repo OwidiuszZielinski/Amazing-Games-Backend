@@ -79,14 +79,9 @@ public class GamesEntity {
     }
 
 
-
-
-
     public boolean isAvailability() {
         return availability;
     }
-
-
 
 
     public void fromDTO(GamesDTO gamesDTO){
