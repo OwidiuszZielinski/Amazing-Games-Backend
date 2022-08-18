@@ -7,7 +7,7 @@ build-docker-job:
     - xor
   stage: build
   script:
-    - docker build -t reg.k8s.icydusk.io/amazing-games-backend:latest -t reg.k8s.icydusk.io/amazing-games-backend:$CI_COMMIT_TAG .
+    - docker build -t reg.k8s.icydusk.io/amazing-games-backend:latest -t reg.k8s.icydusk.io/amazing-games-backend:$CI_COMMIT_SHA .
 
 publish-image:
   tags:
