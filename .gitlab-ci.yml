@@ -5,7 +5,9 @@ stages:
 
 check-kube:
   stage: check-cluster
-  image: bitnami/kubectl:1.24
+  image: 
+    name: bitnami/kubectl:1.24
+    entrypoint: ['']
   tags: 
     - xor
   script:
