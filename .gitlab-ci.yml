@@ -4,12 +4,14 @@ stages:
   - push
 
 check-kube:
-  image: bitnami/kubectl:latest
+  stage: check-cluster
+  image: bitnami/kubectl:1.24
   tags: 
     - xor
-  stage: check-cluster
   script:
     - kubectl config get-contexts
+    - kubectl config use-context Owi-learning/kubeconfig:xor
+    - kubectl get pods
 
 build-docker-job:
   tags:
