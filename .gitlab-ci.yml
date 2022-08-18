@@ -1,6 +1,15 @@
 stages:
+  - check-cluster
   - build
   - push
+
+check-kube:
+  image: bitnami/kubectl:latest
+  tags: 
+    - xor
+  stage: check-cluster
+  script:
+    - kubectl config get-contexts
 
 build-docker-job:
   tags:
