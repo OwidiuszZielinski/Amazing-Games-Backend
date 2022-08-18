@@ -1,7 +1,6 @@
 package com.example.amazinggamesbackend.app;
 
-import com.example.amazinggamesbackend.core.games.GamesRepository;
-import com.example.amazinggamesbackend.core.orders.OrderRepository;
+
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
@@ -21,13 +20,6 @@ import java.util.List;
 public class OrderController {
     @Autowired
     OrderService orderService;
-
-    @Autowired
-    GamesRepository gamesRepository;
-
-
-
-
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")

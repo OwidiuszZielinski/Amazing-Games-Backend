@@ -5,7 +5,7 @@ import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -19,8 +19,8 @@ public class UserService {
         newuser.fromDTO(user);
         return usersRepository.save(newuser);
     }
-    public ArrayList<UsersEntity> getAllUsers(){
-        return (ArrayList<UsersEntity>) usersRepository.findAll();
+    public List<UsersEntity> getAllUsers(){
+        return usersRepository.findAll();
     }
     public void deleteUser(int id){
         usersRepository.delete(usersRepository.findById(id).get());

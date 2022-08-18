@@ -7,10 +7,13 @@ import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -21,25 +24,18 @@ public class OrderService {
     @Autowired
     GamesRepository gamesRepository;
 
-    public OrderEntity addorder(OrdersDTO order){
-        double value = 0;
+    public OrderEntity addorder(OrdersDTO order) {
         OrderEntity neworder = new OrderEntity();
-        List <GamesEntity> gamelist = new ArrayList<>();
         neworder.addUser(usersRepository.findById(order.getUser()).get());
-        for(Integer x : order.getGames()){
-            gamelist.add(gamesRepository.findById(x).get());
-            value += gamesRepository.findById(x).get().getPrice();
-        }
-        neworder.setGamesEntities(gamelist);
-        neworder.setValue(value);
+        neworder.setGamesEntities(gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList()));
+        neworder.setValue(gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum());
         neworder.setStatus(order.getStatus());
         neworder.setDate(OrderEntity.orderdate());
-
         return orderRepository.save(neworder);
-
     }
-    public ArrayList<OrderEntity> getAllOrders(){
-        return (ArrayList<OrderEntity>) orderRepository.findAll();
+
+    public List<OrderEntity> getAllOrders() {
+        return orderRepository.findAll();
     }
 
 }

@@ -19,8 +19,8 @@ public class GamesService {
         newgame.fromDTO(game);
         return gamesRepository.save(newgame);
     }
-    public ArrayList<GamesEntity> gamelist() {
-        return (ArrayList<GamesEntity>) gamesRepository.findAll();
+    public List<GamesEntity> gamelist() {
+        return gamesRepository.findAll();
 
     }
     public void deleteGameById(int Id){
