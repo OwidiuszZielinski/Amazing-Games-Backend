@@ -54,9 +54,8 @@ public class OrderEntity {
         return ts.toString();
 
     }
-    public void addGame(GamesEntity game){
-        gamesEntities.add(game);
-        System.out.println(gamesEntities);
+    public void setStatus(String status) {
+        this.status = "STARTED";
     }
 
 

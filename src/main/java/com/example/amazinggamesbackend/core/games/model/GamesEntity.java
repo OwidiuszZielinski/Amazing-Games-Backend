@@ -42,11 +42,6 @@ public class GamesEntity {
             throw new IllegalArgumentException("bad rating value");
     }
 
-    public void addOrder(OrderEntity order){
-        orders.add(order);
-        order.getGamesEntities().add(this);
-    }
-
     public void fromDTO(GamesDTO gamesDTO){
         this.title = gamesDTO.getTitle();
         this.type = gamesDTO.getType();

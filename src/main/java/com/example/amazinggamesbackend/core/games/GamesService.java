@@ -12,15 +12,12 @@ import java.util.stream.Collectors;
 @Service
 public class GamesService {
 
-
     @Autowired
     private GamesRepository gamesRepository;
-    public List<GamesEntity> addGame(GamesDTO game){
-        List<GamesEntity> games = new ArrayList<>();
+    public GamesEntity addGame(GamesDTO game){
         GamesEntity newgame = new GamesEntity();
         newgame.fromDTO(game);
-        games.add(newgame);
-        return games;
+        return gamesRepository.save(newgame);
     }
     public ArrayList<GamesEntity> gamelist() {
         return (ArrayList<GamesEntity>) gamesRepository.findAll();
