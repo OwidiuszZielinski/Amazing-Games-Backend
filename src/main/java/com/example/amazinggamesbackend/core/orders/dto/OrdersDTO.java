@@ -6,6 +6,7 @@ import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,14 +16,13 @@ import java.util.ArrayList;
 public class OrdersDTO {
 
     private Integer user;
-    private ArrayList<Integer> games;
+    private List<Integer> games;
     private String status;
     private String date;
     private double value;
 
     public static OrdersDTO from (OrderEntity order){
         return OrdersDTO.builder()
-
                 .date(OrderEntity.orderdate())
                 .build();
     }

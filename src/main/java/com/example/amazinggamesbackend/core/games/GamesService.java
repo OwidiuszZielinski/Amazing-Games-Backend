@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -14,10 +15,12 @@ public class GamesService {
 
     @Autowired
     private GamesRepository gamesRepository;
-    public GamesEntity addGame(GamesDTO game){
+    public List<GamesEntity> addGame(GamesDTO game){
+        List<GamesEntity> games = new ArrayList<>();
         GamesEntity newgame = new GamesEntity();
         newgame.fromDTO(game);
-        return gamesRepository.save(newgame);
+        games.add(newgame);
+        return games;
     }
     public ArrayList<GamesEntity> gamelist() {
         return (ArrayList<GamesEntity>) gamesRepository.findAll();

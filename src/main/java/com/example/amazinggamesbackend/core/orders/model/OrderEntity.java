@@ -6,11 +6,13 @@ import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
 import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -21,7 +23,6 @@ import java.util.List;
 @Setter
 @Entity
 public class OrderEntity {
-
 
 
     @Id
@@ -35,6 +36,7 @@ public class OrderEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name="user_id")
     private UsersEntity user;
+
 
     @OneToMany(mappedBy = "order" )
     @JsonManagedReference
@@ -53,6 +55,10 @@ public class OrderEntity {
     public void setStatus(String status) {
         this.status = "STARTED";
     }
+    public List<GamesEntity> getGamesEntities() {
+        return gamesEntities;
+    }
+
     public void addUser(UsersEntity userEntity) {
         this.user = userEntity;
     }

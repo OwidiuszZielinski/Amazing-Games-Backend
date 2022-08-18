@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.app;
 
+import com.example.amazinggamesbackend.core.games.GamesRepository;
 import com.example.amazinggamesbackend.core.orders.OrderRepository;
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
@@ -18,15 +19,14 @@ import java.util.List;
 
 @RestController
 public class OrderController {
+    @Autowired
     OrderService orderService;
 
     @Autowired
-    public void setOrderService(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    GamesRepository gamesRepository;
 
-    @Autowired
-    OrderRepository orderRepository;
+
+
 
 
     @Operation(summary = "Create new order")
