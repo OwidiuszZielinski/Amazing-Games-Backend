@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,16 +27,24 @@ public class GamesEntity {
     private double rating;
     private boolean availability;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+
+    @ManyToMany( fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH})
+    @JoinTable(name = "order_game",
+    joinColumns = @JoinColumn (name = "game_id"),
+    inverseJoinColumns = @JoinColumn(name = "order_id"))
     @JsonBackReference
-    private OrderEntity order;
+    private List<OrderEntity> orders = new ArrayList<>();
     public void setRating(double rating) {
         if (rating <= 10 && rating >=0) {
             this.rating = rating;
         }
         else
             throw new IllegalArgumentException("bad rating value");
+    }
+
+    public void addOrder(OrderEntity order){
+        orders.add(order);
+        order.getGamesEntities().add(this);
     }
 
     public void fromDTO(GamesDTO gamesDTO){

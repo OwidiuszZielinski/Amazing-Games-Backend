@@ -16,7 +16,7 @@ import java.util.List;
 public class OrdersDTO {
 
     private Integer user;
-    private List<Integer> games;
+    private ArrayList<Integer> games;
     private String status;
     private String date;
     private double value;
