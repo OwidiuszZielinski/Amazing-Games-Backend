@@ -32,11 +32,11 @@ public class OrderEntity {
     private double value;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name="user_id")
     private UsersEntity user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order" )
     @JsonManagedReference
     private List<GamesEntity> gamesEntities = new ArrayList<>();
 

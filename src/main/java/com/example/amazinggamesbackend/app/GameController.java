@@ -25,7 +25,8 @@ public class GameController {
     @Operation(summary = "add game")
     @PostMapping("/games")
     public ResponseEntity addGame(@RequestBody GamesDTO gamesDTO){
-        if (!gamesRepository.findByGameByTitle(gamesDTO.getTitle()).isEmpty()) {
+        List<GamesEntity> gameFromDB = gamesRepository.findByTitle(gamesDTO.getTitle());
+        if (!gameFromDB.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else if (gamesDTO.getTitle().isBlank() || gamesDTO.getType().isBlank() || gamesDTO.getDescription().isBlank()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
