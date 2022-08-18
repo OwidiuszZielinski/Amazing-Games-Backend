@@ -13,7 +13,7 @@ check-kube:
   script:
     - kubectl config get-contexts
     - kubectl config use-context owi-learning/kubeconfig:xor
-    - kubectl gitlab-agent-owi -n get pods -A
+    - kubectl -n gitlab-agent-owi  get pods -A
 
 build-docker-job:
   tags:
