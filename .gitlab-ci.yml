@@ -12,7 +12,7 @@ check-kube:
     - xor
   script:
     - kubectl config get-contexts
-    - kubectl config use-context Owi-learning/kubeconfig:xor
+    - kubectl config use-context owi-learning/kubeconfig:xor
     - kubectl get pods
 
 build-docker-job:
