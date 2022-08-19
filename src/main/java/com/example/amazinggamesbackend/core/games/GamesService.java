@@ -26,13 +26,13 @@ public class GamesService {
     public void deleteGameById(int Id){
         gamesRepository.delete(gamesRepository.findById(Id).get());
     }
-    public GamesEntity editGameById(int id,GamesEntity gamesEntity){
+    public GamesEntity editGameById(int id,GamesDTO gamesDTO){
         GamesEntity getgame = gamesRepository.findById(id).get();
-        getgame.setTitle(gamesEntity.getTitle());
-        getgame.setType(gamesEntity.getType());
-        getgame.setDescription(gamesEntity.getDescription());
-        getgame.setPrice(gamesEntity.getPrice());
-        getgame.setRating(gamesEntity.getRating());
+        getgame.setTitle(gamesDTO.getTitle());
+        getgame.setType(gamesDTO.getType());
+        getgame.setDescription(gamesDTO.getDescription());
+        getgame.setPrice(gamesDTO.getPrice());
+        getgame.setRating(gamesDTO.getRating());
         return gamesRepository.save(getgame);
     }
 }
