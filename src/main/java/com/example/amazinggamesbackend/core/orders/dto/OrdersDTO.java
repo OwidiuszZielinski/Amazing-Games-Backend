@@ -19,7 +19,7 @@ public class OrdersDTO {
     private ArrayList<Integer> games;
     private String status;
     private String date;
-    private double value;
+
 
     public static OrdersDTO from (OrderEntity order){
         return OrdersDTO.builder()

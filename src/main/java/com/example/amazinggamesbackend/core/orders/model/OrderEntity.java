@@ -1,20 +1,14 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
-import com.example.amazinggamesbackend.core.games.dto.GamesDTO;
 import com.example.amazinggamesbackend.core.games.model.GamesEntity;
-import com.example.amazinggamesbackend.core.orders.OrderRepository;
-import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
-import com.example.amazinggamesbackend.core.users.UsersRepository;
+
 import com.example.amazinggamesbackend.core.users.model.UsersEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;

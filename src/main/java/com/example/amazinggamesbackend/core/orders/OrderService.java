@@ -37,5 +37,18 @@ public class OrderService {
     public List<OrderEntity> getAllOrders() {
         return orderRepository.findAll();
     }
+    public void deleteOrder(int id){
+        orderRepository.deleteById(id);
+    }
+    public OrderEntity editOrder(int id,OrdersDTO orderEntity){
+        OrderEntity getOrder = orderRepository.findById(id).get();
+        getOrder.setDate(orderEntity.getDate());
+        getOrder.setStatus(orderEntity.getStatus());
+        getOrder.setUser(usersRepository.findById(orderEntity.getUser()).get());
+        getOrder.setGamesEntities(gamesRepository.findAllById(orderEntity.getGames()).stream().collect(Collectors.toList()));
+        getOrder.setValue(gamesRepository.findAllById(orderEntity.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum());
+        return orderRepository.save(getOrder);
+
+    }
 
 }
