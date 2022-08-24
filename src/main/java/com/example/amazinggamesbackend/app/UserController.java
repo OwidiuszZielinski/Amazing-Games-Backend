@@ -46,4 +46,9 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    @Operation(summary = "edit user by id")
+    @PatchMapping("/users/{id}")
+    public UsersEntity editUser(@PathVariable int id, @RequestBody UsersDTO user){
+        return userService.editUser(id,user);
+    }
 }

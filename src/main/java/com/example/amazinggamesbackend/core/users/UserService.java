@@ -25,5 +25,13 @@ public class UserService {
     public void deleteUser(int id){
         usersRepository.delete(usersRepository.findById(id).get());
     }
+    public UsersEntity editUser(int id,UsersDTO user){
+        UsersEntity editedUser = usersRepository.findById(id).get();
+        editedUser.setEmail(user.getEmail());
+        editedUser.setAccesslevel(user.getAccesslevel());
+        editedUser.setUsername(user.getUsername());
+        editedUser.setPassword(user.getPassword());
+        return usersRepository.save(editedUser);
+    }
 
 }

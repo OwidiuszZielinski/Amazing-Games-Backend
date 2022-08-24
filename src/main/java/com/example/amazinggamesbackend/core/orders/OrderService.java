@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.orders;
 
 import com.example.amazinggamesbackend.core.games.GamesRepository;
+import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GamesEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
@@ -24,12 +25,15 @@ public class OrderService {
     @Autowired
     GamesRepository gamesRepository;
 
+
+    GamesService gamesService = new GamesService();
+    //dodac 1 repo na serwis
     public OrderEntity addorder(OrdersDTO order) {
         OrderEntity neworder = new OrderEntity();
         neworder.addUser(usersRepository.findById(order.getUser()).get());
         neworder.setGamesEntities(gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList()));
-        neworder.setValue(gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum());
-        neworder.setStatus(order.getStatus());
+        neworder.setValue(gamesService.calculateOrderValue(order));
+        neworder.setStatus(neworder.getStatus());
         neworder.setDate(OrderEntity.orderdate());
         return orderRepository.save(neworder);
     }
@@ -40,13 +44,13 @@ public class OrderService {
     public void deleteOrder(int id){
         orderRepository.deleteById(id);
     }
-    public OrderEntity editOrder(int id,OrdersDTO orderEntity){
+    public OrderEntity editOrder(int id,OrdersDTO order){
         OrderEntity getOrder = orderRepository.findById(id).get();
-        getOrder.setDate(orderEntity.getDate());
-        getOrder.setStatus(orderEntity.getStatus());
-        getOrder.setUser(usersRepository.findById(orderEntity.getUser()).get());
-        getOrder.setGamesEntities(gamesRepository.findAllById(orderEntity.getGames()).stream().collect(Collectors.toList()));
-        getOrder.setValue(gamesRepository.findAllById(orderEntity.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum());
+        getOrder.setDate(order.getDate());
+        getOrder.setStatus(order.getStatus());
+        getOrder.setUser(usersRepository.findById(order.getUser()).get());
+        getOrder.setGamesEntities(gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList()));
+        getOrder.setValue(gamesService.calculateOrderValue(order));
         return orderRepository.save(getOrder);
 
     }

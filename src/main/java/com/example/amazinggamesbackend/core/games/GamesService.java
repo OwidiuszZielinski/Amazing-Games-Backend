@@ -2,6 +2,7 @@ package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GamesDTO;
 import com.example.amazinggamesbackend.core.games.model.GamesEntity;
+import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class GamesService {
 
     @Autowired
     private GamesRepository gamesRepository;
+
     public GamesEntity addGame(GamesDTO game){
         GamesEntity newgame = new GamesEntity();
         newgame.fromDTO(game);
@@ -33,6 +35,11 @@ public class GamesService {
         getgame.setDescription(gamesDTO.getDescription());
         getgame.setPrice(gamesDTO.getPrice());
         getgame.setRating(gamesDTO.getRating());
+        getgame.setAvailability(gamesDTO.isAvailability());
         return gamesRepository.save(getgame);
+    }
+    public double calculateOrderValue(OrdersDTO order){
+        System.out.println(order.getGames());
+        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum();
     }
 }
