@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.games.model;
 
-import com.example.amazinggamesbackend.core.games.dto.GamesDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class GamesEntity {
+public class GameEntity {
 
 
 
@@ -42,13 +42,13 @@ public class GamesEntity {
             throw new IllegalArgumentException("bad rating value");
     }
 
-    public void fromDTO(GamesDTO gamesDTO){
-        this.title = gamesDTO.getTitle();
-        this.type = gamesDTO.getType();
-        this.price = gamesDTO.getPrice();
-        this.description = gamesDTO.getDescription();
-        this.rating = gamesDTO.getRating();
-        this.availability = gamesDTO.isAvailability();
+    public void fromDTO(GameDTO gameDTO){
+        this.title = gameDTO.getTitle();
+        this.type = gameDTO.getType();
+        this.price = gameDTO.getPrice();
+        this.description = gameDTO.getDescription();
+        this.rating = gameDTO.getRating();
+        this.availability = gameDTO.isAvailability();
     }
 
 }
