@@ -38,13 +38,12 @@ public class GamesService {
         getgame.setAvailability(gamesDTO.isAvailability());
         return gamesRepository.save(getgame);
     }
-//    public double calculateOrderValue(OrdersDTO order){
-//        System.out.println(order.getGames());
-//        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum();
-//    }
-//
-//    public List<GamesEntity> gamesPerOrder(OrdersDTO order){
-//
-//        return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
-//    }
+    public double calculateOrderValue(OrdersDTO order){
+        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum();
+    }
+
+    public List<GamesEntity> gamesPerOrder(OrdersDTO order){
+
+        return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
+    }
 }

@@ -33,5 +33,8 @@ public class UserService {
         editedUser.setPassword(user.getPassword());
         return usersRepository.save(editedUser);
     }
+    public UsersEntity userById(int id){
+        return usersRepository.findById(id).get();
+    }
 
 }
