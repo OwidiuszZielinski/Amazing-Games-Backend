@@ -45,7 +45,7 @@ public class OrderEntity {
     }
 
     public void setStatus(String status) {
-        this.status = "STARTED";
+        this.status = status;
     }
 
     public void setValue(double value) {

@@ -1,9 +1,11 @@
 package com.example.amazinggamesbackend.core.orders;
 
 import com.example.amazinggamesbackend.core.games.GamesRepository;
+import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GamesEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.model.UsersEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +22,19 @@ public class OrderService {
     @Autowired
     OrderRepository orderRepository;
     @Autowired
-    UsersRepository usersRepository;
+    UserService userService = new UserService();
     @Autowired
-    GamesRepository gamesRepository;
+    GamesService gamesService = new GamesService();
+
+
+
 
     public OrderEntity addorder(OrdersDTO order) {
         OrderEntity neworder = new OrderEntity();
-        neworder.addUser(usersRepository.findById(order.getUser()).get());
-        neworder.setGamesEntities(gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList()));
-        neworder.setValue(gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum());
-        neworder.setStatus(order.getStatus());
+        neworder.addUser(userService.userById(order.getUser()));
+        neworder.setGamesEntities(gamesService.gamesPerOrder(order));
+        neworder.setValue(gamesService.calculateOrderValue(order));
+        neworder.setStatus(neworder.getStatus());
         neworder.setDate(OrderEntity.orderdate());
         return orderRepository.save(neworder);
     }
@@ -44,9 +49,9 @@ public class OrderService {
         OrderEntity getOrder = orderRepository.findById(id).get();
         getOrder.setDate(orderEntity.getDate());
         getOrder.setStatus(orderEntity.getStatus());
-        getOrder.setUser(usersRepository.findById(orderEntity.getUser()).get());
-        getOrder.setGamesEntities(gamesRepository.findAllById(orderEntity.getGames()).stream().collect(Collectors.toList()));
-        getOrder.setValue(gamesRepository.findAllById(orderEntity.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum());
+        getOrder.setUser(userService.userById(orderEntity.getUser()));
+        getOrder.setGamesEntities(gamesService.gamesPerOrder(orderEntity));
+        getOrder.setValue(gamesService.calculateOrderValue(orderEntity));
         return orderRepository.save(getOrder);
 
     }

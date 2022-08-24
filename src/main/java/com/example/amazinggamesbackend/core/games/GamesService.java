@@ -2,6 +2,7 @@ package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GamesDTO;
 import com.example.amazinggamesbackend.core.games.model.GamesEntity;
+import com.example.amazinggamesbackend.core.orders.dto.OrdersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,8 @@ import java.util.stream.Collectors;
 public class GamesService {
 
     @Autowired
-    private GamesRepository gamesRepository;
+    GamesRepository gamesRepository;
+
     public GamesEntity addGame(GamesDTO game){
         GamesEntity newgame = new GamesEntity();
         newgame.fromDTO(game);
@@ -26,13 +28,22 @@ public class GamesService {
     public void deleteGameById(int Id){
         gamesRepository.delete(gamesRepository.findById(Id).get());
     }
-    public GamesEntity editGameById(int id,GamesEntity gamesEntity){
+    public GamesEntity editGameById(int id,GamesDTO gamesDTO){
         GamesEntity getgame = gamesRepository.findById(id).get();
-        getgame.setTitle(gamesEntity.getTitle());
-        getgame.setType(gamesEntity.getType());
-        getgame.setDescription(gamesEntity.getDescription());
-        getgame.setPrice(gamesEntity.getPrice());
-        getgame.setRating(gamesEntity.getRating());
+        getgame.setTitle(gamesDTO.getTitle());
+        getgame.setType(gamesDTO.getType());
+        getgame.setDescription(gamesDTO.getDescription());
+        getgame.setPrice(gamesDTO.getPrice());
+        getgame.setRating(gamesDTO.getRating());
+        getgame.setAvailability(gamesDTO.isAvailability());
         return gamesRepository.save(getgame);
+    }
+    public double calculateOrderValue(OrdersDTO order){
+        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum();
+    }
+
+    public List<GamesEntity> gamesPerOrder(OrdersDTO order){
+
+        return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
     }
 }
