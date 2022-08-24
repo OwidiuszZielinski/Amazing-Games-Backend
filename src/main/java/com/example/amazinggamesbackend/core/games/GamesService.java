@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class GamesService {
 
     @Autowired
-    private GamesRepository gamesRepository;
+    GamesRepository gamesRepository;
 
     public GamesEntity addGame(GamesDTO game){
         GamesEntity newgame = new GamesEntity();
@@ -38,8 +38,13 @@ public class GamesService {
         getgame.setAvailability(gamesDTO.isAvailability());
         return gamesRepository.save(getgame);
     }
-    public double calculateOrderValue(OrdersDTO order){
-        System.out.println(order.getGames());
-        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum();
-    }
+//    public double calculateOrderValue(OrdersDTO order){
+//        System.out.println(order.getGames());
+//        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GamesEntity::getPrice).sum();
+//    }
+//
+//    public List<GamesEntity> gamesPerOrder(OrdersDTO order){
+//
+//        return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
+//    }
 }
