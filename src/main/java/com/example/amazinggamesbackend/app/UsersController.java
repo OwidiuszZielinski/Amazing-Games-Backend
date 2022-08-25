@@ -25,14 +25,9 @@ public class UsersController {
     @PostMapping("/users")
     public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
 
-        if (!usersRepository.findByUsername(userDTO.getUsername()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else if (userDTO.getUsername().isBlank() || userDTO.getPassword().isBlank() || userDTO.getEmail().isBlank()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else {
             usersService.addUser(userDTO);
             return ResponseEntity.ok().build();
-        }
+
     }
     @Operation(summary = "get users")
     @GetMapping("/users")
