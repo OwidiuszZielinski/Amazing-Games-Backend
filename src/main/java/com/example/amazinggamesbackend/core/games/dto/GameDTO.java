@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.games.dto;
 
-import com.example.amazinggamesbackend.core.games.model.GamesEntity;
+import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import lombok.*;
 
 @Getter
@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GamesDTO {
+public class GameDTO {
 
     private String title;
     private String type;
@@ -18,8 +18,8 @@ public class GamesDTO {
     private boolean availability;
 
 
-    public static GamesDTO from (GamesEntity gameEntity){
-        return GamesDTO.builder()
+    public static GameDTO from (GameEntity gameEntity){
+        return GameDTO.builder()
                 .availability(gameEntity.isAvailability())
                 .build();
     }

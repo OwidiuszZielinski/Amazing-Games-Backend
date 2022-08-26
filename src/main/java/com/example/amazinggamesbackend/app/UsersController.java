@@ -2,9 +2,9 @@ package com.example.amazinggamesbackend.app;
 
 
 import com.example.amazinggamesbackend.core.users.UsersRepository;
-import com.example.amazinggamesbackend.core.users.dto.UsersDTO;
-import com.example.amazinggamesbackend.core.users.UserService;
-import com.example.amazinggamesbackend.core.users.model.UsersEntity;
+import com.example.amazinggamesbackend.core.users.dto.UserDTO;
+import com.example.amazinggamesbackend.core.users.UsersService;
+import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,39 +16,39 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-public class UserController {
+public class UsersController {
     @Autowired
     UsersRepository usersRepository;
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
     @Operation(summary = "add user")
     @PostMapping("/users")
-    public ResponseEntity addUser(@RequestBody UsersDTO usersDTO) {
+    public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
 
-        if (!usersRepository.findByUsername(usersDTO.getUsername()).isEmpty()) {
+        if (!usersRepository.findByUsername(userDTO.getUsername()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else if (usersDTO.getUsername().isBlank() || usersDTO.getPassword().isBlank() || usersDTO.getEmail().isBlank()) {
+        } else if (userDTO.getUsername().isBlank() || userDTO.getPassword().isBlank() || userDTO.getEmail().isBlank()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {
-            userService.addUser(usersDTO);
+            usersService.addUser(userDTO);
             return ResponseEntity.ok().build();
         }
     }
     @Operation(summary = "get users")
     @GetMapping("/users")
-    public List<UsersEntity> getUsers(){
-        return userService.getAllUsers();
+    public List<UserEntity> getUsers(){
+        return usersService.getAllUsers();
     }
 
     @Operation(summary = "delete user by id")
     @DeleteMapping("/users/{id}")
     public void deleteUserById(@PathVariable int id){
-        userService.deleteUser(id);
+        usersService.deleteUser(id);
     }
 
     @Operation(summary = "edit user by id")
     @PatchMapping("/users/{id}")
-    public UsersEntity editUser(@PathVariable int id, @RequestBody UsersDTO user){
-        return userService.editUser(id,user);
+    public UserEntity editUser(@PathVariable int id,@RequestBody UserDTO user){
+        return usersService.editUser(id,user);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
-import com.example.amazinggamesbackend.core.games.model.GamesEntity;
+import com.example.amazinggamesbackend.core.games.model.GameEntity;
 
-import com.example.amazinggamesbackend.core.users.model.UsersEntity;
+import com.example.amazinggamesbackend.core.users.model.UserEntity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
@@ -22,13 +22,13 @@ public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String status;
+    private int status;
     private String date;
     private double value;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private UsersEntity user;
+    private UserEntity user;
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
@@ -36,7 +36,7 @@ public class OrderEntity {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id"))
     @JsonManagedReference
-    private List<GamesEntity> gamesEntities = new ArrayList<>();
+    private List<GameEntity> gamesEntities = new ArrayList<>();
 
     public static String orderdate() {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -44,7 +44,7 @@ public class OrderEntity {
 
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
@@ -54,7 +54,7 @@ public class OrderEntity {
     }
 
 
-    public void addUser(UsersEntity userEntity) {
+    public void addUser(UserEntity userEntity) {
         this.user = userEntity;
     }
 
