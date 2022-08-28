@@ -59,11 +59,11 @@ public class SecurityConfig {
                         .httpBasic().disable()
                         .cors()
                         .and()
-                        .authorizeRequests()
+                        .authorizeHttpRequests()
                         .antMatchers("/auth/**","/users/info")
                         .permitAll()
-                        .antMatchers(HttpMethod.GET , "/games/**")
-                        .permitAll()
+                        .antMatchers("/games/**")
+                        .hasRole("USER")
                         .antMatchers(HttpMethod.POST,"/orders/**")
                         .hasRole("USER")
                         .antMatchers(HttpMethod.GET,"/orders/**","/games/**","users/**")
@@ -81,7 +81,7 @@ public class SecurityConfig {
                         .and()
                         .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                        http.addFilterBefore(filter,UsernamePasswordAuthenticationFilter.class);
+                        http.addFilterBefore(filter,UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable();
 
         return http.build();
     }

@@ -41,6 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     String username = jwtUtil.validateTokenAndRetrieveSubject(jwt);
 
                     // Fetch User Details
+                    System.out.println(username + "FILTER LOG");
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                     // Create Authentication Token

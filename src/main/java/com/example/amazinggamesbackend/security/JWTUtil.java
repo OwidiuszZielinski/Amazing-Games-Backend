@@ -23,17 +23,17 @@ public class JWTUtil {
                 .withSubject("User Details")
                 .withClaim("username", username)
                 .withIssuedAt(new Date())
-                .withIssuer("AMAZING-GAMES")
+                .withIssuer("YOUR APPLICATION/PROJECT/COMPANY NAME")
                 .sign(Algorithm.HMAC256(secret));
     }
 
     public String validateTokenAndRetrieveSubject(String token)throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject("User Details")
-                .withIssuer("AMAZING-GAMES")
+                .withIssuer("YOUR APPLICATION/PROJECT/COMPANY NAME")
                 .build();
         DecodedJWT jwt = verifier.verify(token);
-        return jwt.getClaim("email").asString();
+        return jwt.getClaim("username").asString();
     }
 
 }

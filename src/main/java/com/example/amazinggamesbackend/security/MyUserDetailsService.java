@@ -21,14 +21,14 @@ public class MyUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserEntity> userRes = repository.findByUsernameIgnoreCase(username);
-        if(userRes.isEmpty()) {
+        if(userRes.isEmpty())
             throw new UsernameNotFoundException("Could not findUser with username = " + username);
-        }
+
         UserEntity user = userRes.get();
         return new org.springframework.security.core.userdetails.User(
                 username,
                 user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRoles())));
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
 
     }
 }
