@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,6 +47,12 @@ public class UsersController {
     @GetMapping("/users")
     public List<UserEntity> getUsers() {
         return usersService.getAllUsers();
+    }
+    @GetMapping("/users/info")
+    public UserEntity getUserDetails(){
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(username);
+        return usersRepository.findByUsernameIgnoreCase(username).get();
     }
 
     @Operation(summary = "delete user by id")
