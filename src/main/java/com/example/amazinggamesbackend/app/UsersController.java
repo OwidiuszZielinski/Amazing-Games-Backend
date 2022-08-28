@@ -60,7 +60,7 @@ public class UsersController {
         return usersService.editUser(id ,user);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserDTO user) {
         Optional<UserEntity> userFromDb = usersRepository.findByUsernameIgnoreCase(user.getUsername());
