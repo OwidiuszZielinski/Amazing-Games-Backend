@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .antMatchers(HttpMethod.DELETE)
                         .hasRole("ADMIN")
                         .antMatchers(HttpMethod.GET , "/games/**")
-                        .hasRole("USER")
+                        .permitAll()
                         .antMatchers(HttpMethod.POST,"/games/**")
                         .hasRole("ADMIN")
                         .antMatchers("/login/**")
