@@ -18,45 +18,53 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@AllArgsConstructor
-@RequestMapping("/users")
 public class UsersController {
-
-
-
     @Autowired
     UsersRepository usersRepository;
     @Autowired
     private UsersService usersService;
+
     @Operation(summary = "add user")
-    @PostMapping
-    public ResponseEntity register(@Valid @RequestBody UserDTO user) {
-            usersService.addUser(user);
+    @PostMapping("/users")
+    public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
+
+        if (usersRepository.findByUsernameIgnoreCase(userDTO.getUsername()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        } else if (userDTO.getUsername().isBlank() || userDTO.getPassword().isBlank() || userDTO.getEmail().isBlank()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        } else {
+            usersService.addUser(userDTO);
             return ResponseEntity.ok().build();
-
-
+        }
     }
 
     @Operation(summary = "get users")
-    @GetMapping
-    public List<UserEntity> getUsers(){
+    @GetMapping("/users")
+    public List<UserEntity> getUsers() {
         return usersService.getAllUsers();
     }
 
     @Operation(summary = "delete user by id")
-    @DeleteMapping
-    public void deleteUserById(@PathVariable Long id){
+    @DeleteMapping("/users/{id}")
+    public void deleteUserById(@PathVariable int id) {
         usersService.deleteUser(id);
     }
 
     @Operation(summary = "edit user by id")
-    @PatchMapping
-    public UserEntity editUser(@PathVariable Long id,@RequestBody UserDTO user){
-        return usersService.editUser(id,user);
+    @PatchMapping("/users/{id}")
+    public UserEntity editUser(@PathVariable int id ,@RequestBody UserDTO user) {
+        return usersService.editUser(id ,user);
+    }
+
+    @CrossOrigin(origins = "http://localhost:8080")
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserDTO user) {
+        Optional<UserEntity> userFromDb = usersRepository.findByUsernameIgnoreCase(user.getUsername());
+        return ResponseEntity.ok().build();
     }
 }
-
 

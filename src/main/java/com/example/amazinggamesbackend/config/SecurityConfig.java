@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +22,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 
 @Configuration
@@ -34,7 +40,7 @@ public class SecurityConfig {
     private UserDetailsServiceImpl userDetailService;
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http,BCryptPasswordEncoder bCryptPasswordEncoder)
+    public AuthenticationManager authManager(HttpSecurity http ,BCryptPasswordEncoder bCryptPasswordEncoder)
             throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailService)
@@ -42,19 +48,19 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
+                http.csrf()
                 .disable()
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET,"/games/**","/orders/**","/users/**").permitAll()
-                .mvcMatchers(HttpMethod.POST,"/orders/**").permitAll()
-                .anyRequest()
-                .authenticated()
+                .mvcMatchers(HttpMethod.GET ,"/games/**" ,"/orders/**" ,"/users/**").permitAll()
+                .mvcMatchers(HttpMethod.DELETE,"/games/**" ,"/orders/**" ,"/users/**").permitAll()
+                .mvcMatchers(HttpMethod.POST ,"/games/**" ,"/orders/**" ,"/users/**")
+                .permitAll()
                 .and()
-                .httpBasic()
-                .and()
-                .csrf().disable();
+                .cors().and()
+                .httpBasic();
         return http.build();
     }
 
@@ -63,5 +69,6 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 
 }

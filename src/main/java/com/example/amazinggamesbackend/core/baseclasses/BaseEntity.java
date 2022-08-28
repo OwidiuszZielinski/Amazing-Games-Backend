@@ -18,7 +18,7 @@ import java.util.UUID;
 public abstract class BaseEntity {
     @Id
     @GeneratedValue
-    private Long id;
+    private int id;
 
     private String uuid = UUID.randomUUID().toString();
 

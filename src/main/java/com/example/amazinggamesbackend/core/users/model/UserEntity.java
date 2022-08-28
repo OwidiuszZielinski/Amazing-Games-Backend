@@ -5,9 +5,7 @@ import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +17,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class  UserEntity extends BaseEntity implements UserDetails {
@@ -28,7 +27,12 @@ public class  UserEntity extends BaseEntity implements UserDetails {
 
     private String password;
         private String email;
-        private String roles ;
+
+    public void setRoles(String roles) {
+        this.roles ="ROLE_USER";
+    }
+
+    private String roles ;
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",cascade = CascadeType.MERGE)
         @JsonBackReference
         private List<OrderEntity> orderEntities;

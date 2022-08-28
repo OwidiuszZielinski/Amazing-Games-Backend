@@ -19,16 +19,17 @@ public class UsersService {
     public UserEntity addUser(UserDTO user){
         UserEntity newuser = new UserEntity();
         newuser.fromDTO(user);
+        newuser.setRoles(user.getRoles());
         newuser.setPassword(passwordEncoder.encode(user.getPassword()));
         return usersRepository.save(newuser);
     }
     public List<UserEntity> getAllUsers(){
         return usersRepository.findAll();
     }
-    public void deleteUser(Long id){
+    public void deleteUser(int id){
         usersRepository.delete(usersRepository.findById(id).get());
     }
-    public UserEntity editUser(Long id,UserDTO user){
+    public UserEntity editUser(int id,UserDTO user){
         UserEntity editedUser = usersRepository.findById(id).get();
         editedUser.setEmail(user.getEmail());
         editedUser.setRoles(user.getRoles());
@@ -36,7 +37,7 @@ public class UsersService {
         editedUser.setPassword(user.getPassword());
         return usersRepository.save(editedUser);
     }
-    public UserEntity userById(Long id){
+    public UserEntity userById(int id){
         return usersRepository.findById(id).get();
     }
 

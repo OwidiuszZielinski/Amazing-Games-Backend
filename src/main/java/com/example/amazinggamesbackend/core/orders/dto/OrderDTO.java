@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Builder
 public class OrderDTO {
 
-    private Long user;
+    private int user;
     private ArrayList<Integer> games;
     private int status;
     private String date;
