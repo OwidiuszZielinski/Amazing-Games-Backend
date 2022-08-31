@@ -6,15 +6,19 @@ import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityExistsException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -30,19 +34,25 @@ public class AuthController {
 
     // Defining the function to handle the POST route for registering a user
     @PostMapping("/register")
-    public Map<String, Object> registerHandler(@RequestBody UserDTO user){
+    public Map<String, Object> registerHandler (@RequestBody UserDTO user) {
         // Encoding Password using Bcrypt
-        UserEntity registerUser = new UserEntity();
-        registerUser.fromDTO(user);
-        registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        registerUser.setRoles(user.getRoles());
-        repository.save(registerUser);
+        if (repository.findByUsernameIgnoreCase(user.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("This user exists");
+        } else if (user.getUsername().isBlank() || user.getPassword().isBlank() || user.getEmail().isBlank()) {
+            throw new IllegalArgumentException("This field can't be blank");
+        } else {
+            UserEntity registerUser = new UserEntity();
+            registerUser.fromDTO(user);
+            registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            registerUser.setRoles(user.getRoles());
+            repository.save(registerUser);
 
-        // Generating JWT
-        String token = jwtUtil.generateToken(user.getEmail());
+            // Generating JWT
+            String token = jwtUtil.generateToken(user.getEmail());
 
-        // Responding with JWT
-        return Collections.singletonMap("jwt-token", token);
+            // Responding with JWT
+            return Collections.singletonMap("jwt-token" ,token);
+        }
     }
 
     // Defining the function to handle the POST route for logging in a user
