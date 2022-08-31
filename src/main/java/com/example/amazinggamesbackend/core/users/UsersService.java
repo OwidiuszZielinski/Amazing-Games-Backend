@@ -34,7 +34,12 @@ public class UsersService {
         editedUser.setEmail(user.getEmail());
         editedUser.setRoles(user.getRoles());
         editedUser.setUsername(user.getUsername());
-        editedUser.setPassword(user.getPassword());
+        if(user.getPassword().isBlank()) {
+            editedUser.setPassword(editedUser.getPassword());
+        }
+        else {
+            editedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return usersRepository.save(editedUser);
     }
     public UserEntity userById(int id){

@@ -63,7 +63,7 @@ public class SecurityConfig {
                         .antMatchers("/auth/**","/users/info")
                         .permitAll()
                         .antMatchers("/games/**")
-                        .hasRole("USER")
+                        .permitAll()
                         .antMatchers(HttpMethod.POST,"/orders/**")
                         .hasRole("USER")
                         .antMatchers(HttpMethod.GET,"/orders/**","/games/**","users/**")

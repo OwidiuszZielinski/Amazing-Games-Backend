@@ -30,9 +30,6 @@ public class  UserEntity extends BaseEntity implements UserDetails {
     private String password;
         private String email;
 
-    public void setRoles(String roles) {
-        this.roles ="ROLE_USER";
-    }
 
     private String roles ;
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "user",cascade = CascadeType.MERGE)
@@ -43,7 +40,7 @@ public class  UserEntity extends BaseEntity implements UserDetails {
                 this.username = username;
                 this.password = password;
                 this.email = email;
-                this.roles = "ROLE_USER";
+                this.roles = roles;
         }
 
         public void fromDTO(UserDTO userDTO){

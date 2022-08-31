@@ -44,7 +44,7 @@ public class AuthController {
             UserEntity registerUser = new UserEntity();
             registerUser.fromDTO(user);
             registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            registerUser.setRoles(user.getRoles());
+            registerUser.setRoles("ROLE_USER");
             repository.save(registerUser);
 
             // Generating JWT

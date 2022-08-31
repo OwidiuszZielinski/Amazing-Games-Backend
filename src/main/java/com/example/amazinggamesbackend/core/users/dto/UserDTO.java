@@ -22,10 +22,10 @@ public class UserDTO {
     private String roles;
 
 
-    public static UserDTO from (UserEntity user,PasswordEncoder passwordEncoder){
+    public static UserDTO from (UserEntity user){
 
         return UserDTO.builder()
-                .roles(user.getRoles())
+
                 .build();
     }
 }
