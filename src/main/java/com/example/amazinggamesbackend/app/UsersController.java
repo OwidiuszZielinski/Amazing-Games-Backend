@@ -43,8 +43,8 @@ public class UsersController {
 
     @Operation(summary = "delete user by id")
     @DeleteMapping("/users/{id}")
-    public void deleteUserById(@PathVariable int id) {
-        usersService.deleteUser(id);
+    public void deleteUserById(@PathVariable List<Integer> ids) {
+        usersService.deleteUser(ids);
     }
 
     @Operation(summary = "edit user by id")

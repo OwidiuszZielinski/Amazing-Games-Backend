@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .disable()
                         .httpBasic().disable()
                         .cors()
-                        .and()
+                        .disable()
                         .authorizeHttpRequests()
                         .antMatchers("/auth/**","/users/info")
                         .permitAll()

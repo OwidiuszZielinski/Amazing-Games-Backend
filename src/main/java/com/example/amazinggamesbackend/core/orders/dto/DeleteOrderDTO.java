@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.orders.dto;
 
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.util.List;

@@ -20,8 +20,8 @@ public class UsersService {
     public List<UserEntity> getAllUsers(){
         return usersRepository.findAll();
     }
-    public void deleteUser(int id){
-        usersRepository.delete(usersRepository.findById(id).get());
+    public void deleteUser(List<Integer> ids){
+        usersRepository.deleteAllByIdInBatch(ids);
     }
     public UserEntity editUser(int id,UserDTO user){
         UserEntity editedUser = usersRepository.findById(id).get();

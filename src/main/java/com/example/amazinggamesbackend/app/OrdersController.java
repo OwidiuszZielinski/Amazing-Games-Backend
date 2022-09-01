@@ -37,17 +37,14 @@ public class OrdersController {
     public List<OrderEntity> getOrders() {
         return ordersService.getAllOrders();
     }
-    @Operation(summary ="Delete order by id")
-    @DeleteMapping("/orders/{Id}")
-    public ResponseEntity deleteOrder(@PathVariable int Id){
-        ordersService.deleteOrder(Id);
-        return ResponseEntity.ok().build();
-    }
-    //todo tymczasowo brzydki path
-    //dziala usuwanie z arraya teraz front trzeba zmienic zeby wysylal array czy 1 do usuniecia czy wsyzstko
-    @Operation(summary ="Delete order by id")
-    @DeleteMapping("/orders/bulk_delete")
+
+    @Operation(summary ="Delete order by id/ids")
+    @DeleteMapping("/orders")
     public ResponseEntity deleteOrders(@RequestBody DeleteOrderDTO deleteOrderDTO){
+        if(deleteOrderDTO.getIds().isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
+
         System.out.println(deleteOrderDTO.getIds());
         ordersService.deleteOrders(deleteOrderDTO.getIds());
         return ResponseEntity.ok().build();
