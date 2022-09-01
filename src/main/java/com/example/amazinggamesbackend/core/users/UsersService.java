@@ -16,13 +16,7 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public UserEntity addUser(UserDTO user){
-        UserEntity newuser = new UserEntity();
-        newuser.fromDTO(user);
-        newuser.setRoles(user.getRoles());
-        newuser.setPassword(passwordEncoder.encode(user.getPassword()));
-        return usersRepository.save(newuser);
-    }
+
     public List<UserEntity> getAllUsers(){
         return usersRepository.findAll();
     }

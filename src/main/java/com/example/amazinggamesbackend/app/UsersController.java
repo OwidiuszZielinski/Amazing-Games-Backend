@@ -29,19 +29,6 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @Operation(summary = "add user")
-    @PostMapping("/users")
-    public ResponseEntity addUser(@RequestBody UserDTO userDTO) {
-
-        if (usersRepository.findByUsernameIgnoreCase(userDTO.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else if (userDTO.getUsername().isBlank() || userDTO.getPassword().isBlank() || userDTO.getEmail().isBlank()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else {
-            usersService.addUser(userDTO);
-            return ResponseEntity.ok().build();
-        }
-    }
 
     @Operation(summary = "get users")
     @GetMapping("/users")
