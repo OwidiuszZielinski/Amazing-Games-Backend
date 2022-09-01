@@ -37,6 +37,10 @@ public class OrdersService {
     public void deleteOrder(int id){
         ordersRepository.deleteById(id);
     }
+    public void deleteOrders(List<Integer>ids){
+        System.out.println(ids);
+            ordersRepository.deleteAllByIdInBatch(ids);
+    }
     public OrderEntity editOrder(int id,OrderDTO order){
         OrderEntity getOrder = ordersRepository.findById(id).get();
         getOrder.setDate(order.getDate());

@@ -23,6 +23,7 @@ public class AmazingGamesBackendApplication {
 				registry.addMapping("/games").allowedMethods("http://localhost:8080");
 				registry.addMapping("/login").allowedMethods("http://localhost:8080");
 				registry.addMapping("/orders").allowedMethods("http://localhost:8080");
+
 			}
 		};
 	}

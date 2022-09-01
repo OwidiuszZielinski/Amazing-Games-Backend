@@ -2,8 +2,10 @@ package com.example.amazinggamesbackend.app;
 
 
 import com.example.amazinggamesbackend.core.orders.OrdersService;
+import com.example.amazinggamesbackend.core.orders.dto.DeleteOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,15 @@ public class OrdersController {
     @DeleteMapping("/orders/{Id}")
     public ResponseEntity deleteOrder(@PathVariable int Id){
         ordersService.deleteOrder(Id);
+        return ResponseEntity.ok().build();
+    }
+    //todo tymczasowo brzydki path
+    //dziala usuwanie z arraya teraz front trzeba zmienic zeby wysylal array czy 1 do usuniecia czy wsyzstko
+    @Operation(summary ="Delete order by id")
+    @DeleteMapping("/orders/bulk_delete")
+    public ResponseEntity deleteOrders(@RequestBody DeleteOrderDTO deleteOrderDTO){
+        System.out.println(deleteOrderDTO.getIds());
+        ordersService.deleteOrders(deleteOrderDTO.getIds());
         return ResponseEntity.ok().build();
     }
     @Operation(summary = "Edit order by id")
