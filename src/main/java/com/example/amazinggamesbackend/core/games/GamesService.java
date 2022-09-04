@@ -1,5 +1,7 @@
 package com.example.amazinggamesbackend.core.games;
 
+import com.example.amazinggamesbackend.core.shoppingcart.dto.ShoppingCartDTO;
+import com.example.amazinggamesbackend.core.shoppingcart.dto.EditShoppingCartDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -24,8 +26,9 @@ public class GamesService {
         return gamesRepository.findAll();
 
     }
-    public void deleteGameById(int Id){
-        gamesRepository.delete(gamesRepository.findById(Id).get());
+    public void deleteGamesById(List<Integer> ids){
+        gamesRepository.deleteAllByIdInBatch(ids);
+
     }
     public GameEntity editGameById(int id,GameDTO gameDTO){
         GameEntity getgame = gamesRepository.findById(id).get();
@@ -45,4 +48,14 @@ public class GamesService {
 
         return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
     }
+    public List<GameEntity> gamesToBasket(ShoppingCartDTO basket){
+
+        return gamesRepository.findAllById(basket.getGamesIDS()).stream().collect(Collectors.toList());
+    }
+    public List<GameEntity> gamesToBasket(EditShoppingCartDTO basket){
+
+        return gamesRepository.findAllById(basket.getIds()).stream().collect(Collectors.toList());
+    }
+
+
 }

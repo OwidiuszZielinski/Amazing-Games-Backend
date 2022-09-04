@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.app;
 
 
+import com.example.amazinggamesbackend.core.orders.OrdersRepository;
 import com.example.amazinggamesbackend.core.orders.OrdersService;
 import com.example.amazinggamesbackend.core.orders.dto.DeleteOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -18,6 +19,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 public class OrdersController {
+
+    @Autowired
+    OrdersRepository ordersRepository;
     @Autowired
     OrdersService ordersService;
 
@@ -38,21 +42,24 @@ public class OrdersController {
         return ordersService.getAllOrders();
     }
 
-    @Operation(summary ="Delete order by id/ids")
+    @Operation(summary = "Delete order")
     @DeleteMapping("/orders")
-    public ResponseEntity deleteOrders(@RequestBody DeleteOrderDTO deleteOrderDTO){
-        if(deleteOrderDTO.getIds().isEmpty()){
+    public ResponseEntity deleteOrders(@RequestBody DeleteOrderDTO deleteOrderDTO) {
+        if (deleteOrderDTO.getIds().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
+        if (ordersRepository.findAllById(deleteOrderDTO.getIds()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
 
-        System.out.println(deleteOrderDTO.getIds());
         ordersService.deleteOrders(deleteOrderDTO.getIds());
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
-    public OrderEntity editOrder(@PathVariable int Id,@RequestBody OrderDTO order){
-       return ordersService.editOrder(Id,order);
+    public OrderEntity editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
+        return ordersService.editOrder(Id ,order);
 
     }
 }

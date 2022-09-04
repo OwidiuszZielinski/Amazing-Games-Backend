@@ -54,34 +54,34 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                http.csrf()
+        http.csrf()
                 .disable()
-                        .httpBasic().disable()
-                        .cors()
-                        .disable()
-                        .authorizeHttpRequests()
-                        .antMatchers("/auth/**","/users/info")
-                        .permitAll()
-                        .antMatchers("/games/**")
-                        .permitAll()
-                        .antMatchers(HttpMethod.POST,"/orders/**")
-                        .hasRole("USER")
-                        .antMatchers(HttpMethod.GET,"/orders/**","/games/**","users/**")
-                        .permitAll()
-                        .antMatchers(HttpMethod.POST,"/orders/**","/games/**","users/**")
-                        .hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/orders/**","/games/**","users/**")
-                        .permitAll()
-                        .and()
-                        .userDetailsService(userDetailService)
-                        .exceptionHandling()
-                        .authenticationEntryPoint(
-                                ((request ,response ,authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Unauthorized"))
-                        )
-                        .and()
-                        .sessionManagement()
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                        http.addFilterBefore(filter,UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable();
+                .httpBasic().disable()
+                .cors()
+                .disable()
+                .authorizeHttpRequests()
+                .antMatchers("/auth/**" ,"/users/info")
+                .permitAll()
+                .antMatchers("/games/**")
+                .permitAll()
+                .antMatchers(HttpMethod.POST ,"/orders/**")
+                .hasRole("USER")
+                .antMatchers(HttpMethod.GET ,"/orders/**" ,"/games/**" ,"users/**")
+                .permitAll()
+                .antMatchers(HttpMethod.POST ,"/orders/**" ,"/games/**" ,"users/**")
+                .hasRole("USER")
+                .antMatchers(HttpMethod.DELETE ,"/orders/**" ,"/games/**" ,"users/**")
+                .permitAll()
+                .and()
+                .userDetailsService(userDetailService)
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        ((request ,response ,authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED ,"Unauthorized"))
+                )
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(filter ,UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable();
 
         return http.build();
     }

@@ -27,14 +27,18 @@ import java.util.Map;
 public class AuthController {
 
     // Injecting Dependencies
-    @Autowired private UsersRepository repository;
-    @Autowired private JWTUtil jwtUtil;
-    @Autowired private AuthenticationManager authManager;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UsersRepository repository;
+    @Autowired
+    private JWTUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @PostMapping("/register")
-    public Map<String, Object> registerHandler (@RequestBody UserDTO user) {
+    public Map<String, Object> registerHandler(@RequestBody UserDTO user) {
 
         if (repository.findByUsernameIgnoreCase(user.getUsername()).isPresent() || repository.findByEmail(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -57,12 +61,12 @@ public class AuthController {
 
     // Defining the function to handle the POST route for logging in a user
     @PostMapping("/login")
-    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body){
+    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body) {
         try {
             // Creating the Authentication Token which will contain the credentials for authenticating
             // This token is used as input to the authentication process
             UsernamePasswordAuthenticationToken authInputToken =
-                    new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword());
+                    new UsernamePasswordAuthenticationToken(body.getUsername() ,body.getPassword());
 
             // Authenticating the Login Credentials
             authManager.authenticate(authInputToken);
@@ -72,8 +76,8 @@ public class AuthController {
             String token = jwtUtil.generateToken(body.getUsername());
 
             // Respond with the JWT
-            return Collections.singletonMap("jwt-token", token);
-        }catch (AuthenticationException authExc){
+            return Collections.singletonMap("jwt-token" ,token);
+        } catch (AuthenticationException authExc) {
             // Auhentication Failed
             throw new RuntimeException("Invalid Login Credentials");
         }

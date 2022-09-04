@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.core.users;
 
+import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,12 @@ public class UsersService {
     public List<UserEntity> getAllUsers(){
         return usersRepository.findAll();
     }
-    public void deleteUser(List<Integer> ids){
+    public List<GameEntity> getBasketGames(){
+        return null;
+    }
+
+
+    public void deleteUsers(List<Integer> ids){
         usersRepository.deleteAllByIdInBatch(ids);
     }
     public UserEntity editUser(int id,UserDTO user){
