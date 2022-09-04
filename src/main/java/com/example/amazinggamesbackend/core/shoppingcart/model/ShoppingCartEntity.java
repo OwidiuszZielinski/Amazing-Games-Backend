@@ -25,7 +25,7 @@ public class ShoppingCartEntity {
             joinColumns = @JoinColumn(name = "cart_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id"))
     @JsonManagedReference
-    private List<GameEntity> gamesIDS = new ArrayList<>();
+    private List<GameEntity> games = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;

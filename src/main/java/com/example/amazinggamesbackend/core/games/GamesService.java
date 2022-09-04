@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.core.games;
 
+import com.example.amazinggamesbackend.core.shoppingcart.dto.AddToCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.ShoppingCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.EditShoppingCartDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,13 +50,17 @@ public class GamesService {
 
         return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
     }
-    public List<GameEntity> gamesToBasket(ShoppingCartDTO basket){
+    public List<GameEntity> gamesToCartByDTO(ShoppingCartDTO cart){
 
-        return gamesRepository.findAllById(basket.getGamesIDS()).stream().collect(Collectors.toList());
+        return gamesRepository.findAllById(cart.getGamesIDS()).stream().collect(Collectors.toList());
     }
-    public List<GameEntity> gamesToBasket(EditShoppingCartDTO basket){
+    public List<GameEntity> gamesToCartByEditDTO(EditShoppingCartDTO cart){
 
-        return gamesRepository.findAllById(basket.getIds()).stream().collect(Collectors.toList());
+        return gamesRepository.findAllById(cart.getIds()).stream().collect(Collectors.toList());
+    }
+    public Optional<GameEntity> addGameToCart(AddToCartDTO itemID){
+
+        return gamesRepository.findById(itemID.getId());
     }
 
 

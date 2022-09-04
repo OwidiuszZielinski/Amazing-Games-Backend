@@ -2,6 +2,7 @@ package com.example.amazinggamesbackend.app;
 
 import com.example.amazinggamesbackend.core.shoppingcart.ShoppingCartRepository;
 import com.example.amazinggamesbackend.core.shoppingcart.ShoppingCartService;
+import com.example.amazinggamesbackend.core.shoppingcart.dto.AddToCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.ShoppingCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.EditShoppingCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.model.ShoppingCartEntity;
@@ -21,22 +22,29 @@ public class ShoppingCartController {
 
     @Operation(summary = "Create new shopping cart")
     @PostMapping("/cart")
-    public ResponseEntity newBasket(@RequestBody ShoppingCartDTO basket) {
-            shoppingCartService.addToBasket(basket);
+    public ResponseEntity newCart(@RequestBody ShoppingCartDTO cart) {
+            shoppingCartService.addToCart(cart);
             return ResponseEntity.ok().build();
+
+    }
+    @Operation(summary = "Add to cart")
+    @PostMapping("/cart/{id}")
+    public ResponseEntity addtoCart(@PathVariable int id ,@RequestBody AddToCartDTO itemId) {
+        shoppingCartService.addtoCart(id,itemId);
+        return ResponseEntity.ok().build();
 
     }
     @Operation(summary = "delete items")
     @DeleteMapping("/cart/{id}")
     public ResponseEntity deleteGameById(@PathVariable int id ,@RequestBody EditShoppingCartDTO editShoppingCartDTO) {
-                 shoppingCartService.deleteItem(id,editShoppingCartDTO);
+                 shoppingCartService.deleteItemFromCart(id,editShoppingCartDTO);
         return ResponseEntity.ok().build();
 
     }
     @Operation(summary = "Get items from user")
     @GetMapping("/cart/{id}")
-    public ShoppingCartEntity getBasket(@PathVariable int id){
-        return shoppingCartService.getBasketByUserID(id);
+    public ShoppingCartEntity getCart(@PathVariable int id){
+        return shoppingCartService.getCartByUserId(id);
     }
 
 
