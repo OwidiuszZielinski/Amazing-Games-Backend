@@ -16,6 +16,7 @@ public class ShoppingCartDTO {
     private ArrayList<Integer> gamesIDS;
 
 
+
     public ShoppingCartDTO from (ShoppingCartEntity basket){
         return ShoppingCartDTO.builder().build();
     }
