@@ -27,7 +27,6 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-
     @Operation(summary = "get users")
     @GetMapping("/users")
     public List<UserEntity> getUsers() {

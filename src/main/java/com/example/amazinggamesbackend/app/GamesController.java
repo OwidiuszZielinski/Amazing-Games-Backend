@@ -43,7 +43,7 @@ public class GamesController {
     }
 
     @Operation(summary = "delete games")
-    @DeleteMapping("games")
+    @DeleteMapping("/games")
     public ResponseEntity deleteGameById(@RequestBody DeleteGamesDTO deleteGamesDTO) {
         if (gamesRepository.findAllById(deleteGamesDTO.getIds()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();

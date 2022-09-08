@@ -39,6 +39,9 @@ public class GameEntity {
     @JsonBackReference
     private List<ShoppingCartEntity> shoppingCarts = new ArrayList<>();
 
+
+
+
     public void setRating(double rating) {
         if (rating <= 10 && rating >= 0) {
             this.rating = rating;

@@ -1,8 +1,7 @@
 package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.shoppingcart.dto.AddToCartDTO;
-import com.example.amazinggamesbackend.core.shoppingcart.dto.ShoppingCartDTO;
-import com.example.amazinggamesbackend.core.shoppingcart.dto.EditShoppingCartDTO;
+import com.example.amazinggamesbackend.core.shoppingcart.dto.CreateShoppingCartDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -50,18 +49,16 @@ public class GamesService {
 
         return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
     }
-    public List<GameEntity> gamesToCartByDTO(ShoppingCartDTO cart){
 
-        return gamesRepository.findAllById(cart.getGamesIDS()).stream().collect(Collectors.toList());
-    }
-    public List<GameEntity> gamesToCartByEditDTO(EditShoppingCartDTO cart){
+    public List<GameEntity> gamesToCartByEditDTO(List<Integer> list){
 
-        return gamesRepository.findAllById(cart.getIds()).stream().collect(Collectors.toList());
+        return gamesRepository.findAllById(list.stream().collect(Collectors.toList()));
     }
     public Optional<GameEntity> addGameToCart(AddToCartDTO itemID){
 
         return gamesRepository.findById(itemID.getId());
     }
+
 
 
 }

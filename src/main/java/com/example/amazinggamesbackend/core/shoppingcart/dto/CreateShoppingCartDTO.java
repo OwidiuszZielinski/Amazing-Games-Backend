@@ -11,13 +11,10 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ShoppingCartDTO {
+public class CreateShoppingCartDTO {
     private int userID;
-    private ArrayList<Integer> gamesIDS;
 
-
-
-    public ShoppingCartDTO from (ShoppingCartEntity basket){
-        return ShoppingCartDTO.builder().build();
+    public CreateShoppingCartDTO from (ShoppingCartEntity basket){
+        return CreateShoppingCartDTO.builder().build();
     }
 }
