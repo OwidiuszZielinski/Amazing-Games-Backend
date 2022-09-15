@@ -21,9 +21,7 @@ public class UsersService {
     public List<UserEntity> getAllUsers(){
         return usersRepository.findAll();
     }
-    public List<GameEntity> getBasketGames(){
-        return null;
-    }
+
 
 
     public void deleteUsers(List<Integer> ids){

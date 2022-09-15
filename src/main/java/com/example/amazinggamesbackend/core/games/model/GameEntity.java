@@ -34,14 +34,6 @@ public class GameEntity {
     @JsonBackReference
     private List<OrderEntity> orders = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
-    @JoinTable(name = "cart_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "cart_id"))
-    @JsonBackReference
-    private List<ShoppingCartEntity> shoppingCarts = new ArrayList<>();
-
-
-
-
     public void setRating(double rating) {
         if (rating <= 10 && rating >= 0) {
             this.rating = rating;

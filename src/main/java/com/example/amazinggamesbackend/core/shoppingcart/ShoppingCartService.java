@@ -1,7 +1,6 @@
 package com.example.amazinggamesbackend.core.shoppingcart;
 
 
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.AddToCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.CreateShoppingCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.EditShoppingCartDTO;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,24 +29,27 @@ public class ShoppingCartService {
 
     }
 
-    public ShoppingCartEntity addtoCart(int id,AddToCartDTO itemID){
+    public ShoppingCartEntity addToCart(int id,AddToCartDTO itemID){
          ShoppingCartEntity getCart = shoppingCartRepository.findByUserId(id).get();
-        if(getCart.getGames().stream().anyMatch(game -> game.getId() == itemID.getId())){
-            getCart.setQuantity(getCart.getQuantity()+1);
-            getCart.setGames(getCart.getGames());
+         if(getCart.getCartGames().stream().anyMatch(game -> game.getGame().getId() == itemID.getId())){
+                getCart.setCartGames(getCart.getCartGames());
+                incrementCartItem(getCart,itemID);
+                return shoppingCartRepository.save(getCart);
+
         }
-        else
-            getCart.setQuantity(getCart.getQuantity());
-            getCart.getGames().add(gamesService.addGameToCart(itemID).get());
-            return shoppingCartRepository.save(getCart);
+        else {
+            getCart.getCartGames().add(gamesService.addGameToCart(itemID));
+            getCart.getCartGames().get(getCart.getCartGames().size() - 1).setQuantity(1);
+        }
+             return shoppingCartRepository.save(getCart);
 
     }
     public ShoppingCartEntity deleteItemsFromCart(int id,EditShoppingCartDTO editShoppingCartDTO){
             ShoppingCartEntity getCartByUserID = (shoppingCartRepository.findByUserId(id).get());
             List<Integer> listGamesIds = new ArrayList<>();
-            listGamesIds.addAll(getCartByUserID.getGames().stream().mapToInt(game -> game.getId()).boxed().collect(Collectors.toList()));
+            listGamesIds.addAll(getCartByUserID.getCartGames().stream().mapToInt(game -> game.getId()).boxed().collect(Collectors.toList()));
             listGamesIds.removeAll(editShoppingCartDTO.getIds());
-            getCartByUserID.setGames(gamesService.gamesToCartByEditDTO(listGamesIds));
+           // getCartByUserID.setCartGames(gamesService.gamesToCartByEditDTO(listGamesIds));
             getCartByUserID.setUser(getCartByUserID.getUser());
             return shoppingCartRepository.save(getCartByUserID);
 
@@ -58,6 +59,11 @@ public class ShoppingCartService {
         newCartForUser.addUser(usersService.userById(cartDTO.getUserID()));
         return shoppingCartRepository.save(newCartForUser);
     }
+    public ShoppingCartGames incrementCartItem(ShoppingCartEntity getCart,AddToCartDTO itemID){
+        ShoppingCartGames getGames = getCart.getCartGames().stream().filter(game -> game.getGame().getId() == itemID.getId()).findFirst().get();
+        getGames.setQuantity(getCart.getCartGames().stream().filter(game -> game.getGame().getId() == itemID.getId()).findFirst().get().getQuantity()+1);
+        return getGames;
 
+    }
 
 }

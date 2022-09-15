@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.core.games;
 
+import com.example.amazinggamesbackend.core.shoppingcart.ShoppingCartGames;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.AddToCartDTO;
-import com.example.amazinggamesbackend.core.shoppingcart.dto.CreateShoppingCartDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,9 +53,11 @@ public class GamesService {
 
         return gamesRepository.findAllById(list.stream().collect(Collectors.toList()));
     }
-    public Optional<GameEntity> addGameToCart(AddToCartDTO itemID){
 
-        return gamesRepository.findById(itemID.getId());
+    public ShoppingCartGames addGameToCart(AddToCartDTO itemID){
+        ShoppingCartGames games = new ShoppingCartGames();
+        games.setGame(gamesRepository.findById(itemID.getId()).get());
+        return games;
     }
 
 
