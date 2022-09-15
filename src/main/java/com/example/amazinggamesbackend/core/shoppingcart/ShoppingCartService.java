@@ -47,9 +47,6 @@ public class ShoppingCartService {
             ShoppingCartEntity getCartByUserID = (shoppingCartRepository.findByUserId(id).get());
             List<Integer> listGamesIds = new ArrayList<>();
             listGamesIds.addAll(getCartByUserID.getGames().stream().mapToInt(game -> game.getId()).boxed().collect(Collectors.toList()));
-//            for(GameEntity x: getCartByUserID.getGames()){
-//                listGamesIds.add(x.getId());
-//            }
             listGamesIds.removeAll(editShoppingCartDTO.getIds());
             getCartByUserID.setGames(gamesService.gamesToCartByEditDTO(listGamesIds));
             getCartByUserID.setUser(getCartByUserID.getUser());
