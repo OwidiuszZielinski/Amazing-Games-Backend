@@ -38,9 +38,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    private List<ShoppingCartEntity> shoppingCartEntities;
+    ShoppingCartEntity shoppingCart;
 
     public UserEntity(String username ,String password ,String email ,String roles) {
         this.username = username;

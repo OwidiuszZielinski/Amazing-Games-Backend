@@ -40,8 +40,8 @@ public class UsersService {
         }
         return usersRepository.save(editedUser);
     }
-    public UserEntity userById(int id){
-        return usersRepository.findById(id).get();
-    }
+    public UserEntity userById(int id) {
+            return usersRepository.findById(id).get();
+        }
 
 }

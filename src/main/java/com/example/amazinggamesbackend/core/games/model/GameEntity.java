@@ -1,9 +1,11 @@
 package com.example.amazinggamesbackend.core.games.model;
 
+import com.example.amazinggamesbackend.core.shoppingcart.model.CartDetail;
 import com.example.amazinggamesbackend.core.shoppingcart.model.ShoppingCartEntity;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +35,10 @@ public class GameEntity {
     @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
     @JsonBackReference
     private List<OrderEntity> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
+    @JsonManagedReference
+    private List<CartDetail> cartDetails = new ArrayList<>();
 
     public void setRating(double rating) {
         if (rating <= 10 && rating >= 0) {
