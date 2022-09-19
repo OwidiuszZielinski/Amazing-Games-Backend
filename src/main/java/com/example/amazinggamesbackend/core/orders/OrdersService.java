@@ -21,8 +21,6 @@ public class OrdersService {
     GamesService gamesService = new GamesService();
 
 
-
-
     public OrderEntity addorder(OrderDTO order) {
         OrderEntity neworder = new OrderEntity();
         neworder.addUser(usersService.userById(order.getUser()));

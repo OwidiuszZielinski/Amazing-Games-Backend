@@ -33,7 +33,7 @@ public class UsersController {
         return usersService.getAllUsers();
     }
 
-    @GetMapping("/users/basket")
+    @GetMapping("/users/cart")
     public UserEntity getUserDetails() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return usersRepository.findByUsernameIgnoreCase(username).get();

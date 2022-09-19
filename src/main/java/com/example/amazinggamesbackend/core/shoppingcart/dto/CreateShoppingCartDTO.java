@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class CreateShoppingCartDTO {
     private int userID;
 
-    public CreateShoppingCartDTO from (ShoppingCartEntity basket){
+    public CreateShoppingCartDTO from (ShoppingCartEntity cart){
         return CreateShoppingCartDTO.builder().build();
     }
 }

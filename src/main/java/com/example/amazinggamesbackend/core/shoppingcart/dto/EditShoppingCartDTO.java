@@ -14,7 +14,7 @@ public class EditShoppingCartDTO {
 
     private List<Integer> ids;
 
-    public static EditShoppingCartDTO from(ShoppingCartEntity basket) {
+    public static EditShoppingCartDTO from(ShoppingCartEntity cart) {
         return EditShoppingCartDTO.builder().build();
 
     }
