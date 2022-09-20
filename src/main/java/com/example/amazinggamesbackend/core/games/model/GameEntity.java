@@ -5,6 +5,7 @@ import com.example.amazinggamesbackend.core.shoppingcart.model.ShoppingCartEntit
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,7 @@ public class GameEntity {
     @JsonBackReference
     private List<OrderEntity> orders = new ArrayList<>();
 
+    //@JsonIgnore
     @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
     private List<CartDetail> cartDetails = new ArrayList<>();
 

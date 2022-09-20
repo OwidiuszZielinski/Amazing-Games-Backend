@@ -3,6 +3,7 @@ package com.example.amazinggamesbackend.core.shoppingcart.model;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class CartDetail {
     private GameEntity game;
     @ManyToOne
     @JoinColumn(name = "cart_id")
+    //@JsonIgnore
     private ShoppingCartEntity cart;
 
     private int quantity;

@@ -67,8 +67,11 @@ public class GamesService {
 //        return gamesRepository.findAllById(list.stream().collect(Collectors.toList()));
 //    }
 
-    public GameEntity addGameToCart(AddToCartDTO itemID){
-        return gamesRepository.findById(itemID.getId()).get();
+//    public GameEntity addGameToCart(AddToCartDTO itemID){
+//        return gamesRepository.findById(itemID.getId()).get();
+//    }
+    public GameEntity addGameToCart(int id){
+        return gamesRepository.findById(id).get();
     }
 
 
