@@ -37,7 +37,6 @@ public class GameEntity {
     private List<OrderEntity> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
-    @JsonManagedReference
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     public void setRating(double rating) {

@@ -3,6 +3,7 @@ package com.example.amazinggamesbackend.core.shoppingcart;
 
 import com.example.amazinggamesbackend.core.shoppingcart.dto.AddToCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.dto.CreateShoppingCartDTO;
+import com.example.amazinggamesbackend.core.shoppingcart.dto.ShoppingCartDTO;
 import com.example.amazinggamesbackend.core.shoppingcart.model.CartDetail;
 import com.example.amazinggamesbackend.core.shoppingcart.model.ShoppingCartEntity;
 import com.example.amazinggamesbackend.core.games.GamesService;
@@ -27,10 +28,14 @@ public class ShoppingCartService {
     GamesService gamesService;
 
     //Ta metoda zwraca ladnie koszyk uzytkownika i operuje na tym w metodzie addToCart, ale w rescie nie zwraca
-    public ShoppingCartEntity getCartByUserId(int id) {
-        return shoppingCartRepository.findByUserId(id).get();
+    public ShoppingCartDTO getCartByUserId(int id) {
+
+             return ShoppingCartDTO.from(shoppingCartRepository.findByUserId(id).get());
 
     }
+
+
+
 
     //Ta metoda nie zwraca koszyka a koszyki sa w bazie danych , dodaja sie poprawnie nie ma zadnych nulli w klasie pomocniczej
     public List<ShoppingCartEntity> getCarts() {
@@ -38,20 +43,22 @@ public class ShoppingCartService {
     }
 
 
-    public void addGameToCart(int id ,AddToCartDTO itemID) {
-        ShoppingCartEntity getCartByUserID = getCartByUserId(id);
-        if (getCartByUserID.getCartDetails().stream().anyMatch(game -> game.getGame().getId() == itemID.getId())) {
-            getCartByUserID.setCartDetails(getCartByUserID.getCartDetails());
-            quantityCartGame(getCartByUserID ,itemID);
-            shoppingCartRepository.save(getCartByUserID);
+//    public void addGameToCart(int id ,AddToCartDTO itemID) {
+//        ShoppingCartEntity getCartByUserID = getCartByUserId(id);
+//        if (getCartByUserID.getCartDetails().stream().anyMatch(game -> game.getGame().getId() == itemID.getId())) {
+//            getCartByUserID.setCartDetails(getCartByUserID.getCartDetails());
+//            quantityCartGame(getCartByUserID ,itemID);
+//            shoppingCartRepository.save(getCartByUserID);
+//
+//        } else {
+//            getCartByUserID.getCartDetails().add(new CartDetail(gamesService.addGameToCart(itemID) ,getCartByUserID ,INCREMENT));
+//            getCartByUserID.getCartDetails().get(getCartByUserID.getCartDetails().size() - 1).setQuantity(1);
+//        }
+//        shoppingCartRepository.save(getCartByUserID);
+//
+//    }
 
-        } else {
-            getCartByUserID.getCartDetails().add(new CartDetail(gamesService.addGameToCart(itemID) ,getCartByUserID ,INCREMENT));
-            getCartByUserID.getCartDetails().get(getCartByUserID.getCartDetails().size() - 1).setQuantity(1);
-        }
-        shoppingCartRepository.save(getCartByUserID);
 
-    }
 
 
 //    public ShoppingCartEntity deleteGamesFromCart(int id ,EditShoppingCartDTO editShoppingCartDTO) {
@@ -60,7 +67,7 @@ public class ShoppingCartService {
 //        return shoppingCartRepository.save(getCartByUserID);
 //
 //    }
-
+    //tylko id wepchnac usera bez DTO
     public void createCartForUser(CreateShoppingCartDTO cartDTO) {
 
         ShoppingCartEntity CartForUser = new ShoppingCartEntity();

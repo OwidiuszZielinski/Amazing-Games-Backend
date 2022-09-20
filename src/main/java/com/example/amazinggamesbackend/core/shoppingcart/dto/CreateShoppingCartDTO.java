@@ -13,7 +13,6 @@ import java.util.ArrayList;
 @Builder
 public class CreateShoppingCartDTO {
     private int userID;
-
     public CreateShoppingCartDTO from (ShoppingCartEntity cart){
         return CreateShoppingCartDTO.builder().build();
     }

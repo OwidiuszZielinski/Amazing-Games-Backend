@@ -1,6 +1,9 @@
 package com.example.amazinggamesbackend.core.shoppingcart.model;
 
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
