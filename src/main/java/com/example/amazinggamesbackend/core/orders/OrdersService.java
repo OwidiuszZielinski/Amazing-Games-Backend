@@ -5,6 +5,8 @@ import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +19,6 @@ public class OrdersService {
     UsersService usersService = new UsersService();
     @Autowired
     GamesService gamesService = new GamesService();
-
-
 
 
     public OrderEntity addorder(OrderDTO order) {
@@ -34,8 +34,9 @@ public class OrdersService {
     public List<OrderEntity> getAllOrders() {
         return ordersRepository.findAll();
     }
-    public void deleteOrder(int id){
-        ordersRepository.deleteById(id);
+
+    public void deleteOrders(List<Integer>ids) {
+        ordersRepository.deleteAllByIdInBatch(ids);
     }
     public OrderEntity editOrder(int id,OrderDTO order){
         OrderEntity getOrder = ordersRepository.findById(id).get();

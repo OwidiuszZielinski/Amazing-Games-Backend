@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.core.users;
 
+import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,15 @@ public class UsersService {
     @Autowired
     private UsersRepository usersRepository;
 
-    public UserEntity addUser(UserDTO user){
-        UserEntity newuser = new UserEntity();
-        newuser.fromDTO(user);
-        newuser.setRoles(user.getRoles());
-        newuser.setPassword(passwordEncoder.encode(user.getPassword()));
-        return usersRepository.save(newuser);
-    }
+
     public List<UserEntity> getAllUsers(){
         return usersRepository.findAll();
     }
-    public void deleteUser(int id){
-        usersRepository.delete(usersRepository.findById(id).get());
+
+
+
+    public void deleteUsers(List<Integer> ids){
+        usersRepository.deleteAllByIdInBatch(ids);
     }
     public UserEntity editUser(int id,UserDTO user){
         UserEntity editedUser = usersRepository.findById(id).get();
@@ -42,8 +40,8 @@ public class UsersService {
         }
         return usersRepository.save(editedUser);
     }
-    public UserEntity userById(int id){
-        return usersRepository.findById(id).get();
-    }
+    public UserEntity userById(int id) {
+            return usersRepository.findById(id).get();
+        }
 
 }

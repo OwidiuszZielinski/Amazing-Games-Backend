@@ -18,7 +18,7 @@ public class GameDTO {
     private boolean availability;
 
 
-    public static GameDTO from (GameEntity gameEntity){
+    public static GameDTO from(GameEntity gameEntity) {
         return GameDTO.builder()
                 .availability(gameEntity.isAvailability())
                 .build();
