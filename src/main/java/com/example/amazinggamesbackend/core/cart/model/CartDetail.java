@@ -1,10 +1,8 @@
-package com.example.amazinggamesbackend.core.shoppingcart.model;
+package com.example.amazinggamesbackend.core.cart.model;
 
+import com.example.amazinggamesbackend.core.cart.dto.CartDetailDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,13 +23,24 @@ public class CartDetail {
     @ManyToOne
     @JoinColumn(name = "cart_id")
     //@JsonIgnore
-    private ShoppingCartEntity cart;
+    private CartEntity cart;
 
     private int quantity;
 
-    public CartDetail(GameEntity game ,ShoppingCartEntity cart ,int quantity) {
+    public CartDetail(GameEntity game,int quantity) {
+        this.game = game;
+        this.quantity = quantity;
+    }
+
+    public CartDetail(GameEntity game,CartEntity cart, int quantity) {
         this.game = game;
         this.cart = cart;
         this.quantity = quantity;
     }
+
+    public void incraseQty(){
+        this.quantity = quantity+1;
+    }
+
+
 }

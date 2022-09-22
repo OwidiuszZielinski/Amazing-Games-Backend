@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.core.users.model;
 
 import com.example.amazinggamesbackend.core.baseclasses.BaseEntity;
-import com.example.amazinggamesbackend.core.shoppingcart.model.ShoppingCartEntity;
+import com.example.amazinggamesbackend.core.cart.model.CartEntity;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -40,7 +40,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    ShoppingCartEntity shoppingCart;
+    CartEntity shoppingCart;
 
     public UserEntity(String username ,String password ,String email ,String roles) {
         this.username = username;

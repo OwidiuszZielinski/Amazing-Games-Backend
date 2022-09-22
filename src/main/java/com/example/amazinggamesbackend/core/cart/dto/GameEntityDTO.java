@@ -1,16 +1,14 @@
-package com.example.amazinggamesbackend.core.shoppingcart.dto;
+package com.example.amazinggamesbackend.core.cart.dto;
 
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import com.example.amazinggamesbackend.core.shoppingcart.model.CartDetail;
 import lombok.*;
 
-import javax.persistence.Column;
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GameInfoDTO {
+public class GameEntityDTO {
     private Integer id;
     private String title;
     private String type;
@@ -19,8 +17,8 @@ public class GameInfoDTO {
     private double rating;
     private boolean availability;
 
-    public static GameInfoDTO from(GameEntity game){
-        return GameInfoDTO.builder().id(game.getId())
+    public static GameEntityDTO from(GameEntity game){
+        return GameEntityDTO.builder().id(game.getId())
                 .title(game.getTitle())
                 .type(game.getType())
                 .price(game.getPrice())
