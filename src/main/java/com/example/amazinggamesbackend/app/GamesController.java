@@ -39,7 +39,7 @@ public class GamesController {
     @Operation(summary = "get all games")
     @GetMapping("/games")
     public List<GameEntity> getGames() {
-        return gamesService.gamelist();
+        return gamesService.getGames();
     }
 
     @Operation(summary = "delete games")

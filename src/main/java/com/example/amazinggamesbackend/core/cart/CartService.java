@@ -2,7 +2,6 @@ package com.example.amazinggamesbackend.core.cart;
 
 
 
-import com.example.amazinggamesbackend.core.cart.dto.CreateCartDTO;
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.cart.model.CartEntity;
@@ -31,36 +30,36 @@ public class CartService {
     }
 
     public void addGameToCart(int id ,int gameId) {
-        CartEntity cart = cartRepository.findByUserId(id).get();
+        CartEntity cart = getUserCart(id);
         List<CartDetail> cartDetails = cart.getCartDetails();
         if (cartDetails.stream().anyMatch(game -> game.getGame().getId() == gameId)) {
-            incraseGameQty(cart ,gameId);
+            increaseGameQty(cart ,gameId);
         } else {
             cartDetails.add(new CartDetail(gamesService.getGameById(gameId) ,cart ,1));
         }
         cartRepository.save(cart);
     }
 
-
-    //    public ShoppingCartEntity deleteGamesFromCart(int id ,EditShoppingCartDTO editShoppingCartDTO) {
-//        ShoppingCartEntity getCartByUserID = getCartByUserId(id);
-//        getCartByUserID.getCartDetails().stream().dropWhile(game -> game.getGame().getId() == editShoppingCartDTO.getIds().stream().findAny().get());
-//        return shoppingCartRepository.save(getCartByUserID);
-//
-//    }
-    //tylko id wepchnac usera bez DTO
-    public void createCartForUser(CreateCartDTO cartDTO) {
-
-        CartEntity CartForUser = new CartEntity();
-        CartForUser.addUser(usersService.userById(cartDTO.getUserID()));
-        cartRepository.save(CartForUser);
+    public void deleteGameFromCart(int id, int gameId){
+        CartEntity cart = getUserCart(id);
+        cart.getCartDetails().removeIf(x -> x.getGame().getId() == gameId);
+        cartRepository.save(cart);
     }
 
-    public void incraseGameQty(CartEntity cart ,int gameId) {
+    public void createCartForUser(int id) {
+        CartEntity userCart = new CartEntity();
+        userCart.addUser(usersService.userById(id));
+        cartRepository.save(userCart);
+    }
+
+
+    public void increaseGameQty(CartEntity cart ,int gameId) {
         CartDetail cartDetail = cart.getCartDetails().stream().filter(e -> e.getGame().getId() == gameId).findFirst().get();
-        cartDetail.incraseQty();
+        cartDetail.increaseQty();
 
-
+    }
+    public CartEntity getUserCart(int id){
+        return cartRepository.findByUserId(id).get();
     }
 
 

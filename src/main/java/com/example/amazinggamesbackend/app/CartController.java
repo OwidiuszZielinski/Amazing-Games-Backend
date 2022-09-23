@@ -21,8 +21,8 @@ public class CartController {
 
     @Operation(summary = "Create new shopping cart")
     @PostMapping("/cart")
-    public ResponseEntity newCart(@RequestBody CreateCartDTO userID) {
-        if (cartRepository.findByUserId(userID.getUserID()).isPresent()) {
+    public ResponseEntity newCart(@RequestBody int userID) {
+        if (cartRepository.findByUserId(userID).isPresent()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {
             cartService.createCartForUser(userID);
@@ -38,14 +38,13 @@ public class CartController {
 
     }
 
-//    @Operation(summary = "delete items")
-//    @DeleteMapping("/cart/{id}")
-//    public ResponseEntity deleteGameById(@PathVariable int id ,@RequestBody EditShoppingCartDTO editShoppingCartDTO) {
-//        shoppingCartService.deleteItemsFromCart(id ,editShoppingCartDTO);
-//        return ResponseEntity.ok().build();
-//
-//    }
+    @Operation(summary = "Delete item")
+    @DeleteMapping("/cart/{id}")
+    public ResponseEntity deleteGameById(@PathVariable int id ,@RequestBody Integer itemId) {
+        cartService.deleteGameFromCart(id,itemId);
+        return ResponseEntity.ok().build();
 
+    }
 
     @Operation(summary = "Get items from user")
     @GetMapping("/cart/{id}/games")

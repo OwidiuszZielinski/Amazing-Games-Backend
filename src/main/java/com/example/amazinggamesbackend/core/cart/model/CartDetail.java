@@ -1,8 +1,6 @@
 package com.example.amazinggamesbackend.core.cart.model;
 
-import com.example.amazinggamesbackend.core.cart.dto.CartDetailDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,7 +36,7 @@ public class CartDetail {
         this.quantity = quantity;
     }
 
-    public void incraseQty(){
+    public void increaseQty(){
         this.quantity = quantity+1;
     }
 

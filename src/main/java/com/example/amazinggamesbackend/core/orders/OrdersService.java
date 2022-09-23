@@ -5,8 +5,6 @@ import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class OrdersService {
     public OrderEntity addorder(OrderDTO order) {
         OrderEntity neworder = new OrderEntity();
         neworder.addUser(usersService.userById(order.getUser()));
-        neworder.setGamesEntities(gamesService.gamesPerOrder(order));
+        neworder.setGamesEntities(gamesService.gamesInOrder(order));
         neworder.setValue(gamesService.calculateOrderValue(order));
         neworder.setStatus(neworder.getStatus());
         neworder.setDate(OrderEntity.orderdate());
@@ -43,7 +41,7 @@ public class OrdersService {
         getOrder.setDate(order.getDate());
         getOrder.setStatus(order.getStatus());
         getOrder.setUser(usersService.userById(order.getUser()));
-        getOrder.setGamesEntities(gamesService.gamesPerOrder(order));
+        getOrder.setGamesEntities(gamesService.gamesInOrder(order));
         getOrder.setValue(gamesService.calculateOrderValue(order));
         return ordersRepository.save(getOrder);
 

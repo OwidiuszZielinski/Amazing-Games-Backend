@@ -16,11 +16,11 @@ public class GamesService {
     GamesRepository gamesRepository;
 
     public GameEntity addGame(GameDTO game){
-        GameEntity newgame = new GameEntity();
-        newgame.fromDTO(game);
-        return gamesRepository.save(newgame);
+        GameEntity newGame = new GameEntity();
+        newGame.fromDTO(game);
+        return gamesRepository.save(newGame);
     }
-    public List<GameEntity> gamelist() {
+    public List<GameEntity> getGames() {
         return gamesRepository.findAll();
 
     }
@@ -29,44 +29,23 @@ public class GamesService {
 
     }
     public GameEntity editGameById(int id,GameDTO gameDTO){
-        GameEntity getgame = gamesRepository.findById(id).get();
-        getgame.setTitle(gameDTO.getTitle());
-        getgame.setType(gameDTO.getType());
-        getgame.setDescription(gameDTO.getDescription());
-        getgame.setPrice(gameDTO.getPrice());
-        getgame.setRating(gameDTO.getRating());
-        getgame.setAvailability(gameDTO.isAvailability());
-        return gamesRepository.save(getgame);
+        GameEntity getGame = gamesRepository.findById(id).get();
+        getGame.setTitle(gameDTO.getTitle());
+        getGame.setType(gameDTO.getType());
+        getGame.setDescription(gameDTO.getDescription());
+        getGame.setPrice(gameDTO.getPrice());
+        getGame.setRating(gameDTO.getRating());
+        getGame.setAvailability(gameDTO.isAvailability());
+        return gamesRepository.save(getGame);
     }
     public double calculateOrderValue(OrderDTO order){
         return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GameEntity::getPrice).sum();
     }
 
-    public List<GameEntity> gamesPerOrder(OrderDTO order){
-
+    public List<GameEntity> gamesInOrder(OrderDTO order){
         return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
     }
 
-
-
-//    public List<CartGames> gamesToCartByEditDTO(List<Integer> list){
-//        List<GameEntity> games = gamesRepository.findAllById(list.stream().collect(Collectors.toList()));
-//        List<CartGames> scg = new ArrayList<>();
-//
-//        for(GameEntity x : games){
-//          //  scg.add(new ShoppingCartGames(1,x));
-//
-//        }
-//        return scg;
-//    }
-//    public List<GameEntity> gamesToCartByEditDTO(List<Integer> list){
-//
-//        return gamesRepository.findAllById(list.stream().collect(Collectors.toList()));
-//    }
-
-//    public GameEntity addGameToCart(AddToCartDTO itemID){
-//        return gamesRepository.findById(itemID.getId()).get();
-//    }
     public GameEntity getGameById(int id){
         return gamesRepository.findById(id).get();
     }

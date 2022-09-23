@@ -22,7 +22,7 @@ public class CartEntity {
     @GeneratedValue
     private int id;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
+    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
