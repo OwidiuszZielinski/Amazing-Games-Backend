@@ -46,6 +46,12 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    public void cleanCart(int id){
+        CartEntity cart = getUserCart(id);
+        cart.getCartDetails().clear();
+        cartRepository.save(cart);
+    }
+
     public void createCartForUser(int id) {
         CartEntity userCart = new CartEntity();
         userCart.addUser(usersService.userById(id));
