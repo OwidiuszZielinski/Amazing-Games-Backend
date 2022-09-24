@@ -5,15 +5,15 @@ import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.tax.Rates;
+import com.example.amazinggamesbackend.core.tax.Tax;
 import com.example.amazinggamesbackend.core.users.UsersService;
-import io.swagger.models.auth.In;
+import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.CollationElementIterator;
+import javax.transaction.Transactional;
 import java.util.*;
-import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
 
 @Service
 public class OrdersService {
@@ -26,8 +26,8 @@ public class OrdersService {
 
 
     public void createOrder(OrderDTO order) {
-        OrderEntity newOrder = new OrderEntity(order.getStatus() ,OrderEntity.orderDate() ,gamesService.calculateOrderValue(order) ,
-                usersService.userById(order.getUser()) ,gamesService.gamesInOrder(order));
+        OrderEntity newOrder = new OrderEntity(order.getStatus() ,OrderEntity.orderDate() ,gamesService.calculateOrderValue(order)
+                ,usersService.userById(order.getUser()) ,gamesService.gamesInOrder(order));
         ordersRepository.save(newOrder);
     }
 
@@ -35,6 +35,9 @@ public class OrdersService {
         List<OrderDTO> orderList = new ArrayList<>();
         for (OrderEntity x : ordersRepository.findAll()) {
             orderList.add(OrderDTO.from(x));
+        }
+        for(OrderDTO y:orderList){
+            y.setValueWithTax(calcTax(y.getValue(),usersService.userById(y.getUser())));
         }
         return orderList;
     }
@@ -47,7 +50,7 @@ public class OrdersService {
         OrderEntity getOrder = ordersRepository.findById(id).get();
         getOrder.setStatus(order.getStatus());
         getOrder.setUser(usersService.userById(order.getUser()));
-        getOrder.setGamesEntities(gamesService.gamesInOrder(order));
+        getOrder.setGames(gamesService.gamesInOrder(order));
         getOrder.setValue(gamesService.calculateOrderValue(order));
         ordersRepository.save(getOrder);
         return OrderDTO.from(getOrder);
@@ -57,7 +60,7 @@ public class OrdersService {
     public GameEntityDTO bestseller() {
         HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
         for (OrderEntity x : ordersRepository.findAll()) {
-            for (GameEntity y : x.getGamesEntities()) {
+            for (GameEntity y : x.getGames()) {
                 if (gameIdFrequency.containsKey(y.getId())) {
                     gameIdFrequency.put(y.getId() ,gameIdFrequency.get(y.getId()) + 1);
                 } else {
@@ -65,10 +68,19 @@ public class OrdersService {
                 }
             }
         }
-        int key = Collections.max(gameIdFrequency.entrySet(),Map.Entry.comparingByValue()).getKey();
+        int key = Collections.max(gameIdFrequency.entrySet() ,Map.Entry.comparingByValue()).getKey();
         return GameEntityDTO.from(gamesService.getGameById(key));
 
-
+    }
+    @Transactional
+    public double calcTax(double withoutTax ,UserEntity user) {
+        double tax = 0;
+        for (Rates x : Tax.taxList) {
+            if (x.getCountry_id() == user.getCountry_id()) {
+                tax = withoutTax * (x.getStandard_rate() / 100);
+            }
+        }
+        return withoutTax + tax;
     }
 }
 

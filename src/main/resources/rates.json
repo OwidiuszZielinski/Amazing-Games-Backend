@@ -1,0 +1,109 @@
+[{
+  "country_id": "1",
+  "country": "Austria",
+  "vat_name": "Umsatzsteuer",
+  "vat_abbr": "USt",
+  "standard_rate": 20.00,
+  "reduced_rate": 10.00,
+  "reduced_rate_alt": 13.00,
+  "super_reduced_rate": false,
+  "parking_rate": 12.00
+
+},
+{
+  "country_id": "2",
+  "country": "Belgium",
+  "vat_name": "Taxe sur la valeur ajoutée",
+  "vat_abbr": "TVA/BTW",
+  "standard_rate": 21.00,
+  "reduced_rate": 12.00,
+  "reduced_rate_alt": 6.00,
+  "super_reduced_rate": false,
+  "parking_rate": 12.00
+
+},
+  {
+    "country_id": "3",
+    "country": "Czech Republic",
+    "vat_name": "Dani z pridane hotnoty",
+    "vat_abbr": "DPH",
+    "standard_rate": 21.00,
+    "reduced_rate": 15.00,
+    "reduced_rate_alt": 10.00,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  },
+  {
+    "country_id": "4",
+    "country": "Denmark",
+    "vat_name": "Omsaetningsavgift",
+    "vat_abbr": "MOMS",
+    "standard_rate": 25.00,
+    "reduced_rate": 0.00,
+    "reduced_rate_alt": 0.00,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  },
+  {
+    "country_id": "5",
+    "country": "Germany",
+    "vat_name": "Umsatzsteuer",
+    "vat_abbr": "USt",
+    "standard_rate": 19.00,
+    "reduced_rate": 7.00,
+    "reduced_rate_alt": 0.00,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  },
+  {
+    "country_id": "6",
+    "country": "France",
+    "vat_name": "Taxe sur la valeur ajoutée",
+    "vat_abbr": "TVA",
+    "standard_rate": 20.00,
+    "reduced_rate": 10.00,
+    "reduced_rate_alt": 5.50,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  },
+  {
+    "country_id": "7",
+    "country": "Poland",
+    "vat_name": "Podatek od towaròw i uslug",
+    "vat_abbr": "VAT",
+    "standard_rate": 23.00,
+    "reduced_rate": 8.00,
+    "reduced_rate_alt": 5.00,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  },
+  {
+    "country_id": "8",
+    "country": "Sweden",
+    "vat_name": "Mervärdeskatt",
+    "vat_abbr": "ML",
+    "standard_rate": 25.00,
+    "reduced_rate": 12.00,
+    "reduced_rate_alt": 6.00,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  },
+  {
+    "country_id": "9",
+    "country": "Italy",
+    "vat_name": "Imposta sul valore aggiunto",
+    "vat_abbr": "IVA",
+    "standard_rate": 22.00,
+    "reduced_rate": 10.00,
+    "reduced_rate_alt": 4.00,
+    "super_reduced_rate": false,
+    "parking_rate": 0.00
+
+  }
+]

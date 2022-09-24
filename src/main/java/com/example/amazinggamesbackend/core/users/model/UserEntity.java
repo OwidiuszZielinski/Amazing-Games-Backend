@@ -29,19 +29,19 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     private String email;
-    private int country;
+    private int country_id;
     private String address;
 
     private String roles;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    private List<OrderEntity> orderEntities;
+    private List<OrderEntity> orders;
 
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    CartEntity shoppingCart;
+    CartEntity cart;
 
     public UserEntity(String username ,String password ,String email ,String roles,int country,String address) {
         this.username = username;
@@ -49,7 +49,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
         this.email = email;
         this.roles = roles;
         this.address = address;
-        this.country = country;
+        this.country_id = country;
 
     }
 
@@ -58,7 +58,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
         this.roles = userDTO.getRoles();
         this.email = userDTO.getEmail();
         this.password = userDTO.getPassword();
-        this.country = userDTO.getCountry();
+        this.country_id = userDTO.getCountry_id();
         this.address = userDTO.getAddress();
 
     }

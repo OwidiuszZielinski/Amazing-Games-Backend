@@ -2,10 +2,6 @@ package com.example.amazinggamesbackend.core.users.dto;
 
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.HashSet;
-
 
 @Getter
 @Setter
@@ -20,7 +16,7 @@ public class UserDTO {
     private String email;
     private String roles;
     private String address;
-    private int country;
+    private int country_id;
 
 
     public static UserDTO from(UserEntity user) {
@@ -30,7 +26,7 @@ public class UserDTO {
                 .email(user.getEmail())
                 .roles(user.getRoles())
                 .address(user.getAddress())
-                .country(user.getCountry())
+                .country_id(user.getCountry_id())
                 .build();
     }
 }

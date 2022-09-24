@@ -1,15 +1,11 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
-import com.example.amazinggamesbackend.core.cart.model.CartDetail;
-import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
-import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -42,7 +38,7 @@ public class OrderEntity {
     @JoinTable(name = "order_game",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id"))
-    private List<GameEntity> gamesEntities = new ArrayList<>();
+    private List<GameEntity> games = new ArrayList<>();
 
     public static String orderDate() {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -50,19 +46,18 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(int status ,String date ,double value ,UserEntity user ,List<GameEntity> gamesEntities) {
+    public OrderEntity(int status ,String date ,double value,UserEntity user ,List<GameEntity> games) {
         this.status = status;
         this.date = date;
         this.value = value;
         this.user = user;
-        this.gamesEntities = gamesEntities;
+        this.games = games;
     }
 
     public void setValue(double value) {
         DecimalFormat formatValue = new DecimalFormat("##.00");
         this.value = Double.parseDouble(formatValue.format(value).replace("," ,"."));
     }
-
 
 
 }
