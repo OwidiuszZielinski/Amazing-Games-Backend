@@ -57,9 +57,7 @@ public class GamesController {
         gamesService.editGameById(Id ,gameDTO);
         return ResponseEntity.ok().build();
     }
-    @Operation(summary = "Get top selling game")
-    @GetMapping("")
-        public void getTopSellingGame(){
 
-    }
+
+
 }

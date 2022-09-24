@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.app;
 
 
+import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.OrdersRepository;
 import com.example.amazinggamesbackend.core.orders.OrdersService;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -58,5 +59,11 @@ public class OrdersController {
     public OrderDTO editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
         return ordersService.editOrder(Id ,order);
 
+    }
+
+    @Operation(summary = "Bestseller")
+    @GetMapping("games/bestseller")
+    public GameEntityDTO getBestseller(){
+        return ordersService.bestseller();
     }
 }
