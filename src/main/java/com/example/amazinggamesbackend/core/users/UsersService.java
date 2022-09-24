@@ -41,6 +41,7 @@ public class UsersService {
         return usersRepository.save(editedUser);
     }
     public UserEntity userById(int id) {
+            System.out.println(usersRepository.findById(id).get().getRoles());
             return usersRepository.findById(id).get();
         }
 

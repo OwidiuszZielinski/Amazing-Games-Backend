@@ -2,17 +2,15 @@ package com.example.amazinggamesbackend.app;
 
 import com.example.amazinggamesbackend.core.games.GamesRepository;
 import com.example.amazinggamesbackend.core.games.GamesService;
-import com.example.amazinggamesbackend.core.games.dto.DeleteGamesDTO;
-import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -25,9 +23,9 @@ public class GamesController {
     @Autowired
     private GamesService gamesService;
 
-    @Operation(summary = "add game")
+    @Operation(summary = "Add game")
     @PostMapping("/games")
-    public ResponseEntity addGame(@RequestBody GameDTO gameDTO) {
+    public ResponseEntity addGame(@RequestBody GameEntityDTO gameDTO) {
         if (gameDTO.getTitle().isBlank() || gameDTO.getType().isBlank() || gameDTO.getDescription().isBlank()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {
@@ -36,31 +34,32 @@ public class GamesController {
         }
     }
 
-    @Operation(summary = "get all games")
+    @Operation(summary = "Get all games")
     @GetMapping("/games")
-    public List<GameEntity> getGames() {
+    public List<GameEntityDTO> getGames() {
         return gamesService.getGames();
     }
 
-    @Operation(summary = "delete games")
+    @Operation(summary = "Delete games")
     @DeleteMapping("/games")
-    public ResponseEntity deleteGameById(@RequestBody DeleteGamesDTO deleteGamesDTO) {
-        if (gamesRepository.findAllById(deleteGamesDTO.getIds()).isEmpty()) {
+    public ResponseEntity deleteGameById(@RequestBody List<Integer> ids) {
+        if (gamesRepository.findAllById(ids).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
-        if (deleteGamesDTO.getIds().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else
-            gamesService.deleteGamesById(deleteGamesDTO.getIds());
+        else
+            gamesService.deleteGamesById(ids);
         return ResponseEntity.ok().build();
-
     }
 
-    @Operation(summary = "edit game by id")
+    @Operation(summary = "Edit game by id")
     @PatchMapping("games/{Id}")
-    public GameEntity editGameById(@RequestBody GameDTO gameDTO ,@PathVariable int Id) {
-        return gamesService.editGameById(Id ,gameDTO);
+    public ResponseEntity editGameById(@RequestBody GameEntityDTO gameDTO ,@PathVariable int Id) {
+        gamesService.editGameById(Id ,gameDTO);
+        return ResponseEntity.ok().build();
+    }
+    @Operation(summary = "Get top selling game")
+    @GetMapping("")
+        public void getTopSellingGame(){
 
     }
-
 }

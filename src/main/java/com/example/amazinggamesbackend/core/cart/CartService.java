@@ -64,6 +64,7 @@ public class CartService {
         cartDetail.increaseQty();
 
     }
+    //Service method return Entity
     public CartEntity getUserCart(int id){
         return cartRepository.findByUserId(id).get();
     }
