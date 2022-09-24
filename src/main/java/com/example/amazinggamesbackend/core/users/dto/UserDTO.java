@@ -15,17 +15,22 @@ import java.util.HashSet;
 public class UserDTO {
 
 
-
     private String username;
     private String password;
     private String email;
     private String roles;
+    private String address;
+    private int country;
 
 
-    public static UserDTO from (UserEntity user){
-
+    public static UserDTO from(UserEntity user) {
         return UserDTO.builder()
-
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .address(user.getAddress())
+                .country(user.getCountry())
                 .build();
     }
 }

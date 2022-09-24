@@ -27,7 +27,7 @@ public class UsersService {
     public void deleteUsers(List<Integer> ids){
         usersRepository.deleteAllByIdInBatch(ids);
     }
-    public UserEntity editUser(int id,UserDTO user){
+    public UserDTO editUser(int id,UserDTO user){
         UserEntity editedUser = usersRepository.findById(id).get();
         editedUser.setEmail(user.getEmail());
         editedUser.setRoles(user.getRoles());
@@ -38,7 +38,8 @@ public class UsersService {
         else {
             editedUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        return usersRepository.save(editedUser);
+        usersRepository.save(editedUser);
+        return UserDTO.from(editedUser);
     }
     public UserEntity userById(int id) {
             System.out.println(usersRepository.findById(id).get().getRoles());

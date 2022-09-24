@@ -62,7 +62,7 @@ public class OrdersController {
     }
 
     @Operation(summary = "Bestseller")
-    @GetMapping("games/bestseller")
+    @GetMapping("orders/bestseller")
     public GameEntityDTO getBestseller(){
         return ordersService.bestseller();
     }

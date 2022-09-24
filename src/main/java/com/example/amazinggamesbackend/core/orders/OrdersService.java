@@ -56,7 +56,6 @@ public class OrdersService {
 
     public GameEntityDTO bestseller() {
         HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
-        GameEntityDTO best = null;
         for (OrderEntity x : ordersRepository.findAll()) {
             for (GameEntity y : x.getGamesEntities()) {
                 if (gameIdFrequency.containsKey(y.getId())) {
@@ -66,12 +65,8 @@ public class OrdersService {
                 }
             }
         }
-        for (Map.Entry<Integer, Integer> entry : gameIdFrequency.entrySet()) {
-            if (entry.getValue() == Collections.max(gameIdFrequency.values())) {
-                best = GameEntityDTO.from(gamesService.getGameById(entry.getKey()));
-            }
-        }
-        return best;
+        int key = Collections.max(gameIdFrequency.entrySet(),Map.Entry.comparingByValue()).getKey();
+        return GameEntityDTO.from(gamesService.getGameById(key));
 
 
     }
