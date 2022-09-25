@@ -34,11 +34,11 @@ public class CartEntity {
     }
 
     public void fromDTO(CartDTO cartDTO) {
-        List<CartDetail> templist = new ArrayList<>();
+        List<CartDetail> tempList = new ArrayList<>();
         for (CartDetailDTO x : cartDTO.getCartDetailsinfo()) {
-            templist.add(new CartDetail(toGameEntity(x.getGame()) ,x.getQuantity()));
+            tempList.add(new CartDetail(toGameEntity(x.getGame()) ,x.getQuantity()));
         }
-        this.cartDetails = templist;
+        this.cartDetails = tempList;
         this.user = cartDTO.getUser();
 
     }
