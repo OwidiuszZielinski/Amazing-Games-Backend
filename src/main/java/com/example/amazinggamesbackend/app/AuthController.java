@@ -1,5 +1,7 @@
 package com.example.amazinggamesbackend.app;
 
+import com.example.amazinggamesbackend.core.tax.Tax;
+import com.example.amazinggamesbackend.core.tax.TaxFactory;
 import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
@@ -49,7 +51,8 @@ public class AuthController {
             registerUser.fromDTO(user);
             registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
             registerUser.setRoles("ROLE_USER");
-            repository.save(registerUser);
+            registerUser.setCountry_id(user.getCountry_id());
+                repository.save(registerUser);
 
             // Generating JWT
             String token = jwtUtil.generateToken(user.getEmail());

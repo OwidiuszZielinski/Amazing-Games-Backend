@@ -2,7 +2,6 @@ package com.example.amazinggamesbackend.app;
 
 import com.example.amazinggamesbackend.core.cart.CartRepository;
 import com.example.amazinggamesbackend.core.cart.CartService;
-import com.example.amazinggamesbackend.core.cart.dto.CreateCartDTO;
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -38,19 +37,23 @@ public class CartController {
 
     }
 
-    @Operation(summary = "Delete item")
+    @Operation(summary = "Delete from cart")
     @DeleteMapping("/cart/{id}")
     public ResponseEntity deleteGameById(@PathVariable int id ,@RequestBody Integer itemId) {
         cartService.deleteGameFromCart(id,itemId);
         return ResponseEntity.ok().build();
-
+    }
+    @Operation(summary = "Clean cart")
+    @PatchMapping("/cart/{id}")
+    public ResponseEntity clearCart(@PathVariable int id) {
+        cartService.cleanCart(id);
+        return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Get items from user")
+    @Operation(summary = "Get user cart")
     @GetMapping("/cart/{id}/games")
     public CartDTO getCart(@PathVariable int id) {
         return cartService.getCartByUserId(id);
     }
-
 
 }

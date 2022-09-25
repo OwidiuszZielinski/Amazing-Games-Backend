@@ -1,9 +1,8 @@
 package com.example.amazinggamesbackend.core.games.model;
 
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
-import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,23 +27,19 @@ public class GameEntity {
     private double rating;
     private boolean availability;
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
     @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
-    @JsonBackReference
     private List<OrderEntity> orders = new ArrayList<>();
-
-    //@JsonIgnore
     @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     public void setRating(double rating) {
         if (rating <= 10 && rating >= 0) {
             this.rating = rating;
-        } else throw new IllegalArgumentException("bad rating value");
+        } else throw new IllegalArgumentException("Bad rating value");
     }
 
-    public void fromDTO(GameDTO gameDTO) {
+    public void fromDTO(GameEntityDTO gameDTO) {
         this.title = gameDTO.getTitle();
         this.type = gameDTO.getType();
         this.price = gameDTO.getPrice();

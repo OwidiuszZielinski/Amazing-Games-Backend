@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.cart.dto;
 
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
+import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import lombok.*;
 
 import java.util.ArrayList;

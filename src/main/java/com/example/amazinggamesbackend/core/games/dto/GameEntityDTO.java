@@ -1,4 +1,4 @@
-package com.example.amazinggamesbackend.core.cart.dto;
+package com.example.amazinggamesbackend.core.games.dto;
 
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import lombok.*;
@@ -27,7 +27,6 @@ public class GameEntityDTO {
                 .availability(game.isAvailability())
                 .build();
     }
-
 
 
 }

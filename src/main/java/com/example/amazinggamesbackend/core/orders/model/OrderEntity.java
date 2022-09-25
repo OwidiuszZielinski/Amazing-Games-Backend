@@ -1,11 +1,15 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
+import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 
+import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.amazinggamesbackend.interfaces.FormatValue;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -17,7 +21,9 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class OrderEntity {
+@NoArgsConstructor
+public class OrderEntity implements FormatValue {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,33 +36,29 @@ public class OrderEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
     @JoinTable(name = "order_game",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id"))
-    @JsonManagedReference
-    private List<GameEntity> gamesEntities = new ArrayList<>();
+    private List<GameEntity> games = new ArrayList<>();
 
-    public static String orderdate() {
+    public static String orderDate() {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
         return ts.toString();
 
     }
 
-    public void setStatus(int status) {
+    public OrderEntity(int status ,String date ,double value,UserEntity user ,List<GameEntity> games) {
         this.status = status;
+        this.date = date;
+        this.value = value;
+        this.user = user;
+        this.games = games;
     }
+
 
     public void setValue(double value) {
-        DecimalFormat formatvalue = new DecimalFormat("##.00");
-        this.value = Double.parseDouble(formatvalue.format(value).replace("," ,"."));
+        this.value = format(value);
     }
-
-
-    public void addUser(UserEntity userEntity) {
-        this.user = userEntity;
-    }
-
 
 }

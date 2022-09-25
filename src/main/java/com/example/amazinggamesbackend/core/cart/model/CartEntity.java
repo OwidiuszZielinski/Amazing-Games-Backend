@@ -2,11 +2,9 @@ package com.example.amazinggamesbackend.core.cart.model;
 
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.dto.CartDetailDTO;
-import com.example.amazinggamesbackend.core.cart.dto.GameEntityDTO;
-import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,17 +34,17 @@ public class CartEntity {
     }
 
     public void fromDTO(CartDTO cartDTO) {
-        List<CartDetail> templist = new ArrayList<>();
+        List<CartDetail> tempList = new ArrayList<>();
         for (CartDetailDTO x : cartDTO.getCartDetailsinfo()) {
-            templist.add(new CartDetail(toGameEntity(x.getGame()) ,x.getQuantity()));
+            tempList.add(new CartDetail(fromDTO(x.getGame()) ,x.getQuantity()));
         }
-        this.cartDetails = templist;
+        this.cartDetails = tempList;
         this.user = cartDTO.getUser();
 
     }
 
 
-    public static GameEntity toGameEntity(GameEntityDTO gameEntityDTO) {
+    public static GameEntity fromDTO(GameEntityDTO gameEntityDTO) {
         GameEntity game = new GameEntity();
         game.setId(gameEntityDTO.getId());
         game.setPrice(gameEntityDTO.getPrice());

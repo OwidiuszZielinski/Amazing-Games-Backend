@@ -1,7 +1,6 @@
 package com.example.amazinggamesbackend.core.cart;
 
 
-
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.cart.model.CartEntity;
@@ -46,6 +45,12 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    public void cleanCart(int id){
+        CartEntity cart = getUserCart(id);
+        cart.getCartDetails().clear();
+        cartRepository.save(cart);
+    }
+
     public void createCartForUser(int id) {
         CartEntity userCart = new CartEntity();
         userCart.addUser(usersService.userById(id));
@@ -58,6 +63,7 @@ public class CartService {
         cartDetail.increaseQty();
 
     }
+    //Service method return Entity
     public CartEntity getUserCart(int id){
         return cartRepository.findByUserId(id).get();
     }
