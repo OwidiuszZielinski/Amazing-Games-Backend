@@ -7,6 +7,7 @@ import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 
+import com.example.amazinggamesbackend.interfaces.FormatValue;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import java.util.List;
 @Setter
 @Entity
 @NoArgsConstructor
-public class OrderEntity {
+public class OrderEntity implements FormatValue {
 
 
     @Id
@@ -57,9 +58,7 @@ public class OrderEntity {
 
 
     public void setValue(double value) {
-        DecimalFormat formatValue = new DecimalFormat("##.00");
-        this.value = Double.parseDouble(formatValue.format(value).replace("," ,"."));
+        this.value = format(value);
     }
-
 
 }

@@ -9,6 +9,7 @@ import com.example.amazinggamesbackend.core.tax.Rates;
 import com.example.amazinggamesbackend.core.tax.Tax;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.interfaces.FormatValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class OrdersService {
+public class OrdersService implements FormatValue {
     @Autowired
     OrdersRepository ordersRepository;
     @Autowired
@@ -80,7 +81,7 @@ public class OrdersService {
                 tax = withoutTax * (x.getStandard_rate() / 100);
             }
         }
-        return withoutTax + tax;
+        return format(withoutTax + tax);
     }
 }
 

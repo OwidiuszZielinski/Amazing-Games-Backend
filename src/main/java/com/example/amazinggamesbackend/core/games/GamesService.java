@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class GamesService {
@@ -47,6 +49,13 @@ public class GamesService {
     //Service method return Entity
     public GameEntity getGameById(int id){
         return gamesRepository.findById(id).get();
+    }
+
+    public GameEntityDTO discountGame(){
+        List<GameEntity> gameList = gamesRepository.findAll().stream().filter(game->game.getPrice() > 0).collect(Collectors.toList());
+        Random random = new Random();
+        int discount = random.nextInt(0,gameList.size()-1);
+        return GameEntityDTO.from(gameList.get(discount));
     }
 
 
