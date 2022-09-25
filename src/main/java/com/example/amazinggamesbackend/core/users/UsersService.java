@@ -1,45 +1,41 @@
 package com.example.amazinggamesbackend.core.users;
 
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UsersService {
-
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UsersRepository usersRepository;
+    public List<UserDTO> getAllUsers(){
+        List<UserDTO> tempList = new ArrayList<>();
+        for(UserEntity x : usersRepository.findAll()){
+            tempList.add(UserDTO.fromWithoutPassword(x));
 
-
-    public List<UserEntity> getAllUsers(){
-        return usersRepository.findAll();
+        }
+        return tempList;
     }
-
-
-
     public void deleteUsers(List<Integer> ids){
         usersRepository.deleteAllByIdInBatch(ids);
     }
-    public UserDTO editUser(int id,UserDTO user){
-        UserEntity editedUser = usersRepository.findById(id).get();
-        editedUser.setEmail(user.getEmail());
-        editedUser.setRoles(user.getRoles());
-        editedUser.setUsername(user.getUsername());
+    public void updateUser(int id,UserDTO user){
+        UserEntity update = userById(id);
+        update.fromDTO(user);
         if(user.getPassword().isBlank()) {
-            editedUser.setPassword(editedUser.getPassword());
+            update.setPassword(update.getPassword());
         }
         else {
-            editedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            update.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        usersRepository.save(editedUser);
-        return UserDTO.from(editedUser);
+        usersRepository.save(update);
     }
     public UserEntity userById(int id) {
             return usersRepository.findById(id).get();

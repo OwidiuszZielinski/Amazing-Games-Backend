@@ -54,7 +54,7 @@ public class GamesController {
     @Operation(summary = "Edit game by id")
     @PatchMapping("games/{Id}")
     public ResponseEntity editGameById(@RequestBody GameEntityDTO gameDTO ,@PathVariable int Id) {
-        gamesService.editGameById(Id ,gameDTO);
+        gamesService.updateGame(Id ,gameDTO);
         return ResponseEntity.ok().build();
     }
 

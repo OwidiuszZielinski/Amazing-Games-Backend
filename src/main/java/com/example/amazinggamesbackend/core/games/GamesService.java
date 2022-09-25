@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GamesService {
@@ -33,14 +32,9 @@ public class GamesService {
         gamesRepository.deleteAllByIdInBatch(ids);
 
     }
-    public void editGameById(int id,GameEntityDTO gameDTO){
+    public void updateGame(int id,GameEntityDTO gameDTO){
         GameEntity game = getGameById(id);
-        game.setTitle(gameDTO.getTitle());
-        game.setType(gameDTO.getType());
-        game.setDescription(gameDTO.getDescription());
-        game.setPrice(gameDTO.getPrice());
-        game.setRating(gameDTO.getRating());
-        game.setAvailability(gameDTO.isAvailability());
+        game.fromDTO(gameDTO);
         gamesRepository.save(game);
     }
     public double calculateOrderValue(OrderDTO order){
@@ -48,7 +42,7 @@ public class GamesService {
     }
     //Service method return Entity
     public List<GameEntity> gamesInOrder(OrderDTO order){
-        return gamesRepository.findAllById(order.getGames()).stream().collect(Collectors.toList());
+        return new ArrayList<>(gamesRepository.findAllById(order.getGames()));
     }
     //Service method return Entity
     public GameEntity getGameById(int id){

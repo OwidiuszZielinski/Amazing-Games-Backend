@@ -29,4 +29,13 @@ public class UserDTO {
                 .country_id(user.getCountry_id())
                 .build();
     }
+    public static UserDTO fromWithoutPassword(UserEntity user) {
+        return UserDTO.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .address(user.getAddress())
+                .country_id(user.getCountry_id())
+                .build();
+    }
 }

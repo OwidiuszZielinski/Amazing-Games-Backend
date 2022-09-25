@@ -56,8 +56,8 @@ public class OrdersController {
 
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
-    public OrderDTO editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
-        return ordersService.editOrder(Id ,order);
+    public void editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
+       ordersService.updateOrder(Id ,order);
 
     }
 

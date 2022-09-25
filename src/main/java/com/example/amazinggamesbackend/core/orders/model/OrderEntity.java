@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
+import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -53,6 +54,7 @@ public class OrderEntity {
         this.user = user;
         this.games = games;
     }
+
 
     public void setValue(double value) {
         DecimalFormat formatValue = new DecimalFormat("##.00");

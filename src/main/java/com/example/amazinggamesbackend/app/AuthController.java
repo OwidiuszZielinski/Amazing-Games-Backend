@@ -52,7 +52,7 @@ public class AuthController {
             registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
             registerUser.setRoles("ROLE_USER");
             registerUser.setCountry_id(user.getCountry_id());
-            repository.save(registerUser);
+                repository.save(registerUser);
 
             // Generating JWT
             String token = jwtUtil.generateToken(user.getEmail());

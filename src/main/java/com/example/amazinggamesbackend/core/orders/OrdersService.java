@@ -20,15 +20,15 @@ public class OrdersService {
     @Autowired
     OrdersRepository ordersRepository;
     @Autowired
-    UsersService usersService = new UsersService();
+    UsersService usersService;
     @Autowired
-    GamesService gamesService = new GamesService();
+    GamesService gamesService;
 
 
     public void createOrder(OrderDTO order) {
         OrderEntity newOrder = new OrderEntity(order.getStatus() ,OrderEntity.orderDate() ,gamesService.calculateOrderValue(order)
                 ,usersService.userById(order.getUser()) ,gamesService.gamesInOrder(order));
-        ordersRepository.save(newOrder);
+                ordersRepository.save(newOrder);
     }
 
     public List<OrderDTO> getAllOrders() {
@@ -36,8 +36,8 @@ public class OrdersService {
         for (OrderEntity x : ordersRepository.findAll()) {
             orderList.add(OrderDTO.from(x));
         }
-        for(OrderDTO y:orderList){
-            y.setValueWithTax(calcTax(y.getValue(),usersService.userById(y.getUser())));
+        for (OrderDTO y : orderList) {
+            y.setValueWithTax(calcTax(y.getValue() ,usersService.userById(y.getUser())));
         }
         return orderList;
     }
@@ -46,14 +46,13 @@ public class OrdersService {
         ordersRepository.deleteAllByIdInBatch(ids);
     }
 
-    public OrderDTO editOrder(int id ,OrderDTO order) {
+    public void updateOrder(int id ,OrderDTO order) {
         OrderEntity getOrder = ordersRepository.findById(id).get();
         getOrder.setStatus(order.getStatus());
         getOrder.setUser(usersService.userById(order.getUser()));
         getOrder.setGames(gamesService.gamesInOrder(order));
         getOrder.setValue(gamesService.calculateOrderValue(order));
         ordersRepository.save(getOrder);
-        return OrderDTO.from(getOrder);
 
     }
 
@@ -72,6 +71,7 @@ public class OrdersService {
         return GameEntityDTO.from(gamesService.getGameById(key));
 
     }
+
     @Transactional
     public double calcTax(double withoutTax ,UserEntity user) {
         double tax = 0;

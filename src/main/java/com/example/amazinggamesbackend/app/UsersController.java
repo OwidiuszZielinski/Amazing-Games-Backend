@@ -4,19 +4,16 @@ package com.example.amazinggamesbackend.app;
 import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.UsersService;
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,13 +23,13 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @Operation(summary = "get users")
+    @Operation(summary = "Get users")
     @GetMapping("/users")
-    public List<UserEntity> getUsers() {
+    public List<UserDTO> getUsers() {
         return usersService.getAllUsers();
     }
 
-    @Operation(summary = "delete users")
+    @Operation(summary = "Delete users")
     @DeleteMapping("/users")
     public ResponseEntity<Object> deleteUsers(@RequestBody List<Integer> ids) {
         if (usersRepository.findAllById(ids).isEmpty() || ids.isEmpty()) {
@@ -43,17 +40,11 @@ public class UsersController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "edit user by id")
+    @Operation(summary = "Update user by ID")
     @PatchMapping("/users/{id}")
-    public UserDTO editUser(@PathVariable int id ,@RequestBody UserDTO user) {
-        return usersService.editUser(id ,user);
+    public void updateUser(@PathVariable int id ,@RequestBody UserDTO user) {
+        usersService.updateUser(id ,user);
     }
 
-
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody UserDTO user) {
-        Optional<UserEntity> userFromDb = usersRepository.findByUsernameIgnoreCase(user.getUsername());
-        return ResponseEntity.ok().build();
-    }
 }
 
