@@ -1,26 +1,22 @@
 package com.example.amazinggamesbackend.app;
 
-import com.example.amazinggamesbackend.core.tax.Tax;
-import com.example.amazinggamesbackend.core.tax.TaxFactory;
 import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.security.JWTUtil;
-import org.hibernate.persister.spi.UnknownPersisterException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityExistsException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -52,7 +48,7 @@ public class AuthController {
             registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
             registerUser.setRoles("ROLE_USER");
             registerUser.setCountry_id(user.getCountry_id());
-                repository.save(registerUser);
+            repository.save(registerUser);
 
             // Generating JWT
             String token = jwtUtil.generateToken(user.getEmail());

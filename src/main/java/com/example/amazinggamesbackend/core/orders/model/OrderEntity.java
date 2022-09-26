@@ -1,12 +1,7 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
-import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-
-import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
-import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
-
 import com.example.amazinggamesbackend.interfaces.FormatValue;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +42,7 @@ public class OrderEntity implements FormatValue {
 
     }
 
-    public OrderEntity(int status ,String date ,double value,UserEntity user ,List<GameEntity> games) {
+    public OrderEntity(int status ,String date ,double value ,UserEntity user ,List<GameEntity> games) {
         this.status = status;
         this.date = date;
         this.value = value;

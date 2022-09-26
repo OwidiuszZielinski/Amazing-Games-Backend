@@ -2,16 +2,14 @@ package com.example.amazinggamesbackend.app;
 
 
 import com.example.amazinggamesbackend.core.users.UsersRepository;
-import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.UsersService;
+import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 

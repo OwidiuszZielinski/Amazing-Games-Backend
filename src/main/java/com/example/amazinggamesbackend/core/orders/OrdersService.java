@@ -7,6 +7,7 @@ import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.tax.Rates;
 import com.example.amazinggamesbackend.core.tax.Tax;
+import com.example.amazinggamesbackend.core.tax.TaxSingleton;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
@@ -76,7 +77,8 @@ public class OrdersService implements FormatValue {
     @Transactional
     public double calcTax(double withoutTax ,UserEntity user) {
         double tax = 0;
-        for (Rates x : Tax.taxList) {
+        for (Rates x : Tax.getInstance().getRates()) {
+            System.out.println(x.getCountry());
             if (x.getCountry_id() == user.getCountry_id()) {
                 tax = withoutTax * (x.getStandard_rate() / 100);
             }
