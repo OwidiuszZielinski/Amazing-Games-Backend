@@ -2,19 +2,18 @@ package com.example.amazinggamesbackend.core.tax;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 @Getter
-public class Tax {
+public class Tax implements Cloneable  {
 
     private static Tax taxSingleton;
     private Rates[] rates;
     private Tax(){
+        if (taxSingleton != null) {
+            throw new IllegalStateException("Cannot create new instance, please use getInstance method instead.");
+        }
 
     }
 
@@ -27,9 +26,10 @@ public class Tax {
         }
     }
     public static Tax getInstance() {
-        if (taxSingleton == null) {
-            taxSingleton = new Tax();
+
+            if (taxSingleton == null) {
+                taxSingleton = new Tax();
+            }
+            return taxSingleton;
         }
-        return taxSingleton;
-    }
 }
