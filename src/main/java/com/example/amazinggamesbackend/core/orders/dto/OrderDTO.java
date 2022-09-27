@@ -2,6 +2,7 @@ package com.example.amazinggamesbackend.core.orders.dto;
 
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
 import lombok.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class OrderDTO {
     private int id;
     private int user;
     private List<Integer> games;
-    private int status;
+    private OrderStatus status;
     private String date;
     private double value;
     private double valueWithTax;

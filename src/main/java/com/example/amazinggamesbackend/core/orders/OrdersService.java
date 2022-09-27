@@ -5,9 +5,9 @@ import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
 import com.example.amazinggamesbackend.core.tax.Rates;
 import com.example.amazinggamesbackend.core.tax.Tax;
-import com.example.amazinggamesbackend.core.tax.TaxSingleton;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
@@ -28,7 +28,7 @@ public class OrdersService implements FormatValue {
 
 
     public void createOrder(OrderDTO order) {
-        OrderEntity newOrder = new OrderEntity(order.getStatus() ,OrderEntity.orderDate() ,gamesService.calculateOrderValue(order)
+        OrderEntity newOrder = new OrderEntity(OrderStatus.STARTED ,OrderEntity.orderDate() ,gamesService.calculateOrderValue(order)
                 ,usersService.userById(order.getUser()) ,gamesService.gamesInOrder(order));
                 ordersRepository.save(newOrder);
     }

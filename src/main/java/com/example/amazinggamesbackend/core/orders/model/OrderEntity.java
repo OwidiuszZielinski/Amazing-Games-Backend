@@ -22,7 +22,8 @@ public class OrderEntity implements FormatValue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private int status;
+    @Enumerated(EnumType.ORDINAL)
+     private OrderStatus status;
     private String date;
     private double value;
 
@@ -42,7 +43,7 @@ public class OrderEntity implements FormatValue {
 
     }
 
-    public OrderEntity(int status ,String date ,double value ,UserEntity user ,List<GameEntity> games) {
+    public OrderEntity(OrderStatus status ,String date ,double value ,UserEntity user ,List<GameEntity> games) {
         this.status = status;
         this.date = date;
         this.value = value;
