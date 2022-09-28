@@ -5,22 +5,31 @@ import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
-public class Tax implements Cloneable  {
+public class Tax{
 
     private static Tax taxSingleton;
-    private Rates[] rates;
+    private final List<Rates> rates;
     private Tax(){
         if (taxSingleton != null) {
             throw new IllegalStateException("Cannot create new instance, please use getInstance method instead.");
         }
-
     }
-
+    //Blok try catch kiedy jest wykonywany? kompilacja, wywolanie getInstance?
+    //Singleton działa, tworzenie nowej instacji jest zablokowane, aplikacja jest jednowatkowa wiec nie trzeba dodawac synchronizacji
+    //jesli implementujemy interefjsy clonable lub serializable musimy to uwzglednic w singletonie bo sa wrazliwe miejsca gdzie moglaby
+    //powstac nowa instncja, czy uzywanie getera na getInstance jest poprawne? Musiałem sie dostać do listy rates
     {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            rates = mapper.readValue(new File("src/main/resources/rates.json") ,Rates[].class);
+            Rates[] ratesArray;
+            ratesArray = mapper.readValue(new File("src/main/resources/rates.json") ,Rates[].class);
+            rates = Arrays.asList(ratesArray);
+
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

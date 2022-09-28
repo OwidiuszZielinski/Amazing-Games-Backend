@@ -74,7 +74,6 @@ public class OrdersService implements FormatValue {
 
     }
 
-    @Transactional
     public double calcTax(double withoutTax ,UserEntity user) {
         double tax = 0;
         for (Rates x : Tax.getInstance().getRates()) {
