@@ -2,9 +2,7 @@ package com.example.amazinggamesbackend.app;
 
 import com.example.amazinggamesbackend.core.games.GamesRepository;
 import com.example.amazinggamesbackend.core.games.GamesService;
-
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
-
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +43,7 @@ public class GamesController {
     public ResponseEntity deleteGameById(@RequestBody List<Integer> ids) {
         if (gamesRepository.findAllById(ids).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
-        else
+        } else
             gamesService.deleteGamesById(ids);
         return ResponseEntity.ok().build();
     }
@@ -57,7 +54,6 @@ public class GamesController {
         gamesService.updateGame(Id ,gameDTO);
         return ResponseEntity.ok().build();
     }
-
 
 
 }

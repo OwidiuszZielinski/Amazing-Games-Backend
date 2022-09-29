@@ -1,34 +1,32 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
-import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
-import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
-
 import com.example.amazinggamesbackend.interfaces.FormatValue;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.aspectj.weaver.ast.Or;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @Entity
+@Data
+@Builder
 @NoArgsConstructor
-public class OrderEntity implements FormatValue {
+@AllArgsConstructor
+//Builder musi posiadac konstruktory ??
+//@Data == @Getter, @Setter, @EqualsAndHashcode, @ToString
+public class OrderEntity {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private int status;
+    @Enumerated(EnumType.ORDINAL)
+    private OrderStatus status;
     private String date;
     private double value;
 
@@ -48,17 +46,8 @@ public class OrderEntity implements FormatValue {
 
     }
 
-    public OrderEntity(int status ,String date ,double value,UserEntity user ,List<GameEntity> games) {
-        this.status = status;
-        this.date = date;
-        this.value = value;
-        this.user = user;
-        this.games = games;
-    }
-
-
-    public void setValue(double value) {
-        this.value = format(value);
-    }
+//    public void setValue(double value) {
+//        this.value = format(value);
+//    }
 
 }

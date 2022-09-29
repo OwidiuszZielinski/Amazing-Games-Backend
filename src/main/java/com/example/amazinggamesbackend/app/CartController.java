@@ -40,9 +40,10 @@ public class CartController {
     @Operation(summary = "Delete from cart")
     @DeleteMapping("/cart/{id}")
     public ResponseEntity deleteGameById(@PathVariable int id ,@RequestBody Integer itemId) {
-        cartService.deleteGameFromCart(id,itemId);
+        cartService.deleteGameFromCart(id ,itemId);
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Clean cart")
     @PatchMapping("/cart/{id}")
     public ResponseEntity clearCart(@PathVariable int id) {

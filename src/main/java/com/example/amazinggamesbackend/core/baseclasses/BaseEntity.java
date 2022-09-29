@@ -2,7 +2,6 @@ package com.example.amazinggamesbackend.core.baseclasses;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,12 +19,13 @@ public abstract class BaseEntity implements Serializable {
     private int id;
     private String uuid = UUID.randomUUID().toString();
 
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(uuid);
     }
-    public boolean equals(Object that){
+
+    public boolean equals(Object that) {
         return this == that || that instanceof BaseEntity
-                && Objects.equals(uuid,((BaseEntity) that).uuid);
+                && Objects.equals(uuid ,((BaseEntity) that).uuid);
     }
 
 }

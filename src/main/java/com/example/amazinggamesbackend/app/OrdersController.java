@@ -57,13 +57,13 @@ public class OrdersController {
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
     public void editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
-       ordersService.updateOrder(Id ,order);
+        ordersService.updateOrder(Id ,order);
 
     }
 
     @Operation(summary = "Bestseller")
     @GetMapping("orders/bestseller")
-    public GameEntityDTO getBestseller(){
+    public GameEntityDTO getBestseller() {
         return ordersService.bestseller();
     }
 }
