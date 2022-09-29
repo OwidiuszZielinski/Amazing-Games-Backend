@@ -11,6 +11,7 @@ import com.example.amazinggamesbackend.core.tax.Tax;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,12 @@ public class OrdersService implements FormatValue {
 
 
     public void createOrder(OrderDTO order) {
-        OrderEntity newOrder = new OrderEntity(OrderStatus.STARTED ,OrderEntity.orderDate() ,gamesService.calculateOrderValue(order)
-                ,usersService.userById(order.getUser()) ,gamesService.gamesInOrder(order));
+        OrderEntity newOrder = OrderEntity.builder().status(OrderStatus.STARTED)
+                .date(OrderEntity.orderDate())
+                .games(gamesService.gamesInOrder(order))
+                .value(gamesService.calculateOrderValue(order))
+                .user(usersService.userById(order.getUser()))
+                .build();
                 ordersRepository.save(newOrder);
     }
 
@@ -53,7 +58,7 @@ public class OrdersService implements FormatValue {
         getOrder.setStatus(order.getStatus());
         getOrder.setUser(usersService.userById(order.getUser()));
         getOrder.setGames(gamesService.gamesInOrder(order));
-        getOrder.setValue(gamesService.calculateOrderValue(order));
+        getOrder.setValue(format(gamesService.calculateOrderValue(order)));
         ordersRepository.save(getOrder);
 
     }
@@ -77,7 +82,6 @@ public class OrdersService implements FormatValue {
     public double calcTax(double withoutTax ,UserEntity user) {
         double tax = 0;
         for (Rates x : Tax.getInstance().getRates()) {
-            System.out.println(x.getCountry());
             if (x.getCountry_id() == user.getCountry_id()) {
                 tax = withoutTax * (x.getStandard_rate() / 100);
             }
