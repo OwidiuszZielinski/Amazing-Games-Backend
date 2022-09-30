@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//Builder musi posiadac konstruktory ??
+//Builder musi posiadac konstruktory ?? UpdateOrder bez setterow jak ?
 //@Data == @Getter, @Setter, @EqualsAndHashcode, @ToString
 public class OrderEntity {
 

@@ -54,6 +54,10 @@ public class GamesController {
         gamesService.updateGame(Id ,gameDTO);
         return ResponseEntity.ok().build();
     }
-
+    @Operation(summary = "Get discount game")
+    @GetMapping("games/discount")
+    public int gameDiscount(){
+        return gamesService.discountGame();
+    }
 
 }

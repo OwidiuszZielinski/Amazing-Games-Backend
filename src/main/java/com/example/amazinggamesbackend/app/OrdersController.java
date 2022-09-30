@@ -5,6 +5,8 @@ import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.OrdersRepository;
 import com.example.amazinggamesbackend.core.orders.OrdersService;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

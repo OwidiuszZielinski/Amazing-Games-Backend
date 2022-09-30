@@ -4,6 +4,7 @@ import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class GamesService {
     }
     public List<GameEntityDTO> getGames() {
         List<GameEntityDTO> tempGames = new ArrayList<>();
-        for(GameEntity x : gamesRepository.findAll()){
+        for(GameEntity x : allGames()){
             tempGames.add(GameEntityDTO.from(x));
         }
         return tempGames;
@@ -51,13 +52,20 @@ public class GamesService {
         return gamesRepository.findById(id).get();
     }
 
-    public GameEntityDTO discountGame(){
-        List<GameEntity> gameList = gamesRepository.findAll().stream().filter(game->game.getPrice() > 0).collect(Collectors.toList());
-        Random random = new Random();
-        int discount = random.nextInt(0,gameList.size()-1);
-        return GameEntityDTO.from(gameList.get(discount));
+    public List<GameEntity> allGames(){
+        return gamesRepository.findAll();
     }
-
-
+    @Scheduled(fixedRate = 5000)
+    public int discountGame(){
+        var gameList = paidGames(allGames());
+        var random = new Random();
+        int discount = random.nextInt(0,gameList.size()-1);
+        return gameList.get(discount).getId();
+    }
+    public static List<GameEntity> paidGames(List<GameEntity> list){
+        return list.stream()
+                .filter(game->game.getPrice() > 0)
+                .collect(Collectors.toList());
+    }
 
 }
