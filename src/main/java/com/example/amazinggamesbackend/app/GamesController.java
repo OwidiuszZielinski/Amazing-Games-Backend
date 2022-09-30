@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 
@@ -56,8 +57,8 @@ public class GamesController {
     }
     @Operation(summary = "Get discount game")
     @GetMapping("games/discount")
-    public int gameDiscount(){
-        return gamesService.discountGame();
+    public int gameDiscount() throws FileNotFoundException {
+        return gamesService.getDiscountGameFromFile();
     }
 
 }

@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/auth/**","/orders/**" ,"/games/**" ,"users/**","cart/**")
                 .permitAll()
+
 //                .antMatchers(HttpMethod.GET,"/games/**")
 //                .permitAll()
 //                .antMatchers(HttpMethod.GET,"/cart/**")
