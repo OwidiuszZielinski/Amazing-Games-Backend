@@ -88,8 +88,8 @@ public class GamesService {
                 .collect(Collectors.toList());
     }
 
-    @Scheduled(cron = "0 0 1 * * *")
-    //@Scheduled(fixedRate = 10000)
+
+
     public void saveDiscountGameToFile(int id) {
         try {
             File file = new File("src/main/resources/discount.txt");
