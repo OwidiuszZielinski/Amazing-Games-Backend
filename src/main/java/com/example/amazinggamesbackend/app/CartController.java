@@ -13,6 +13,20 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 public class CartController {
+    //Wstrzykuje zaleznosci do pola za pomoca adnotacji, Dependency Injection
+    //Tworzy sie Bean zarzadzany przez kontener springa? Tutaj bezposrednio na pole
+    //Domyslnie powinno wtrzykiwac sie na konstruktor?
+    //Wtrzykujemy zaleznosci na pola w klasach gdzie tego potrzebujemy
+    //nie robimy metody statycznej ktora to zwraca bo jest ciezka do testowania.
+    //nie odwolujemy sie do klasy ktora zwraca np cartRepository aby sie bezposrednio nie wiazac
+    //losecoupling
+    //stworzona i zarzadzana instancja przez springa to Bean za obsluge odpowiada
+    //Spring IoC Container
+//    @Autowired
+//    public CartController(CartRepository cartRepository){
+//        this.cartRepository = cartRepository;
+//    }
+
     @Autowired
     CartRepository cartRepository;
     @Autowired

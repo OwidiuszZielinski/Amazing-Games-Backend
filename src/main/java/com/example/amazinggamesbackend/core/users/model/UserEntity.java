@@ -13,14 +13,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.*;
 
 @Entity
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @JsonIgnoreProperties({ "hibernateLazyInitializer" ,"handler" })
 public class UserEntity extends BaseEntity implements UserDetails {
     private String username;
@@ -28,6 +25,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
     private String email;
     private int country_id;
     private String address;
@@ -43,15 +41,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonBackReference
     CartEntity cart;
 
-    public UserEntity(String username ,String password ,String email ,String roles,int country,String address) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.roles = roles;
-        this.address = address;
-        this.country_id = country;
 
-    }
 
     public void fromDTO(UserDTO userDTO) {
         this.username = userDTO.getUsername();
