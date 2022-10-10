@@ -33,29 +33,8 @@ public class CartEntity {
         this.user = userEntity;
     }
 
-    public void fromDTO(CartDTO cartDTO) {
-        List<CartDetail> tempList = new ArrayList<>();
-        for (CartDetailDTO x : cartDTO.getCartDetailsinfo()) {
-            tempList.add(new CartDetail(fromDTO(x.getGame()) ,x.getQuantity()));
-        }
-        this.cartDetails = tempList;
-        this.user = cartDTO.getUser();
-
-    }
 
 
-    public static GameEntity fromDTO(GameEntityDTO gameEntityDTO) {
-        GameEntity game = new GameEntity();
-        game.setId(gameEntityDTO.getId());
-        game.setPrice(gameEntityDTO.getPrice());
-        game.setRating(gameEntityDTO.getRating());
-        game.setTitle(gameEntityDTO.getTitle());
-        game.setAvailability(gameEntityDTO.isAvailability());
-        game.setDescription(gameEntityDTO.getDescription());
-        game.setType(gameEntityDTO.getType());
-        return game;
-
-    }
 
 
 

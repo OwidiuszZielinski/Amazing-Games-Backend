@@ -15,7 +15,7 @@ public class CartDetail {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Integer id;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "game_id")
     private GameEntity game;
     @ManyToOne

@@ -34,7 +34,6 @@ public class GamesService {
         return tempGames;
 
     }
-
     public void deleteGamesById(List<Integer> ids) {
         gamesRepository.deleteAllByIdInBatch(ids);
 

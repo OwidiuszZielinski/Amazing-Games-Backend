@@ -5,6 +5,8 @@ import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,7 +32,7 @@ public class GameEntity {
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
     @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<OrderEntity> orders = new ArrayList<>();
-    @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
+    @OneToMany(mappedBy = "game", orphanRemoval = true,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     public void setRating(double rating) {
