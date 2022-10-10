@@ -4,6 +4,7 @@ package com.example.amazinggamesbackend.app;
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.OrdersRepository;
 import com.example.amazinggamesbackend.core.orders.OrdersService;
+import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -27,7 +28,7 @@ public class OrdersController {
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")
-    public ResponseEntity newOrder(@RequestBody OrderDTO order) {
+    public ResponseEntity newOrder(@RequestBody CreateOrderDTO order) {
         if (order.getGames().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {

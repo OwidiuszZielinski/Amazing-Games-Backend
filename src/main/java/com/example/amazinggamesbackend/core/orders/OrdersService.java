@@ -3,6 +3,7 @@ package com.example.amazinggamesbackend.core.orders;
 import com.example.amazinggamesbackend.core.games.GamesService;
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdersService implements FormatValue {
@@ -28,11 +30,11 @@ public class OrdersService implements FormatValue {
     GamesService gamesService;
 
 
-    public void createOrder(OrderDTO order) {
+    public void createOrder(CreateOrderDTO order) {
         OrderEntity newOrder = OrderEntity.builder().status(OrderStatus.STARTED)
                 .date(OrderEntity.orderDate())
-                .games(gamesService.gamesInOrder(order))
-                .value(gamesService.calculateOrderValue(order))
+                .games(gamesService.gamesInOrder(order.getGames()))
+                .value(gamesService.calculateOrderValue(order.getGames()))
                 .user(usersService.userById(order.getUser()))
                 .build();
                 ordersRepository.save(newOrder);
@@ -43,22 +45,29 @@ public class OrdersService implements FormatValue {
         for (OrderEntity x : ordersRepository.findAll()) {
             orderList.add(OrderDTO.from(x));
         }
+        setTax(orderList);
+        orderList.sort(Comparator.comparing(OrderDTO::getDate).reversed());
+        return orderList;
+    }
+
+    public void setTax(List<OrderDTO> orderList){
         for (OrderDTO y : orderList) {
             y.setValueWithTax(calcTax(y.getValue() ,usersService.userById(y.getUser())));
         }
-        return orderList;
     }
 
     public void deleteOrders(List<Integer> ids) {
         ordersRepository.deleteAllByIdInBatch(ids);
+
     }
+
 
     public void updateOrder(int id ,OrderDTO order) {
         OrderEntity getOrder = ordersRepository.findById(id).get();
         getOrder.setStatus(order.getStatus());
         getOrder.setUser(usersService.userById(order.getUser()));
-        getOrder.setGames(gamesService.gamesInOrder(order));
-        getOrder.setValue(format(gamesService.calculateOrderValue(order)));
+        getOrder.setGames(gamesService.gamesInOrder(order.getGames()));
+        getOrder.setValue(format(gamesService.calculateOrderValue(order.getGames())));
         ordersRepository.save(getOrder);
 
     }

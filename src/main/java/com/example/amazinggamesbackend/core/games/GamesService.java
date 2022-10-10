@@ -2,7 +2,9 @@ package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class GamesService {
     }
     public void deleteGamesById(List<Integer> ids) {
         clearCartDetailsInGameEntity(ids);
+
         gamesRepository.deleteAllByIdInBatch(ids);
 
     }
@@ -49,19 +52,20 @@ public class GamesService {
 
     }
 
+
     public void updateGame(int id ,GameEntityDTO gameDTO) {
         GameEntity game = getGameById(id);
         game.fromDTO(gameDTO);
         gamesRepository.save(game);
     }
 
-    public double calculateOrderValue(OrderDTO order) {
-        return gamesRepository.findAllById(order.getGames()).stream().mapToDouble(GameEntity::getPrice).sum();
+    public double calculateOrderValue(List<Integer> games) {
+        return gamesRepository.findAllById(games).stream().mapToDouble(GameEntity::getPrice).sum();
     }
 
     //Service method return Entity
-    public List<GameEntity> gamesInOrder(OrderDTO order) {
-        return new ArrayList<>(gamesRepository.findAllById(order.getGames()));
+    public List<GameEntity> gamesInOrder(List<Integer> games) {
+        return new ArrayList<>(gamesRepository.findAllById(games));
     }
 
     //Service method return Entity
