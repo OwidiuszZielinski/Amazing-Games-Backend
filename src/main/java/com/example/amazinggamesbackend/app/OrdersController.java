@@ -59,7 +59,7 @@ public class OrdersController {
 
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
-    public void editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
+    public void editOrder(@PathVariable int Id ,@RequestBody CreateOrderDTO order) {
         ordersService.updateOrder(Id ,order);
 
     }

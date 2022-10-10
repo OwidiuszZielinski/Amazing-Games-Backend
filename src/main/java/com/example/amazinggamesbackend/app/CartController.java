@@ -27,6 +27,7 @@ public class CartController {
 //        this.cartRepository = cartRepository;
 //    }
 
+    //CO POWINNY ZWRACAĆ REQUESTY? RESPONSEENTITY CZY ENCJE?
     @Autowired
     CartRepository cartRepository;
     @Autowired

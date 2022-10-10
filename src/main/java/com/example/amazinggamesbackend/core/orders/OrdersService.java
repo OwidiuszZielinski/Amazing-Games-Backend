@@ -14,6 +14,8 @@ import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -62,13 +64,17 @@ public class OrdersService implements FormatValue {
     }
 
 
-    public void updateOrder(int id ,OrderDTO order) {
+    public void updateOrder(int id ,CreateOrderDTO order) {
         OrderEntity getOrder = ordersRepository.findById(id).get();
         getOrder.setStatus(order.getStatus());
-        getOrder.setUser(usersService.userById(order.getUser()));
-        getOrder.setGames(gamesService.gamesInOrder(order.getGames()));
-        getOrder.setValue(format(gamesService.calculateOrderValue(order.getGames())));
-        ordersRepository.save(getOrder);
+        if(order.getUser()<=0) {
+            getOrder.setUser(getOrder.getUser());
+        }else {
+            getOrder.setUser(usersService.userById(order.getUser()));
+        }
+            getOrder.setGames(gamesService.gamesInOrder(order.getGames()));
+            getOrder.setValue(format(gamesService.calculateOrderValue(order.getGames())));
+            ordersRepository.save(getOrder);
 
     }
 

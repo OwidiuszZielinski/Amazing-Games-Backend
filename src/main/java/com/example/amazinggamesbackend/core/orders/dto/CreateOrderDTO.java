@@ -17,6 +17,7 @@ public class CreateOrderDTO {
 
     private int user;
     private List<Integer> games;
+    private OrderStatus status;
 
 
     public static CreateOrderDTO from(OrderEntity order) {
