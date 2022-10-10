@@ -35,7 +35,17 @@ public class GamesService {
 
     }
     public void deleteGamesById(List<Integer> ids) {
+        clearCartDetailsInGameEntity(ids);
         gamesRepository.deleteAllByIdInBatch(ids);
+
+    }
+
+    public void clearCartDetailsInGameEntity(List<Integer> ids){
+
+        for(GameEntity x : gamesRepository.findAllById(ids)){
+            x.getCartDetails().clear();
+            gamesRepository.save(x);
+        }
 
     }
 

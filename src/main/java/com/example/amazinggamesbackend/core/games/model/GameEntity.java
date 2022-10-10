@@ -32,7 +32,7 @@ public class GameEntity {
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
     @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<OrderEntity> orders = new ArrayList<>();
-    @OneToMany(mappedBy = "game", orphanRemoval = true,fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     public void setRating(double rating) {
