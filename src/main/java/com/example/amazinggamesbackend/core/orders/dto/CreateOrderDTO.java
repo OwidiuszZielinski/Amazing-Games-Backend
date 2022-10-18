@@ -12,30 +12,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderDTO {
+public class CreateOrderDTO {
 
-    private int id;
+
     private int user;
     private List<Integer> games;
     private OrderStatus status;
-    private String date;
-    private double value;
-    private double valueWithTax;
 
 
-
-    public static OrderDTO from(OrderEntity order){
-        return OrderDTO.builder()
-                .id(order.getId())
+    public static CreateOrderDTO from(OrderEntity order) {
+        return CreateOrderDTO.builder()
                 .user(order.getUser().getId())
                 .games(order.getGames().stream().mapToInt(GameEntity::getId).boxed().toList())
-                .status(order.getStatus())
-                .date(order.getDate())
-                .value(order.getValue())
                 .build();
     }
-
-
-
-
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//Builder musi posiadac konstruktory ??
+//Builder musi posiadac konstruktory ?? UpdateOrder bez setterow jak ?
 //@Data == @Getter, @Setter, @EqualsAndHashcode, @ToString
 public class OrderEntity {
 
@@ -34,7 +34,7 @@ public class OrderEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST ,CascadeType.MERGE ,CascadeType.DETACH ,CascadeType.REFRESH })
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "order_game",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id"))

@@ -4,7 +4,10 @@ package com.example.amazinggamesbackend.app;
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.OrdersRepository;
 import com.example.amazinggamesbackend.core.orders.OrdersService;
+import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,7 @@ public class OrdersController {
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")
-    public ResponseEntity newOrder(@RequestBody OrderDTO order) {
+    public ResponseEntity newOrder(@RequestBody CreateOrderDTO order) {
         if (order.getGames().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {
@@ -56,7 +59,7 @@ public class OrdersController {
 
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
-    public void editOrder(@PathVariable int Id ,@RequestBody OrderDTO order) {
+    public void editOrder(@PathVariable int Id ,@RequestBody CreateOrderDTO order) {
         ordersService.updateOrder(Id ,order);
 
     }
