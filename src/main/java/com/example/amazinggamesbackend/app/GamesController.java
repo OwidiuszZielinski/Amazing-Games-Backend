@@ -8,6 +8,7 @@ import com.example.amazinggamesbackend.core.tax.Rates;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,10 +67,6 @@ public class GamesController {
         gamesService.updateGame(Id ,gameDTO);
         return ResponseEntity.ok().build();
     }
-    @Operation(summary = "Get discount game")
-    @GetMapping("games/discount")
-    public int gameDiscount() throws FileNotFoundException {
-        return gamesService.getDiscountGameFromFile();
-    }
+
 
 }
