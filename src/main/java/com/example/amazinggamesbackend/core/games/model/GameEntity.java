@@ -3,18 +3,22 @@ package com.example.amazinggamesbackend.core.games.model;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class GameEntity {
 
 
@@ -29,9 +33,20 @@ public class GameEntity {
     private double rating;
     private boolean availability;
 
+
+
+
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
+    @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id"))
+    //private Set<OrderEntity> orders = new HashSet<>();
+    //vs
     private List<OrderEntity> orders = new ArrayList<>();
+
+
+
+
+
     @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> cartDetails = new ArrayList<>();
 

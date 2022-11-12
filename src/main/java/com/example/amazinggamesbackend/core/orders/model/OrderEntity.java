@@ -10,7 +10,9 @@ import org.aspectj.weaver.ast.Or;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -38,7 +40,7 @@ public class OrderEntity {
     @JoinTable(name = "order_game",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "game_id"))
-    private List<GameEntity> games = new ArrayList<>();
+    private Set<GameEntity> games = new HashSet<>();
 
     public static String orderDate() {
         Timestamp ts = new Timestamp(System.currentTimeMillis());
