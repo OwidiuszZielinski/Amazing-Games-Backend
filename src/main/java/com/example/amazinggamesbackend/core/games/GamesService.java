@@ -16,11 +16,16 @@ import java.util.stream.Collectors;
 @Service
 public class GamesService {
 
-    @Autowired
-    GamesRepository gamesRepository;
 
+    private final GamesRepository gamesRepository;
+
+
+    private final GameDayDiscountRepository gameDayDiscountRepository;
     @Autowired
-    GameDayDiscountRepository gameDayDiscountRepository;
+    public GamesService(GamesRepository gamesRepository ,GameDayDiscountRepository gameDayDiscountRepository) {
+        this.gamesRepository = gamesRepository;
+        this.gameDayDiscountRepository = gameDayDiscountRepository;
+    }
 
     public void addGame(GameEntityDTO game) {
         GameEntity newGame = new GameEntity();

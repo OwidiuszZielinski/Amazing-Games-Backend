@@ -11,10 +11,16 @@ import java.util.List;
 
 @Service
 public class UsersService {
+    private final  PasswordEncoder passwordEncoder;
+
+    private final  UsersRepository usersRepository;
+
     @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UsersRepository usersRepository;
+    public UsersService(PasswordEncoder passwordEncoder ,UsersRepository usersRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.usersRepository = usersRepository;
+    }
+
     public List<UserDTO> getAllUsers(){
         List<UserDTO> tempList = new ArrayList<>();
         for(UserEntity x : usersRepository.findAll()){

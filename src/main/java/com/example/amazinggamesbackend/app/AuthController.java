@@ -25,15 +25,21 @@ import java.util.Map;
 public class AuthController {
 
     // Injecting Dependencies
-    @Autowired
-    private UsersRepository repository;
-    @Autowired
-    private JWTUtil jwtUtil;
-    @Autowired
-    private AuthenticationManager authManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
+    private final UsersRepository repository;
+
+    private final JWTUtil jwtUtil;
+
+    private final AuthenticationManager authManager;
+
+    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    public AuthController(UsersRepository repository ,JWTUtil jwtUtil ,AuthenticationManager authManager ,PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.jwtUtil = jwtUtil;
+        this.authManager = authManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/register")
     public Map<String, Object> registerHandler(@RequestBody UserDTO user) {

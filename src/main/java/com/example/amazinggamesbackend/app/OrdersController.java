@@ -17,14 +17,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @RestController
 public class OrdersController {
 
+
+    private final OrdersRepository ordersRepository;
+
+    private final OrdersService ordersService;
+
     @Autowired
-    OrdersRepository ordersRepository;
-    @Autowired
-    OrdersService ordersService;
+    public OrdersController(OrdersRepository ordersRepository ,OrdersService ordersService) {
+        this.ordersRepository = ordersRepository;
+        this.ordersService = ordersService;
+    }
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")

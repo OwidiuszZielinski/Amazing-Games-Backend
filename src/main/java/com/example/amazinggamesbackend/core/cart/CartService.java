@@ -5,6 +5,7 @@ import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.cart.model.CartEntity;
 import com.example.amazinggamesbackend.core.games.GamesService;
+import com.example.amazinggamesbackend.core.users.UsersRepository;
 import com.example.amazinggamesbackend.core.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,18 @@ import java.util.List;
 
 @Service
 public class CartService {
+    private final UsersService usersService;
+    private final CartRepository cartRepository;
+    private final GamesService gamesService;
 
 
+
     @Autowired
-    UsersService usersService;
-    @Autowired
-    CartRepository cartRepository;
-    @Autowired
-    GamesService gamesService;
+    public CartService(UsersService usersService ,CartRepository cartRepository ,GamesService gamesService) {
+        this.usersService = usersService;
+        this.cartRepository = cartRepository;
+        this.gamesService = gamesService;
+    }
 
     public CartDTO getCartByUserId(int userId) {
         return CartDTO.from(cartRepository.findByUserId(userId).get());

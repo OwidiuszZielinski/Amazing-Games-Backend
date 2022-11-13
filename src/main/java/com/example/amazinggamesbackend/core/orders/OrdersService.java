@@ -24,13 +24,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrdersService implements FormatValue {
-    @Autowired
-    OrdersRepository ordersRepository;
-    @Autowired
-    UsersService usersService;
-    @Autowired
-    GamesService gamesService;
 
+    private final OrdersRepository ordersRepository;
+
+    private final UsersService usersService;
+
+    private final GamesService gamesService;
+    @Autowired
+    public OrdersService(OrdersRepository ordersRepository ,UsersService usersService ,GamesService gamesService) {
+        this.ordersRepository = ordersRepository;
+        this.usersService = usersService;
+        this.gamesService = gamesService;
+    }
 
     public void createOrder(CreateOrderDTO order) {
         OrderEntity newOrder = OrderEntity.builder().status(OrderStatus.STARTED)

@@ -24,13 +24,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@RequiredArgsConstructor
+
 @RestController
 public class GamesController {
+
+    private final GamesRepository gamesRepository;
+
+    private final GamesService gamesService;
+
     @Autowired
-    GamesRepository gamesRepository;
-    @Autowired
-    private GamesService gamesService;
+    public GamesController(GamesRepository gamesRepository ,GamesService gamesService) {
+        this.gamesRepository = gamesRepository;
+        this.gamesService = gamesService;
+    }
 
     @Operation(summary = "Add game")
     @PostMapping("/games")

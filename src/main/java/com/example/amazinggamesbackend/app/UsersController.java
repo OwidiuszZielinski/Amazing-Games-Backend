@@ -13,13 +13,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @RestController
 public class UsersController {
+
+
+
+    private final UsersRepository usersRepository;
+
+    private final UsersService usersService;
     @Autowired
-    UsersRepository usersRepository;
-    @Autowired
-    private UsersService usersService;
+    public UsersController(UsersRepository usersRepository ,UsersService usersService) {
+        this.usersRepository = usersRepository;
+        this.usersService = usersService;
+    }
 
     @Operation(summary = "Get users")
     @GetMapping("/users")

@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
+
 @RestController
 public class CartController {
     //Wstrzykuje zaleznosci do pola za pomoca adnotacji, Dependency Injection
@@ -28,10 +28,15 @@ public class CartController {
 //    }
 
     //CO POWINNY ZWRACAĆ REQUESTY? RESPONSEENTITY CZY ENCJE?
+
+    private final CartRepository cartRepository;
+
+    private final CartService cartService;
     @Autowired
-    CartRepository cartRepository;
-    @Autowired
-    CartService cartService;
+    public CartController(CartRepository cartRepository ,CartService cartService) {
+        this.cartRepository = cartRepository;
+        this.cartService = cartService;
+    }
 
     @Operation(summary = "Create new shopping cart")
     @PostMapping("/cart")

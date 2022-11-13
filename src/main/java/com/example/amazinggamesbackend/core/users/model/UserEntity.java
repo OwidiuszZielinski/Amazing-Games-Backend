@@ -44,6 +44,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
 
     public void fromDTO(UserDTO userDTO) {
+
         this.username = userDTO.getUsername();
         this.roles = userDTO.getRoles();
         this.email = userDTO.getEmail();

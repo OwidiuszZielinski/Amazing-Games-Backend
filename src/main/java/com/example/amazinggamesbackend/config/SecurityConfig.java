@@ -37,13 +37,19 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-    @Autowired
-    private UsersRepository usersRepository;
+
+    private final UsersRepository usersRepository;
+
+    private final JWTFilter filter;
+
+    private final MyUserDetailsService userDetailService;
 
     @Autowired
-    private JWTFilter filter;
-    @Autowired
-    private MyUserDetailsService userDetailService;
+    public SecurityConfig(UsersRepository usersRepository ,JWTFilter filter ,MyUserDetailsService userDetailService) {
+        this.usersRepository = usersRepository;
+        this.filter = filter;
+        this.userDetailService = userDetailService;
+    }
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http ,BCryptPasswordEncoder bCryptPasswordEncoder)
