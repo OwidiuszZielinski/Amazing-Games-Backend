@@ -18,10 +18,10 @@ import java.util.List;
 public class UsersController {
 
 
-
     private final UsersRepository usersRepository;
 
     private final UsersService usersService;
+
     @Autowired
     public UsersController(UsersRepository usersRepository ,UsersService usersService) {
         this.usersRepository = usersRepository;

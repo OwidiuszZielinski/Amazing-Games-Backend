@@ -34,9 +34,15 @@ public class CartService {
     }
 
     public void addGameToCart(int id ,int gameId) {
-        CartEntity cart = getUserCart(id);
-        List<CartDetail> cartDetails = cart.getCartDetails();
-        if (cartDetails.stream().anyMatch(game -> game.getGame().getId() == gameId)) {
+        //Fail first
+        if(gamesService.getGameById(gameId) == null){
+            throw new RuntimeException("No game in DB");
+        }
+
+        final CartEntity cart = getUserCart(id);
+        final List<CartDetail> cartDetails = cart.getCartDetails();
+        boolean gameIsInCart = cartDetails.stream().anyMatch(game -> game.getGame().getId() == gameId);
+        if (gameIsInCart) {
             increaseGameQty(cart ,gameId);
         } else {
             cartDetails.add(new CartDetail(gamesService.getGameById(gameId) ,cart ,1));

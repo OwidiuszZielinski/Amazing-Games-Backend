@@ -50,31 +50,35 @@ public class CartController {
     }
 
     @Operation(summary = "Add to cart")
-    @PostMapping("/cart/{id}/games")
-    public ResponseEntity addToCart(@PathVariable int id ,@RequestBody Integer itemId) {
-        cartService.addGameToCart(id ,itemId);
-        return ResponseEntity.ok().build();
-
+    @PostMapping("/cart/{userId}")
+    public ResponseEntity addToCart(@PathVariable int userId ,@RequestBody Integer itemId) {
+        try {
+            cartService.addGameToCart(userId ,itemId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
     }
 
     @Operation(summary = "Delete from cart")
-    @DeleteMapping("/cart/{id}")
-    public ResponseEntity deleteGameById(@PathVariable int id ,@RequestBody Integer itemId) {
-        cartService.deleteGameFromCart(id ,itemId);
+    @DeleteMapping("/cart/{userId}")
+    public ResponseEntity deleteGameById(@PathVariable int userId ,@RequestBody Integer itemId) {
+        cartService.deleteGameFromCart(userId ,itemId);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Clean cart")
-    @PatchMapping("/cart/{id}")
-    public ResponseEntity clearCart(@PathVariable int id) {
-        cartService.cleanCart(id);
+    @PutMapping("/cart/{userId}")
+    public ResponseEntity clearCart(@PathVariable int userId) {
+        cartService.cleanCart(userId);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Get user cart")
-    @GetMapping("/cart/{id}/games")
-    public CartDTO getCart(@PathVariable int id) {
-        return cartService.getCartByUserId(id);
+    @GetMapping("/cart/{userId}")
+    public CartDTO getCart(@PathVariable int userId) {
+        return cartService.getCartByUserId(userId);
     }
 
 }
