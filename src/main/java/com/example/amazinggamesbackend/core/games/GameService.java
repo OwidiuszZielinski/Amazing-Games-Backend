@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class GameService {
     private final GameRepository gameRepository;
     private final GameDayDiscountRepository gameDayDiscountRepository;
+
     @Autowired
     public GameService(GameRepository gameRepository ,GameDayDiscountRepository gameDayDiscountRepository) {
         this.gameRepository = gameRepository;
@@ -30,33 +31,6 @@ public class GameService {
         gameRepository.save(newGame);
     }
 
-    public void discountGame(){
-        GameDayDiscount gameDayDiscount = new GameDayDiscount();
-        if(noDiscount()){
-            gameDayDiscount.setGameEntity(randomGame());
-            gameDayDiscountRepository.save(gameDayDiscount);
-        }
-        else {
-            gameDayDiscount = getDiscount();
-            gameDayDiscount.setGameEntity(randomGame());
-            gameDayDiscountRepository.save(gameDayDiscount);
-        }
-    }
-
-
-    private GameDayDiscount getDiscount() {
-        return gameDayDiscountRepository.findAll().stream().findFirst().orElseThrow(()->new RuntimeException("No discount in DB"));
-    }
-
-
-    private GameEntity randomGame() {
-        return gameRepository.findById(randomDiscountGameId()).orElse(null);
-    }
-
-    private boolean noDiscount() {
-        return gameDayDiscountRepository.findAll().size() == 0;
-    }
-
 
     public List<GameEntityDTO> getGames() {
         List<GameEntityDTO> tempGames = new ArrayList<>();
@@ -66,6 +40,7 @@ public class GameService {
         return tempGames;
 
     }
+
     public void deleteGamesById(List<Integer> ids) {
         clearCartDetailsInGameEntity(ids);
 
@@ -73,9 +48,9 @@ public class GameService {
 
     }
 
-    public void clearCartDetailsInGameEntity(List<Integer> ids){
+    public void clearCartDetailsInGameEntity(List<Integer> ids) {
 
-        for(GameEntity x : gameRepository.findAllById(ids)){
+        for (GameEntity x : gameRepository.findAllById(ids)) {
             x.getCartDetails().clear();
             gameRepository.save(x);
         }
@@ -112,43 +87,12 @@ public class GameService {
     //@Cacheable(cacheNames = "discountGame")
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(fixedRate = 10000)
-    public int randomDiscountGameId() {
-        List<GameEntity> gameList = paidGames(getAllGames());
-        Random random = new Random();
-        if(gameList.size()==1){
-            return firstGameDiscount(gameList);
-        }
-        if (checkPayGames(gameList)) {
-            int discount = random.nextInt(0 ,gameList.size() - 1);
-            return gameList.get(discount).getId();
 
-        }
-        else
-            throw new NoPaidGame();
-
-
-    }
-
-    private Integer firstGameDiscount(List<GameEntity> gameList) {
-        return gameList.stream().findFirst().orElseThrow(NoPaidGame::new).getId();
-    }
-
-    public boolean checkPayGames(List<GameEntity> games){
-        return games.stream().anyMatch(game -> game.getPrice()!=0);
-    }
-
-
-    public static List<GameEntity> paidGames(List<GameEntity> list) {
-        return list.stream()
-                .filter(game -> game.getPrice() > 0)
-                .collect(Collectors.toList());
-    }
     public static List<GameEntity> freeGames(List<GameEntity> list) {
         return list.stream()
                 .filter(game -> game.getPrice() == 0)
                 .collect(Collectors.toList());
     }
-
 
 
     public void saveDiscountGameToFile(int id) {
@@ -161,6 +105,7 @@ public class GameService {
             throw new RuntimeException(e);
         }
     }
+
     public int getDiscountGameFromFile() throws FileNotFoundException {
         File file = new File("src/main/resources/discount.txt");
         Scanner scanner = new Scanner(new File(String.valueOf(file)));

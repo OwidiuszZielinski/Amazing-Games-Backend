@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.app;
 
+import com.example.amazinggamesbackend.core.games.DiscountService;
 import com.example.amazinggamesbackend.core.games.GameRepository;
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.DeleteArrayDTO;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +22,13 @@ public class GameController {
 
     private final GameService gameService;
 
+    private final DiscountService discountService;
+
     @Autowired
-    public GameController(GameRepository gameRepository ,GameService gameService) {
+    public GameController(GameRepository gameRepository ,GameService gameService ,DiscountService discountService) {
         this.gameRepository = gameRepository;
         this.gameService = gameService;
+        this.discountService = discountService;
     }
 
     @Operation(summary = "Add game")
@@ -67,7 +70,7 @@ public class GameController {
     @Operation(summary = "Set discount game")
     @GetMapping("/games/discount")
     public void setDiscount(){
-        gameService.discountGame();
+        discountService.discountGame();
     }
 
 }
