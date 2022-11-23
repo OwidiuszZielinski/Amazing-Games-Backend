@@ -4,9 +4,8 @@ package com.example.amazinggamesbackend.core.cart;
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.cart.model.CartEntity;
-import com.example.amazinggamesbackend.core.games.GamesService;
-import com.example.amazinggamesbackend.core.users.UsersRepository;
-import com.example.amazinggamesbackend.core.users.UsersService;
+import com.example.amazinggamesbackend.core.games.GameService;
+import com.example.amazinggamesbackend.core.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +14,17 @@ import java.util.List;
 
 @Service
 public class CartService {
-    private final UsersService usersService;
+    private final UserService userService;
     private final CartRepository cartRepository;
-    private final GamesService gamesService;
+    private final GameService gameService;
 
 
 
     @Autowired
-    public CartService(UsersService usersService ,CartRepository cartRepository ,GamesService gamesService) {
-        this.usersService = usersService;
+    public CartService(UserService userService ,CartRepository cartRepository ,GameService gameService) {
+        this.userService = userService;
         this.cartRepository = cartRepository;
-        this.gamesService = gamesService;
+        this.gameService = gameService;
     }
 
     public CartDTO getCartByUserId(int userId) {
@@ -35,7 +34,7 @@ public class CartService {
 
     public void addGameToCart(int id ,int gameId) {
         //Fail first
-        if(gamesService.getGameById(gameId) == null){
+        if(gameService.getGameById(gameId) == null){
             throw new RuntimeException("No game in DB");
         }
 
@@ -45,7 +44,7 @@ public class CartService {
         if (gameIsInCart) {
             increaseGameQty(cart ,gameId);
         } else {
-            cartDetails.add(new CartDetail(gamesService.getGameById(gameId) ,cart ,1));
+            cartDetails.add(new CartDetail(gameService.getGameById(gameId) ,cart ,1));
         }
         cartRepository.save(cart);
     }
@@ -64,7 +63,7 @@ public class CartService {
 
     public void createCartForUser(int id) {
         CartEntity userCart = new CartEntity();
-        userCart.addUser(usersService.userById(id));
+        userCart.addUser(userService.userById(id));
         cartRepository.save(userCart);
     }
 

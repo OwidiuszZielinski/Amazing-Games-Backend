@@ -2,9 +2,9 @@ package com.example.amazinggamesbackend.core.cart.dto;
 
 import com.example.amazinggamesbackend.core.cart.model.CartEntity;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
-import lombok.*;
-
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 

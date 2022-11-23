@@ -1,17 +1,15 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
-import com.example.amazinggamesbackend.interfaces.FormatValue;
-import lombok.*;
-import org.aspectj.weaver.ast.Or;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity

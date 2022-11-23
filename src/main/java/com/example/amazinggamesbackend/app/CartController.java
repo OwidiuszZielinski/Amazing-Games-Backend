@@ -4,7 +4,6 @@ import com.example.amazinggamesbackend.core.cart.CartRepository;
 import com.example.amazinggamesbackend.core.cart.CartService;
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +56,9 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         }
         catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
     }
 
     @Operation(summary = "Delete from cart")

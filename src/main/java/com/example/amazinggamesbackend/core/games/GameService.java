@@ -1,47 +1,47 @@
 package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
-
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class GamesService {
+public class GameService {
 
 
-    private final GamesRepository gamesRepository;
+    private final GameRepository gameRepository;
 
 
     private final GameDayDiscountRepository gameDayDiscountRepository;
     @Autowired
-    public GamesService(GamesRepository gamesRepository ,GameDayDiscountRepository gameDayDiscountRepository) {
-        this.gamesRepository = gamesRepository;
+    public GameService(GameRepository gameRepository ,GameDayDiscountRepository gameDayDiscountRepository) {
+        this.gameRepository = gameRepository;
         this.gameDayDiscountRepository = gameDayDiscountRepository;
     }
 
     public void addGame(GameEntityDTO game) {
         GameEntity newGame = new GameEntity();
         newGame.fromDTO(game);
-        gamesRepository.save(newGame);
+        gameRepository.save(newGame);
     }
 
     public void discountGame(){
         GameDayDiscount gameDayDiscount = new GameDayDiscount();
         if(gameDayDiscountRepository.findAll().size() ==0){
-            gameDayDiscount.setGameEntity(gamesRepository.findById(randomDiscountGameId()).get());
+            gameDayDiscount.setGameEntity(gameRepository.findById(randomDiscountGameId()).get());
             gameDayDiscountRepository.save(gameDayDiscount);
         }
         else
             gameDayDiscount = gameDayDiscountRepository.findAll().get(0);
-            gameDayDiscount.setGameEntity(gamesRepository.findById(randomDiscountGameId()).get());
+            gameDayDiscount.setGameEntity(gameRepository.findById(randomDiscountGameId()).get());
             gameDayDiscountRepository.save(gameDayDiscount);
     }
 
@@ -57,15 +57,15 @@ public class GamesService {
     public void deleteGamesById(List<Integer> ids) {
         clearCartDetailsInGameEntity(ids);
 
-        gamesRepository.deleteAllByIdInBatch(ids);
+        gameRepository.deleteAllByIdInBatch(ids);
 
     }
 
     public void clearCartDetailsInGameEntity(List<Integer> ids){
 
-        for(GameEntity x : gamesRepository.findAllById(ids)){
+        for(GameEntity x : gameRepository.findAllById(ids)){
             x.getCartDetails().clear();
-            gamesRepository.save(x);
+            gameRepository.save(x);
         }
 
     }
@@ -74,25 +74,25 @@ public class GamesService {
     public void updateGame(int id ,GameEntityDTO gameDTO) {
         GameEntity game = getGameById(id);
         game.fromDTO(gameDTO);
-        gamesRepository.save(game);
+        gameRepository.save(game);
     }
 
     public double calculateOrderValue(List<Integer> games) {
-        return gamesRepository.findAllById(games).stream().mapToDouble(GameEntity::getPrice).sum();
+        return gameRepository.findAllById(games).stream().mapToDouble(GameEntity::getPrice).sum();
     }
 
     //Service method return Entity
     public Set<GameEntity> gamesInOrder(List<Integer> games) {
-        return new HashSet<>(gamesRepository.findAllById(games));
+        return new HashSet<>(gameRepository.findAllById(games));
     }
 
     //Service method return Entity
     public GameEntity getGameById(int id) {
-        return gamesRepository.findById(id).get();
+        return gameRepository.findById(id).get();
     }
 
     public List<GameEntity> getAllGames() {
-        return gamesRepository.findAll();
+        return gameRepository.findAll();
     }
 
     //Nie wiem czy to optymalne zapisywac do pliku przecene codzinnie o 1 w nocy i odczytywac z pliku pobierajac

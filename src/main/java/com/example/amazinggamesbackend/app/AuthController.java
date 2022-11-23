@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.app;
 
-import com.example.amazinggamesbackend.core.users.UsersRepository;
+import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
@@ -26,7 +26,7 @@ public class AuthController {
 
     // Injecting Dependencies
 
-    private final UsersRepository repository;
+    private final UserRepository repository;
 
     private final JWTUtil jwtUtil;
 
@@ -34,7 +34,7 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
     @Autowired
-    public AuthController(UsersRepository repository ,JWTUtil jwtUtil ,AuthenticationManager authManager ,PasswordEncoder passwordEncoder) {
+    public AuthController(UserRepository repository ,JWTUtil jwtUtil ,AuthenticationManager authManager ,PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.jwtUtil = jwtUtil;
         this.authManager = authManager;
