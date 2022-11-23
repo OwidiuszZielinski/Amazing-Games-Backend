@@ -14,13 +14,13 @@ import java.util.List;
 public class CartDTO {
 
     private int id;
-    private List<CartDetailDTO> cartDetailsinfo;
+    private List<CartDetailDTO> cartDetailsInfo;
     private UserDTO user;
 
     public static CartDTO from(CartEntity shoppingCart){
         return CartDTO.builder()
                 .id(shoppingCart.getId())
-                .cartDetailsinfo(CartDetailDTO.fromList(shoppingCart.getCartDetails()))
+                .cartDetailsInfo(CartDetailDTO.fromList(shoppingCart.getCartDetails()))
                 .user(UserDTO.fromWithoutPassword(shoppingCart.getUser())).build();
 
     }

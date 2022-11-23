@@ -2,6 +2,8 @@ package com.example.amazinggamesbackend.core.cart;
 
 
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
+import com.example.amazinggamesbackend.core.cart.exceptions.CartNotFound;
+import com.example.amazinggamesbackend.core.cart.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.cart.model.CartEntity;
 import com.example.amazinggamesbackend.core.games.GameService;
@@ -28,17 +30,22 @@ public class CartService {
     }
 
     public CartDTO getCartByUserId(int userId) {
-        return CartDTO.from(cartRepository.findByUserId(userId).get());
-
+        return  CartDTO.from(cartRepository.findByUserId(userId)
+                .orElseThrow(()->new CartNotFound("Cart for this user not found")));
     }
+
+    public boolean checkCartExists(int userId) {
+        return cartRepository.findByUserId(userId).isPresent();
+    }
+
 
     public void addGameToCart(int id ,int gameId) {
         //Fail first
         if(gameService.getGameById(gameId) == null){
-            throw new RuntimeException("No game in DB");
+            throw new GameNotFound("No game in DB");
         }
 
-        final CartEntity cart = getUserCart(id);
+        CartEntity cart = getUserCart(id);
         final List<CartDetail> cartDetails = cart.getCartDetails();
         boolean gameIsInCart = cartDetails.stream().anyMatch(game -> game.getGame().getId() == gameId);
         if (gameIsInCart) {
@@ -51,31 +58,38 @@ public class CartService {
 
     public void deleteGameFromCart(int id, int gameId){
         CartEntity cart = getUserCart(id);
-        cart.getCartDetails().removeIf(x -> x.getGame().getId() == gameId);
-        cartRepository.save(cart);
+        boolean removeIf = cart.getCartDetails().removeIf(x -> x.getGame().getId() == gameId);
+        if(removeIf){
+            cartRepository.save(cart);
+        }else
+            throw new GameNotFound("game not found in cart");
+
     }
 
     public void cleanCart(int id){
-        CartEntity cart = getUserCart(id);
+        final CartEntity cart = getUserCart(id);
         cart.getCartDetails().clear();
         cartRepository.save(cart);
     }
 
     public void createCartForUser(int id) {
-        CartEntity userCart = new CartEntity();
+        final CartEntity userCart = new CartEntity();
         userCart.addUser(userService.userById(id));
         cartRepository.save(userCart);
     }
 
 
     public void increaseGameQty(CartEntity cart ,int gameId) {
-        CartDetail cartDetail = cart.getCartDetails().stream().filter(e -> e.getGame().getId() == gameId).findFirst().get();
+        CartDetail cartDetail = cart.getCartDetails()
+                .stream()
+                .filter(e -> e.getGame().getId() == gameId)
+                .findFirst().orElseThrow(()->new GameNotFound("game not found in cart"));
         cartDetail.increaseQty();
 
     }
     //Service method return Entity
     public CartEntity getUserCart(int id){
-        return cartRepository.findByUserId(id).get();
+        return cartRepository.findByUserId(id).orElseThrow(()->new CartNotFound("Cart for this user not found"));
     }
 
 
