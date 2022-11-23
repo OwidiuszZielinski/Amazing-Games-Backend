@@ -2,14 +2,11 @@ package com.example.amazinggamesbackend.app;
 
 
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
-import com.example.amazinggamesbackend.core.orders.OrdersRepository;
-import com.example.amazinggamesbackend.core.orders.OrdersService;
+import com.example.amazinggamesbackend.core.orders.OrderRepository;
+import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Authorization;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +14,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @RestController
-public class OrdersController {
+public class OrderController {
+
+
+    private final OrderRepository orderRepository;
+
+    private final OrderService orderService;
 
     @Autowired
-    OrdersRepository ordersRepository;
-    @Autowired
-    OrdersService ordersService;
+    public OrderController(OrderRepository orderRepository ,OrderService orderService) {
+        this.orderRepository = orderRepository;
+        this.orderService = orderService;
+    }
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")
@@ -32,7 +35,7 @@ public class OrdersController {
         if (order.getGames().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         } else {
-            ordersService.createOrder(order);
+            orderService.createOrder(order);
             return ResponseEntity.ok().build();
         }
     }
@@ -40,7 +43,7 @@ public class OrdersController {
     @Operation(summary = "Get all orders")
     @GetMapping("/orders")
     public List<OrderDTO> getOrders() {
-        return ordersService.getAllOrders();
+        return orderService.getAllOrders();
     }
 
     @Operation(summary = "Delete order")
@@ -49,24 +52,24 @@ public class OrdersController {
         if (ids.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
-        if (ordersRepository.findAllById(ids).isEmpty()) {
+        if (orderRepository.findAllById(ids).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
 
-        ordersService.deleteOrders(ids);
+        orderService.deleteOrders(ids);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
     public void editOrder(@PathVariable int Id ,@RequestBody CreateOrderDTO order) {
-        ordersService.updateOrder(Id ,order);
+        orderService.updateOrder(Id ,order);
 
     }
 
     @Operation(summary = "Bestseller")
     @GetMapping("orders/bestseller")
     public GameEntityDTO getBestseller() {
-        return ordersService.bestseller();
+        return orderService.bestseller();
     }
 }

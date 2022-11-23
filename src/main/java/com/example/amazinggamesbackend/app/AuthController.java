@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.app;
 
-import com.example.amazinggamesbackend.core.users.UsersRepository;
+import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
@@ -25,15 +25,21 @@ import java.util.Map;
 public class AuthController {
 
     // Injecting Dependencies
-    @Autowired
-    private UsersRepository repository;
-    @Autowired
-    private JWTUtil jwtUtil;
-    @Autowired
-    private AuthenticationManager authManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
+    private final UserRepository repository;
+
+    private final JWTUtil jwtUtil;
+
+    private final AuthenticationManager authManager;
+
+    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    public AuthController(UserRepository repository ,JWTUtil jwtUtil ,AuthenticationManager authManager ,PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.jwtUtil = jwtUtil;
+        this.authManager = authManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/register")
     public Map<String, Object> registerHandler(@RequestBody UserDTO user) {

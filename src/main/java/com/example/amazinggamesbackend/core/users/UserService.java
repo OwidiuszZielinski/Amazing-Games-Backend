@@ -10,21 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UsersService {
+public class UserService {
+    private final  PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
+
     @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UsersRepository usersRepository;
+    public UserService(PasswordEncoder passwordEncoder ,UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+    }
+
+    public UserDTO getUser(int id){
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return UserDTO.from(userEntity);
+    }
+
     public List<UserDTO> getAllUsers(){
         List<UserDTO> tempList = new ArrayList<>();
-        for(UserEntity x : usersRepository.findAll()){
+        for(UserEntity x : userRepository.findAll()){
             tempList.add(UserDTO.fromWithoutPassword(x));
 
         }
         return tempList;
     }
     public void deleteUsers(List<Integer> ids){
-        usersRepository.deleteAllByIdInBatch(ids);
+        userRepository.deleteAllByIdInBatch(ids);
     }
     public void updateUser(int id,UserDTO user){
         UserEntity update = userById(id);
@@ -35,10 +46,10 @@ public class UsersService {
         else {
             update.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        usersRepository.save(update);
+        userRepository.save(update);
     }
     public UserEntity userById(int id) {
-            return usersRepository.findById(id).get();
+            return userRepository.findById(id).get();
         }
 
 }

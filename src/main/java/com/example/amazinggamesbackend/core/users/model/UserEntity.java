@@ -7,14 +7,15 @@ import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Data
@@ -44,6 +45,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
 
     public void fromDTO(UserDTO userDTO) {
+
         this.username = userDTO.getUsername();
         this.roles = userDTO.getRoles();
         this.email = userDTO.getEmail();

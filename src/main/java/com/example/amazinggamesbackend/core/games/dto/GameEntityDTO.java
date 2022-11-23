@@ -1,9 +1,8 @@
 package com.example.amazinggamesbackend.core.games.dto;
 
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import lombok.*;
-
-import java.util.List;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder

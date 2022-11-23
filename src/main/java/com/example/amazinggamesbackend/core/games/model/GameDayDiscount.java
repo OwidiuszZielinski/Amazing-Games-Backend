@@ -1,7 +1,6 @@
 package com.example.amazinggamesbackend.core.games.model;
 
 
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 

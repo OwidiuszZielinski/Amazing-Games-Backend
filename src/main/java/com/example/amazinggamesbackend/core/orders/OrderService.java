@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.orders;
 
-import com.example.amazinggamesbackend.core.games.GamesService;
+import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
@@ -9,42 +9,43 @@ import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
 import com.example.amazinggamesbackend.core.tax.Rates;
 import com.example.amazinggamesbackend.core.tax.Tax;
-import com.example.amazinggamesbackend.core.users.UsersService;
+import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.UserEntity;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
-public class OrdersService implements FormatValue {
-    @Autowired
-    OrdersRepository ordersRepository;
-    @Autowired
-    UsersService usersService;
-    @Autowired
-    GamesService gamesService;
+public class OrderService implements FormatValue {
 
+    private final OrderRepository orderRepository;
+
+    private final UserService userService;
+
+    private final GameService gameService;
+    @Autowired
+    public OrderService(OrderRepository orderRepository ,UserService userService ,GameService gameService) {
+        this.orderRepository = orderRepository;
+        this.userService = userService;
+        this.gameService = gameService;
+    }
 
     public void createOrder(CreateOrderDTO order) {
         OrderEntity newOrder = OrderEntity.builder().status(OrderStatus.STARTED)
                 .date(OrderEntity.orderDate())
-                .games(gamesService.gamesInOrder(order.getGames()))
-                .value(gamesService.calculateOrderValue(order.getGames()))
-                .user(usersService.userById(order.getUser()))
+                .games(gameService.gamesInOrder(order.getGames()))
+                .value(gameService.calculateOrderValue(order.getGames()))
+                .user(userService.userById(order.getUser()))
                 .build();
-                ordersRepository.save(newOrder);
+                orderRepository.save(newOrder);
     }
 
     public List<OrderDTO> getAllOrders() {
         List<OrderDTO> orderList = new ArrayList<>();
-        for (OrderEntity x : ordersRepository.findAll()) {
+        for (OrderEntity x : orderRepository.findAll()) {
             orderList.add(OrderDTO.from(x));
         }
         setTax(orderList);
@@ -54,33 +55,33 @@ public class OrdersService implements FormatValue {
 
     public void setTax(List<OrderDTO> orderList){
         for (OrderDTO y : orderList) {
-            y.setValueWithTax(calcTax(y.getValue() ,usersService.userById(y.getUser())));
+            y.setValueWithTax(calcTax(y.getValue() ,userService.userById(y.getUser())));
         }
     }
 
     public void deleteOrders(List<Integer> ids) {
-        ordersRepository.deleteAllByIdInBatch(ids);
+        orderRepository.deleteAllByIdInBatch(ids);
 
     }
 
 
     public void updateOrder(int id ,CreateOrderDTO order) {
-        OrderEntity getOrder = ordersRepository.findById(id).get();
+        OrderEntity getOrder = orderRepository.findById(id).get();
         getOrder.setStatus(order.getStatus());
         if(order.getUser()<=0) {
             getOrder.setUser(getOrder.getUser());
         }else {
-            getOrder.setUser(usersService.userById(order.getUser()));
+            getOrder.setUser(userService.userById(order.getUser()));
         }
-            getOrder.setGames(gamesService.gamesInOrder(order.getGames()));
-            getOrder.setValue(format(gamesService.calculateOrderValue(order.getGames())));
-            ordersRepository.save(getOrder);
+            getOrder.setGames(gameService.gamesInOrder(order.getGames()));
+            getOrder.setValue(format(gameService.calculateOrderValue(order.getGames())));
+            orderRepository.save(getOrder);
 
     }
 
     public GameEntityDTO bestseller() {
         HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
-        for (OrderEntity x : ordersRepository.findAll()) {
+        for (OrderEntity x : orderRepository.findAll()) {
             for (GameEntity y : x.getGames()) {
                 if (gameIdFrequency.containsKey(y.getId())) {
                     gameIdFrequency.put(y.getId() ,gameIdFrequency.get(y.getId()) + 1);
@@ -90,7 +91,7 @@ public class OrdersService implements FormatValue {
             }
         }
         int key = Collections.max(gameIdFrequency.entrySet() ,Map.Entry.comparingByValue()).getKey();
-        return GameEntityDTO.from(gamesService.getGameById(key));
+        return GameEntityDTO.from(gameService.getGameById(key));
 
     }
 
@@ -102,6 +103,13 @@ public class OrdersService implements FormatValue {
             }
         }
         return format(withoutTax + tax);
+    }
+
+    @Override
+    public double format(double value) {
+        DecimalFormat formatValue = new DecimalFormat("##.00");
+            return Double.parseDouble(formatValue.format(value).replace("," ,"."));
+
     }
 }
 
