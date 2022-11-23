@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,11 +58,16 @@ public class GameController {
 
 
     @Operation(summary = "Edit game by id")
-    @PatchMapping("games/{Id}")
+    @PatchMapping("/games/{Id}")
     public ResponseEntity editGameById(@RequestBody GameEntityDTO gameDTO ,@PathVariable int Id) {
         gameService.updateGame(Id ,gameDTO);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Set discount game")
+    @GetMapping("/games/discount")
+    public void setDiscount(){
+        gameService.discountGame();
+    }
 
 }

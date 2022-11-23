@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+import com.example.amazinggamesbackend.core.games.exceptions.NoPaidGame;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class GameService {
-
-
     private final GameRepository gameRepository;
-
-
     private final GameDayDiscountRepository gameDayDiscountRepository;
     @Autowired
     public GameService(GameRepository gameRepository ,GameDayDiscountRepository gameDayDiscountRepository) {
@@ -35,14 +32,29 @@ public class GameService {
 
     public void discountGame(){
         GameDayDiscount gameDayDiscount = new GameDayDiscount();
-        if(gameDayDiscountRepository.findAll().size() ==0){
-            gameDayDiscount.setGameEntity(gameRepository.findById(randomDiscountGameId()).get());
+        if(noDiscount()){
+            gameDayDiscount.setGameEntity(randomGame());
             gameDayDiscountRepository.save(gameDayDiscount);
         }
-        else
-            gameDayDiscount = gameDayDiscountRepository.findAll().get(0);
-            gameDayDiscount.setGameEntity(gameRepository.findById(randomDiscountGameId()).get());
+        else {
+            gameDayDiscount = getDiscount();
+            gameDayDiscount.setGameEntity(randomGame());
             gameDayDiscountRepository.save(gameDayDiscount);
+        }
+    }
+
+
+    private GameDayDiscount getDiscount() {
+        return gameDayDiscountRepository.findAll().stream().findFirst().orElseThrow(()->new RuntimeException("No discount in DB"));
+    }
+
+
+    private GameEntity randomGame() {
+        return gameRepository.findById(randomDiscountGameId()).orElse(null);
+    }
+
+    private boolean noDiscount() {
+        return gameDayDiscountRepository.findAll().size() == 0;
     }
 
 
@@ -101,13 +113,29 @@ public class GameService {
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(fixedRate = 10000)
     public int randomDiscountGameId() {
-        var gameList = paidGames(getAllGames());
-        var random = new Random();
-        int discount = random.nextInt(0 ,gameList.size() - 1);
-        return gameList.get(discount).getId();
+        List<GameEntity> gameList = paidGames(getAllGames());
+        Random random = new Random();
+        if(gameList.size()==1){
+            return firstGameDiscount(gameList);
+        }
+        if (checkPayGames(gameList)) {
+            int discount = random.nextInt(0 ,gameList.size() - 1);
+            return gameList.get(discount).getId();
+
+        }
+        else
+            throw new NoPaidGame();
+
 
     }
 
+    private Integer firstGameDiscount(List<GameEntity> gameList) {
+        return gameList.stream().findFirst().orElseThrow(NoPaidGame::new).getId();
+    }
+
+    public boolean checkPayGames(List<GameEntity> games){
+        return games.stream().anyMatch(game -> game.getPrice()!=0);
+    }
 
 
     public static List<GameEntity> paidGames(List<GameEntity> list) {
