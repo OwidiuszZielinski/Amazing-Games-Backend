@@ -4,7 +4,7 @@ import com.example.amazinggamesbackend.core.games.DiscountService;
 import com.example.amazinggamesbackend.core.games.GameRepository;
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.DeleteArrayDTO;
-import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,53 +18,54 @@ import java.util.List;
 @RestController
 public class GameController {
 
-    private final GameRepository gameRepository;
-
     private final GameService gameService;
 
     private final DiscountService discountService;
 
     @Autowired
-    public GameController(GameRepository gameRepository ,GameService gameService ,DiscountService discountService) {
-        this.gameRepository = gameRepository;
+    public GameController(GameService gameService ,DiscountService discountService) {
         this.gameService = gameService;
         this.discountService = discountService;
     }
 
     @Operation(summary = "Add game")
     @PostMapping("/games")
-    public ResponseEntity addGame(@RequestBody GameEntityDTO gameDTO) {
-        if (gameDTO.getTitle().isBlank() || gameDTO.getType().isBlank() || gameDTO.getDescription().isBlank()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else {
+    public ResponseEntity<GameDTO> addGame(@RequestBody GameDTO gameDTO) {
+        try {
             gameService.addGame(gameDTO);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        }catch (IllegalArgumentException illegalArgument){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
     }
 
     @Operation(summary = "Get all games")
     @GetMapping("/games")
-    public List<GameEntityDTO> getGames() {
-        return gameService.getGames();
+    public ResponseEntity<List<GameDTO>> getGames() {
+        List<GameDTO> games = gameService.getGames();
+        return new ResponseEntity<>(games,HttpStatus.OK);
     }
 
     @Operation(summary = "Delete games")
     @DeleteMapping("/games")
-    public ResponseEntity deleteGameById(@RequestBody DeleteArrayDTO dto) {
-        if (gameRepository.findAllById(dto.getIds()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else
+    public ResponseEntity<DeleteArrayDTO> deleteGameById(@RequestBody DeleteArrayDTO dto) {
+        try {
             gameService.deleteGamesById(dto.getIds());
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
-
-
 
     @Operation(summary = "Edit game by id")
     @PatchMapping("/games/{Id}")
-    public ResponseEntity editGameById(@RequestBody GameEntityDTO gameDTO ,@PathVariable int Id) {
-        gameService.updateGame(Id ,gameDTO);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<GameDTO> editGameById(@RequestBody GameDTO gameDTO ,@PathVariable int Id) {
+        try {
+            gameService.updateGame(Id ,gameDTO);
+            return ResponseEntity.ok().build();
+        }catch (IllegalArgumentException exception){
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 
     @Operation(summary = "Set discount game")

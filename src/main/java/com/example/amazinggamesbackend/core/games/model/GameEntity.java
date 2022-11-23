@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.core.games.model;
 
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
-import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
 import lombok.*;
 
@@ -30,8 +30,6 @@ public class GameEntity {
     private boolean availability;
 
 
-
-
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))
@@ -39,20 +37,10 @@ public class GameEntity {
     //vs
     private List<OrderEntity> orders = new ArrayList<>();
 
-
-
-
-
     @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> cartDetails = new ArrayList<>();
 
-    public void setRating(double rating) {
-        if (rating <= 10 && rating >= 0) {
-            this.rating = rating;
-        } else throw new IllegalArgumentException("Bad rating value");
-    }
-
-    public void fromDTO(GameEntityDTO gameDTO) {
+    public void fromDTO(GameDTO gameDTO) {
         this.title = gameDTO.getTitle();
         this.type = gameDTO.getType();
         this.price = gameDTO.getPrice();

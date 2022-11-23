@@ -1,81 +1,105 @@
 package com.example.amazinggamesbackend.core.games;
 
-import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
-import com.example.amazinggamesbackend.core.games.exceptions.NoPaidGame;
-import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class GameService {
     private final GameRepository gameRepository;
-    private final GameDayDiscountRepository gameDayDiscountRepository;
+
 
     @Autowired
-    public GameService(GameRepository gameRepository ,GameDayDiscountRepository gameDayDiscountRepository) {
+    public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
-        this.gameDayDiscountRepository = gameDayDiscountRepository;
+
     }
 
-    public void addGame(GameEntityDTO game) {
+    public void addGame(GameDTO game){
+        if(checkTitle(game)){
+            throw new IllegalArgumentException("Game exists in DB");
+        }
+        if(game.getTitle().isBlank() || game.getType().isBlank() || game.getDescription().isBlank()){
+            throw new IllegalArgumentException("Blank field");
+        }
+        game.setRating(checkAndSetRating(game));
         GameEntity newGame = new GameEntity();
         newGame.fromDTO(game);
         gameRepository.save(newGame);
     }
 
-
-    public List<GameEntityDTO> getGames() {
-        List<GameEntityDTO> tempGames = new ArrayList<>();
-        for (GameEntity x : getAllGames()) {
-            tempGames.add(GameEntityDTO.from(x));
-        }
-        return tempGames;
-
+    public boolean checkTitle(GameDTO game){
+        return getGames().stream()
+                .anyMatch(g -> g.getTitle()
+                        .equals(game.getTitle()));
     }
 
-    public void deleteGamesById(List<Integer> ids) {
-        clearCartDetailsInGameEntity(ids);
+    public double checkAndSetRating(GameDTO game){
+        return game.getRating()<0||game.getRating()>10 ? 0 : game.getRating();
+    }
 
+    public List<GameDTO> getGames() {
+//        List<GameEntityDTO> tempGames = new ArrayList<>();
+//        for (GameEntity x : getAllGames()) {
+//            tempGames.add(GameEntityDTO.from(x));
+//        }
+        return getAllGames().stream()
+                .map(GameDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteGamesById(List<Integer> ids){
+        if(ids.isEmpty()){
+            throw new IllegalArgumentException("ids to delete is empty");
+        }
+        clearGamesInCart(ids);
         gameRepository.deleteAllByIdInBatch(ids);
 
     }
 
-    public void clearCartDetailsInGameEntity(List<Integer> ids) {
-
-        for (GameEntity x : gameRepository.findAllById(ids)) {
+    public void clearGamesInCart(List<Integer> ids) {
+        for (GameEntity x : getAllByIds(ids)) {
             x.getCartDetails().clear();
             gameRepository.save(x);
         }
 
     }
-
-
-    public void updateGame(int id ,GameEntityDTO gameDTO) {
+    public void updateGame(int id ,GameDTO gameDTO) {
+        if(checkTitle(gameDTO)){
+            throw new IllegalArgumentException("This title exists");
+        }
+        checkAndSetRating(gameDTO);
         GameEntity game = getGameById(id);
         game.fromDTO(gameDTO);
         gameRepository.save(game);
     }
 
     public double calculateOrderValue(List<Integer> games) {
-        return gameRepository.findAllById(games).stream().mapToDouble(GameEntity::getPrice).sum();
+        return getAllByIds(games).stream()
+                .mapToDouble(GameEntity::getPrice)
+                .sum();
+    }
+
+    private List<GameEntity> getAllByIds(List<Integer> games) {
+        return gameRepository.findAllById(games);
     }
 
     //Service method return Entity
     public Set<GameEntity> gamesInOrder(List<Integer> games) {
-        return new HashSet<>(gameRepository.findAllById(games));
+        return new HashSet<>(getAllByIds(games));
     }
 
     //Service method return Entity
     public GameEntity getGameById(int id) {
-        return gameRepository.findById(id).get();
+        return gameRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Not found"));
     }
 
     public List<GameEntity> getAllGames() {
@@ -95,22 +119,6 @@ public class GameService {
     }
 
 
-    public void saveDiscountGameToFile(int id) {
-        try {
-            File file = new File("src/main/resources/discount.txt");
-            FileWriter fw = new FileWriter(file);
-            fw.write(String.valueOf(id));
-            fw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public int getDiscountGameFromFile() throws FileNotFoundException {
-        File file = new File("src/main/resources/discount.txt");
-        Scanner scanner = new Scanner(new File(String.valueOf(file)));
-        return Integer.parseInt(scanner.next());
-
-    }
 
 }

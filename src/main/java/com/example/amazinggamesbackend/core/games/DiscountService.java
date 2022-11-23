@@ -5,8 +5,13 @@ import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,5 +81,24 @@ public class DiscountService {
     public List<GameEntity> getAllGames() {
         return gameRepository.findAll();
     }
+
+    public void saveDiscountGameToFile(int id) {
+        try {
+            File file = new File("src/main/resources/discount.txt");
+            FileWriter fw = new FileWriter(file);
+            fw.write(String.valueOf(id));
+            fw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getDiscountGameFromFile() throws FileNotFoundException {
+        File file = new File("src/main/resources/discount.txt");
+        Scanner scanner = new Scanner(new File(String.valueOf(file)));
+        return Integer.parseInt(scanner.next());
+
+    }
+
 
 }

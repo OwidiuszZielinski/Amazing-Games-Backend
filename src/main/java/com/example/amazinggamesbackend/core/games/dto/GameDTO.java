@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GameEntityDTO {
+public class GameDTO {
     private Integer id;
     private String title;
     private String type;
@@ -16,8 +16,8 @@ public class GameEntityDTO {
     private boolean availability;
 
 
-    public static GameEntityDTO from(GameEntity game){
-        return GameEntityDTO.builder().id(game.getId())
+    public static GameDTO from(GameEntity game){
+        return GameDTO.builder().id(game.getId())
                 .title(game.getTitle())
                 .type(game.getType())
                 .price(game.getPrice())

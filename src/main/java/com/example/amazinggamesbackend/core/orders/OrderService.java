@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.core.orders;
 
 import com.example.amazinggamesbackend.core.games.GameService;
-import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
@@ -79,7 +79,7 @@ public class OrderService implements FormatValue {
 
     }
 
-    public GameEntityDTO bestseller() {
+    public GameDTO bestseller() {
         HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
         for (OrderEntity x : orderRepository.findAll()) {
             for (GameEntity y : x.getGames()) {
@@ -91,7 +91,7 @@ public class OrderService implements FormatValue {
             }
         }
         int key = Collections.max(gameIdFrequency.entrySet() ,Map.Entry.comparingByValue()).getKey();
-        return GameEntityDTO.from(gameService.getGameById(key));
+        return GameDTO.from(gameService.getGameById(key));
 
     }
 
