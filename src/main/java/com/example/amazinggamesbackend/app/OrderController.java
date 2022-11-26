@@ -5,6 +5,7 @@ import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.orders.OrderRepository;
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
+import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,14 @@ public class OrderController {
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")
-    public ResponseEntity newOrder(@RequestBody CreateOrderDTO order) {
-        if (order.getGames().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        } else {
-            orderService.createOrder(order);
-            return ResponseEntity.ok().build();
+    public ResponseEntity<CreateOrderDTO> newOrder(@RequestBody CreateOrderDTO order) {
+       try {
+           orderService.createOrder(order);
+           return ResponseEntity.status(HttpStatus.CREATED).build();
         }
+       catch (IllegalArgumentException e){
+           return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+       }
     }
 
     @Operation(summary = "Get all orders")
@@ -62,7 +64,7 @@ public class OrderController {
 
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
-    public void editOrder(@PathVariable int Id ,@RequestBody CreateOrderDTO order) {
+    public void editOrder(@PathVariable int Id ,@RequestBody EditOrderDTO order) {
         orderService.updateOrder(Id ,order);
 
     }

@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.users.dto;
 
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.core.users.model.User;
 import lombok.*;
 
 @Getter
@@ -19,7 +19,7 @@ public class UserDTO {
     private int country_id;
 
 
-    public static UserDTO from(UserEntity user) {
+    public static UserDTO from(User user) {
         return UserDTO.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
@@ -29,7 +29,7 @@ public class UserDTO {
                 .country_id(user.getCountry_id())
                 .build();
     }
-    public static UserDTO fromWithoutPassword(UserEntity user) {
+    public static UserDTO fromWithoutPassword(User user) {
         return UserDTO.builder()
                 .username(user.getUsername())
                 .email(user.getEmail())

@@ -1,14 +1,13 @@
 package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.games.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class GameService {
             throw new IllegalArgumentException("Blank field");
         }
         game.setRating(checkAndSetRating(game));
-        GameEntity newGame = new GameEntity();
+        Game newGame = new Game();
         newGame.fromDTO(game);
         gameRepository.save(newGame);
     }
@@ -66,7 +65,7 @@ public class GameService {
     }
 
     public void clearGamesInCart(List<Integer> ids) {
-        for (GameEntity x : getAllByIds(ids)) {
+        for (Game x : getAllByIds(ids)) {
             x.getCartDetails().clear();
             gameRepository.save(x);
         }
@@ -77,33 +76,42 @@ public class GameService {
             throw new IllegalArgumentException("This title exists");
         }
         checkAndSetRating(gameDTO);
-        GameEntity game = getGameById(id);
+        Game game = getGameById(id);
         game.fromDTO(gameDTO);
         gameRepository.save(game);
     }
 
     public double calculateOrderValue(List<Integer> games) {
         return getAllByIds(games).stream()
-                .mapToDouble(GameEntity::getPrice)
+                .mapToDouble(Game::getPrice)
                 .sum();
     }
 
-    private List<GameEntity> getAllByIds(List<Integer> games) {
+    private List<Game> getAllByIds(List<Integer> games) {
         return gameRepository.findAllById(games);
     }
 
     //Service method return Entity
-    public Set<GameEntity> gamesInOrder(List<Integer> games) {
+    public Set<Game> gamesInOrder(List<Integer> games) {
         return new HashSet<>(getAllByIds(games));
     }
 
     //Service method return Entity
-    public GameEntity getGameById(int id) {
+    public Game getGameById(int id) {
         return gameRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Not found"));
     }
 
-    public List<GameEntity> getAllGames() {
+    public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    public boolean checkGameExists(List<Integer> gameIds){
+        return getAllByIds(gameIds)
+                .stream()
+                .anyMatch(game -> game.getId()
+                        .equals(gameIds.stream()
+                                .findAny()
+                                .orElseThrow(()->new NoSuchElementException("No game in reposiotry"))));
     }
 
     //Nie wiem czy to optymalne zapisywac do pliku przecene codzinnie o 1 w nocy i odczytywac z pliku pobierajac
@@ -112,7 +120,7 @@ public class GameService {
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(fixedRate = 10000)
 
-    public static List<GameEntity> freeGames(List<GameEntity> list) {
+    public static List<Game> freeGames(List<Game> list) {
         return list.stream()
                 .filter(game -> game.getPrice() == 0)
                 .collect(Collectors.toList());

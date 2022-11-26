@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.games.dto;
 
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.games.model.Game;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,7 +16,7 @@ public class GameDTO {
     private boolean availability;
 
 
-    public static GameDTO from(GameEntity game){
+    public static GameDTO from(Game game){
         return GameDTO.builder().id(game.getId())
                 .title(game.getTitle())
                 .type(game.getType())

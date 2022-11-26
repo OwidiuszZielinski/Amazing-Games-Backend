@@ -3,7 +3,7 @@ package com.example.amazinggamesbackend.app;
 import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.core.users.model.User;
 import com.example.amazinggamesbackend.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +49,7 @@ public class AuthController {
         } else if (user.getUsername().isBlank() || user.getPassword().isBlank() || user.getEmail().isBlank()) {
             throw new IllegalArgumentException("This field can't be blank");
         } else {
-            UserEntity registerUser = new UserEntity();
+            User registerUser = new User();
             registerUser.fromDTO(user);
             registerUser.setPassword(passwordEncoder.encode(user.getPassword()));
             registerUser.setRoles("ROLE_USER");

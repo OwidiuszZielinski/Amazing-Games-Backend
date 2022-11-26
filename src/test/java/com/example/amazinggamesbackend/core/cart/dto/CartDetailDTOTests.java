@@ -2,7 +2,7 @@ package com.example.amazinggamesbackend.core.cart.dto;
 
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.games.model.Game;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class CartDetailDTOTests {
     @Test
     void should_return_CartDetailToCartDetailDTO_Object() {
         //given
-        final GameEntity game = GameEntity.builder()
+        final Game game = Game.builder()
                 .id(1)
                 .title("TestTitle")
                 .type("TestType")

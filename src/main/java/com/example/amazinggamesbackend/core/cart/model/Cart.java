@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.cart.model;
 
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.core.users.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class CartEntity {
+public class Cart {
 
     @Id
     @GeneratedValue
@@ -22,11 +22,11 @@ public class CartEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
 
-    private UserEntity user;
+    private User user;
 
 
-    public void addUser(UserEntity userEntity) {
-        this.user = userEntity;
+    public void addUser(User user) {
+        this.user = user;
     }
 
 

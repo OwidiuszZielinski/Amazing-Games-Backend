@@ -2,7 +2,7 @@ package com.example.amazinggamesbackend.core.games.model;
 
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
-import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.orders.model.Order;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GameEntity {
+public class Game {
 
 
     @Id
@@ -35,7 +35,7 @@ public class GameEntity {
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     //private Set<OrderEntity> orders = new HashSet<>();
     //vs
-    private List<OrderEntity> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> cartDetails = new ArrayList<>();

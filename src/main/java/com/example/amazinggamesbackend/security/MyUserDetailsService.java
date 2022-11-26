@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.security;
 
 import com.example.amazinggamesbackend.core.users.UserRepository;
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.core.users.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +20,11 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserEntity> userRes = repository.findByUsernameIgnoreCase(username);
+        Optional<User> userRes = repository.findByUsernameIgnoreCase(username);
         if(userRes.isEmpty())
             throw new UsernameNotFoundException("Could not findUser with username = " + username);
 
-        UserEntity user = userRes.get();
+        User user = userRes.get();
         return new org.springframework.security.core.userdetails.User(
                 username,
                 user.getPassword(),

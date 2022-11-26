@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.cart.dto;
 
-import com.example.amazinggamesbackend.core.cart.model.CartEntity;
+import com.example.amazinggamesbackend.core.cart.model.Cart;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public class CartDTO {
     private List<CartDetailDTO> cartDetailsInfo;
     private UserDTO user;
 
-    public static CartDTO from(CartEntity shoppingCart){
+    public static CartDTO from(Cart shoppingCart){
         return CartDTO.builder()
                 .id(shoppingCart.getId())
                 .cartDetailsInfo(CartDetailDTO.fromList(shoppingCart.getCartDetails()))

@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.core.users;
 
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.core.users.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,13 +22,13 @@ public class UserService {
     }
 
     public UserDTO getUser(int id){
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        return UserDTO.from(userEntity);
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return UserDTO.from(user);
     }
 
     public List<UserDTO> getAllUsers(){
         List<UserDTO> tempList = new ArrayList<>();
-        for(UserEntity x : userRepository.findAll()){
+        for(User x : userRepository.findAll()){
             tempList.add(UserDTO.fromWithoutPassword(x));
 
         }
@@ -38,7 +38,7 @@ public class UserService {
         userRepository.deleteAllByIdInBatch(ids);
     }
     public void updateUser(int id,UserDTO user){
-        UserEntity update = userById(id);
+        User update = userById(id);
         update.fromDTO(user);
         if(user.getPassword().isBlank()) {
             update.setPassword(update.getPassword());
@@ -48,7 +48,7 @@ public class UserService {
         }
         userRepository.save(update);
     }
-    public UserEntity userById(int id) {
+    public User userById(int id) {
             return userRepository.findById(id).get();
         }
 

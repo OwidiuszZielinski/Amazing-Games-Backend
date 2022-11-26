@@ -1,8 +1,7 @@
 package com.example.amazinggamesbackend.core.orders.dto;
 
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
-import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
+import com.example.amazinggamesbackend.core.games.model.Game;
+import com.example.amazinggamesbackend.core.orders.model.Order;
 import lombok.*;
 
 import java.util.List;
@@ -17,13 +16,12 @@ public class CreateOrderDTO {
 
     private int user;
     private List<Integer> games;
-    private OrderStatus status;
 
 
-    public static CreateOrderDTO from(OrderEntity order) {
+    public static CreateOrderDTO from(Order order) {
         return CreateOrderDTO.builder()
                 .user(order.getUser().getId())
-                .games(order.getGames().stream().mapToInt(GameEntity::getId).boxed().toList())
+                .games(order.getGames().stream().mapToInt(Game::getId).boxed().toList())
                 .build();
     }
 }

@@ -2,7 +2,7 @@ package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.exceptions.NoPaidGame;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.games.model.Game;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -49,8 +49,8 @@ public class DiscountService {
     }
 
 
-    private GameEntity randomGame() {
-        GameEntity discountGame = gameRepository.findById(randomDiscountGameId()).orElse(null);
+    private Game randomGame() {
+        Game discountGame = gameRepository.findById(randomDiscountGameId()).orElse(null);
 
         return discountGame;
     }
@@ -74,13 +74,13 @@ public class DiscountService {
         return getAllGames().stream().anyMatch(game -> game.getPrice() != 0);
     }
 
-    public List<GameEntity> paidGames() {
+    public List<Game> paidGames() {
         return getAllGames().stream()
                 .filter(game -> game.getPrice() > 0)
                 .collect(Collectors.toList());
     }
 
-    public List<GameEntity> getAllGames() {
+    public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
 

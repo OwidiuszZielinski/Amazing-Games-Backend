@@ -2,15 +2,16 @@ package com.example.amazinggamesbackend.core.orders;
 
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
-import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
+import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
-import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.orders.model.Order;
 import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
 import com.example.amazinggamesbackend.core.tax.Rates;
 import com.example.amazinggamesbackend.core.tax.Tax;
 import com.example.amazinggamesbackend.core.users.UserService;
-import com.example.amazinggamesbackend.core.users.model.UserEntity;
+import com.example.amazinggamesbackend.core.users.model.User;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,18 +35,30 @@ public class OrderService implements FormatValue {
     }
 
     public void createOrder(CreateOrderDTO order) {
-        OrderEntity newOrder = OrderEntity.builder().status(OrderStatus.STARTED)
-                .date(OrderEntity.orderDate())
-                .games(gameService.gamesInOrder(order.getGames()))
+                Order newOrder = Order.builder().status(OrderStatus.CREATED)
+                .date(Order.orderDate())
+                .games(addGamesToOrder(order.getGames()))
                 .value(gameService.calculateOrderValue(order.getGames()))
                 .user(userService.userById(order.getUser()))
                 .build();
                 orderRepository.save(newOrder);
     }
 
+    private Set<Game> addGamesToOrder(List<Integer> gameIds) {
+        if(gameIds.isEmpty()){
+            throw new IllegalArgumentException("Empty games list");
+        }
+        if(gameService.checkGameExists(gameIds)){
+            return gameService.gamesInOrder(gameIds);
+        }
+        else
+            throw new IllegalArgumentException("This game not exists at repository");
+
+    }
+
     public List<OrderDTO> getAllOrders() {
         List<OrderDTO> orderList = new ArrayList<>();
-        for (OrderEntity x : orderRepository.findAll()) {
+        for (Order x : orderRepository.findAll()) {
             orderList.add(OrderDTO.from(x));
         }
         setTax(orderList);
@@ -65,24 +78,23 @@ public class OrderService implements FormatValue {
     }
 
 
-    public void updateOrder(int id ,CreateOrderDTO order) {
-        OrderEntity getOrder = orderRepository.findById(id).get();
-        getOrder.setStatus(order.getStatus());
-        if(order.getUser()<=0) {
-            getOrder.setUser(getOrder.getUser());
-        }else {
-            getOrder.setUser(userService.userById(order.getUser()));
-        }
-            getOrder.setGames(gameService.gamesInOrder(order.getGames()));
-            getOrder.setValue(format(gameService.calculateOrderValue(order.getGames())));
-            orderRepository.save(getOrder);
+    public void updateOrder(int id ,EditOrderDTO order) {
+        Order orderById = getOrderById(id);
+        orderById.setStatus(order.getStatus());
+        orderById.setGames(gameService.gamesInOrder(order.getGames()));
+        orderById.setValue(format(gameService.calculateOrderValue(order.getGames())));
+        orderRepository.save(orderById);
 
+    }
+
+    private Order getOrderById(int id) {
+        return orderRepository.findById(id).orElseThrow(() -> new NoSuchElementException("This order not found"));
     }
 
     public GameDTO bestseller() {
         HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
-        for (OrderEntity x : orderRepository.findAll()) {
-            for (GameEntity y : x.getGames()) {
+        for (Order x : orderRepository.findAll()) {
+            for (Game y : x.getGames()) {
                 if (gameIdFrequency.containsKey(y.getId())) {
                     gameIdFrequency.put(y.getId() ,gameIdFrequency.get(y.getId()) + 1);
                 } else {
@@ -95,7 +107,7 @@ public class OrderService implements FormatValue {
 
     }
 
-    public double calcTax(double withoutTax ,UserEntity user) {
+    public double calcTax(double withoutTax ,User user) {
         double tax = 0;
         for (Rates x : Tax.getInstance().getRates()) {
             if (x.getCountry_id() == user.getCountry_id()) {
@@ -109,7 +121,6 @@ public class OrderService implements FormatValue {
     public double format(double value) {
         DecimalFormat formatValue = new DecimalFormat("##.00");
             return Double.parseDouble(formatValue.format(value).replace("," ,"."));
-
     }
 }
 

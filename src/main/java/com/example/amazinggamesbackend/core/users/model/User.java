@@ -1,8 +1,8 @@
 package com.example.amazinggamesbackend.core.users.model;
 
 import com.example.amazinggamesbackend.core.baseclasses.BaseEntity;
-import com.example.amazinggamesbackend.core.cart.model.CartEntity;
-import com.example.amazinggamesbackend.core.orders.model.OrderEntity;
+import com.example.amazinggamesbackend.core.cart.model.Cart;
+import com.example.amazinggamesbackend.core.orders.model.Order;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,8 +19,9 @@ import java.util.List;
 
 @Entity
 @Data
+@Table(name = "users")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" ,"handler" })
-public class UserEntity extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
     private String username;
 
 
@@ -34,13 +35,13 @@ public class UserEntity extends BaseEntity implements UserDetails {
     private String roles;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    private List<OrderEntity> orders;
+    private List<Order> orders;
 
 
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    CartEntity cart;
+    Cart cart;
 
 
 

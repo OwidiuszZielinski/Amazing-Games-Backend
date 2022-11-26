@@ -18,7 +18,7 @@ public class GameDayDiscount {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id")
-    private GameEntity game;
+    private Game game;
 
 
 }
