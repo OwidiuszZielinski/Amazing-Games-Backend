@@ -3,7 +3,6 @@ package com.example.amazinggamesbackend.core.games;
 import com.example.amazinggamesbackend.core.games.exceptions.NoPaidGame;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -74,9 +73,6 @@ public class DiscountService {
     public boolean checkPayGames() {
         return getAllGames().stream().anyMatch(game -> game.getPrice() != 0);
     }
-
-
-
 
     public List<GameEntity> paidGames() {
         return getAllGames().stream()

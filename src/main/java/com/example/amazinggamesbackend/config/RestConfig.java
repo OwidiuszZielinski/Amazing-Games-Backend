@@ -12,5 +12,9 @@ public class RestConfig {
     public GameDayDiscount discount (){
         return new GameDayDiscount();
     }
+    @Bean
+    public RestTemplate restTemplate (){
+        return new RestTemplate();
+    }
 
 }
