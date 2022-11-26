@@ -16,15 +16,20 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class DiscountService {
 
     private final GameDayDiscountRepository gameDayDiscountRepository;
     private final GameRepository gameRepository;
+    //Strworzylem beana w configuracji zeby nie tworzyc nowych obiektow
+    private GameDayDiscount discount;
 
+    public DiscountService(GameDayDiscountRepository gameDayDiscountRepository ,GameRepository gameRepository ,GameDayDiscount discount) {
+        this.gameDayDiscountRepository = gameDayDiscountRepository;
+        this.gameRepository = gameRepository;
+        this.discount = discount;
+    }
 
     public void discountGame() {
-        GameDayDiscount discount = new GameDayDiscount();
         if (isDiscount()) {
             discount = getDiscount();
         }
