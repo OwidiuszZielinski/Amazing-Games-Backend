@@ -3,6 +3,7 @@ package com.example.amazinggamesbackend.core.games;
 import com.example.amazinggamesbackend.core.games.exceptions.NoPaidGame;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.GameEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,69 +16,69 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DiscountService {
 
     private final GameDayDiscountRepository gameDayDiscountRepository;
     private final GameRepository gameRepository;
 
-    public DiscountService(GameDayDiscountRepository gameDayDiscountRepository ,GameRepository gameRepository) {
-        this.gameDayDiscountRepository = gameDayDiscountRepository;
-        this.gameRepository = gameRepository;
+
+    public void discountGame() {
+        GameDayDiscount discount = new GameDayDiscount();
+        if (isDiscount()) {
+            discount = getDiscount();
+        }
+        int discountId = getDiscountId(discount);
+        while (discountId == discount.getGame().getId()) {
+            discount.setGame(randomGame());
+        }
+        gameDayDiscountRepository.save(discount);
     }
 
-    public void discountGame(){
-        GameDayDiscount gameDayDiscount = new GameDayDiscount();
-        if (!noDiscount()) {
-            gameDayDiscount = getDiscount();
-        }
-        gameDayDiscount.setGameEntity(randomGame());
-        gameDayDiscountRepository.save(gameDayDiscount);
+    private int getDiscountId(GameDayDiscount gameDayDiscount) {
+        return gameDayDiscount.getGame().getId();
     }
 
 
     private GameDayDiscount getDiscount() {
-        return gameDayDiscountRepository.findAll().stream().findFirst().orElseThrow(()->new RuntimeException("No discount in DB"));
+        return gameDayDiscountRepository.findAll().stream().findFirst().orElseThrow(() -> new RuntimeException("No discount in DB"));
     }
 
 
     private GameEntity randomGame() {
-        return gameRepository.findById(randomDiscountGameId()).orElse(null);
+        GameEntity discountGame = gameRepository.findById(randomDiscountGameId()).orElse(null);
+
+        return discountGame;
     }
 
-    private boolean noDiscount() {
-        return gameDayDiscountRepository.findAll().size() == 0;
+    private boolean isDiscount() {
+        return gameDayDiscountRepository.findAll().size() != 0;
     }
+
     public int randomDiscountGameId() {
-        List<GameEntity> gameList = paidGames(getAllGames());
-        Random random = new Random();
-        if(gameList.size()==1){
-            return firstGameDiscount(gameList);
-        }
-        if (checkPayGames(gameList)) {
-            int discount = random.nextInt(0 ,gameList.size() - 1);
-            return gameList.get(discount).getId();
-
-        }
-        else
-            throw new NoPaidGame();
-
-
-    }
-
-    private Integer firstGameDiscount(List<GameEntity> gameList) {
-        return gameList.stream().findFirst().orElseThrow(NoPaidGame::new).getId();
-    }
-
-    public boolean checkPayGames(List<GameEntity> games){
-        return games.stream().anyMatch(game -> game.getPrice()!=0);
+        int discount = new Random().nextInt(0 ,paidGames().size() - 1);
+        return (paidGames().size() == 1) ? firstGameDiscount() : paidGames().get(discount).getId();
     }
 
 
-    public static List<GameEntity> paidGames(List<GameEntity> list) {
-        return list.stream()
+
+    private int firstGameDiscount() {
+        return paidGames().stream().findFirst().orElseThrow(NoPaidGame::new).getId();
+    }
+
+    public boolean checkPayGames() {
+        return getAllGames().stream().anyMatch(game -> game.getPrice() != 0);
+    }
+
+
+
+
+    public List<GameEntity> paidGames() {
+        return getAllGames().stream()
                 .filter(game -> game.getPrice() > 0)
                 .collect(Collectors.toList());
     }
+
     public List<GameEntity> getAllGames() {
         return gameRepository.findAll();
     }

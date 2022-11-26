@@ -70,8 +70,9 @@ public class GameController {
 
     @Operation(summary = "Set discount game")
     @GetMapping("/games/discount")
-    public void setDiscount(){
+    public ResponseEntity setDiscount(){
         discountService.discountGame();
+        return ResponseEntity.ok().build();
     }
 
 }
