@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.app;
 
 
-import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.orders.OrderRepository;
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
@@ -69,7 +69,7 @@ public class OrderController {
 
     @Operation(summary = "Bestseller")
     @GetMapping("orders/bestseller")
-    public GameEntityDTO getBestseller() {
+    public GameDTO getBestseller() {
         return orderService.bestseller();
     }
 }

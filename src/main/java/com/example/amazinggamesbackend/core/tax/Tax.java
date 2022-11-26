@@ -18,6 +18,7 @@ public class Tax{
             throw new IllegalStateException("Cannot create new instance, please use getInstance method instead.");
         }
     }
+    //Odczyt z pliku poniewaz nie mam dostepu do API zeby sworzyc REST TEMPLATE z stawkami vat
     //Blok try catch kiedy jest wykonywany? kompilacja, wywolanie getInstance?
     //Singleton działa, tworzenie nowej instacji jest zablokowane, aplikacja jest jednowatkowa wiec nie trzeba dodawac synchronizacji
     //jesli implementujemy interefjsy clonable lub serializable musimy to uwzglednic w singletonie bo sa wrazliwe miejsca gdzie moglaby

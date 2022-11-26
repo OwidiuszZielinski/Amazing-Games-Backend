@@ -16,7 +16,7 @@ public class CartEntity {
     @GeneratedValue
     private int id;
 
-    @OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart",orphanRemoval = true, cascade = CascadeType.ALL)
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)

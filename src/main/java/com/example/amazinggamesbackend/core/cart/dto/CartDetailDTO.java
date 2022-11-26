@@ -1,7 +1,7 @@
 package com.example.amazinggamesbackend.core.cart.dto;
 
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
-import com.example.amazinggamesbackend.core.games.dto.GameEntityDTO;
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import java.util.Objects;
 @Builder
 public class CartDetailDTO {
 
-    private GameEntityDTO game;
+    private GameDTO game;
     private int quantity;
 
     public static CartDetailDTO from(CartDetail cartDetail) {
-        return CartDetailDTO.builder().quantity(cartDetail.getQuantity()).game(GameEntityDTO.from(cartDetail.getGame())).build();
+        return CartDetailDTO.builder().quantity(cartDetail.getQuantity()).game(GameDTO.from(cartDetail.getGame())).build();
     }
 
 
