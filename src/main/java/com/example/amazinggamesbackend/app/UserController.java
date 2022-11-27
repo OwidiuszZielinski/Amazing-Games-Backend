@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -29,31 +30,49 @@ public class UserController {
 
     @Operation(summary = "Get users")
     @GetMapping("/users")
-    public List<UserDTO> getUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        try {
+            List<UserDTO> users = userService.getAllUsers();
+            return new ResponseEntity<>(users ,HttpStatus.OK);
+        }
+        catch (NotFoundException e){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 
-    @Operation(summary = "Get users")
+    @Operation(summary = "Get user")
     @GetMapping("/users/{Id}")
-    public UserDTO getUsers(@PathVariable int Id) {
-        return userService.getUser(Id);
+    public ResponseEntity<UserDTO> getUser(@PathVariable int Id) {
+        try {
+            UserDTO user = userService.getUserMapToDTO(Id);
+            return new ResponseEntity<>(user ,HttpStatus.OK);
+        }
+        catch (NotFoundException e){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 
     @Operation(summary = "Delete users")
     @DeleteMapping("/users")
-    public ResponseEntity<Object> deleteUsers(@RequestBody List<Integer> ids) {
-        if (userRepository.findAllById(ids).isEmpty() || ids.isEmpty()) {
+    public ResponseEntity<Integer> deleteUsers(@RequestBody List<Integer> ids) {
+        try {
+            userService.deleteUsers(ids);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-
         }
-        userService.deleteUsers(ids);
-        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Update user by ID")
     @PatchMapping("/users/{id}")
-    public void updateUser(@PathVariable int id ,@RequestBody UserDTO user) {
-        userService.updateUser(id ,user);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable int id ,@RequestBody UserDTO user) {
+        try {
+            userService.updateUser(id,user);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+        catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
     }
 
 }

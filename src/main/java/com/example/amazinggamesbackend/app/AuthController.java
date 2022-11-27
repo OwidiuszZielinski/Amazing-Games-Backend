@@ -44,7 +44,9 @@ public class AuthController {
     @PostMapping("/register")
     public Map<String, Object> registerHandler(@RequestBody UserDTO user) {
 
-        if (repository.findByUsernameIgnoreCase(user.getUsername()).isPresent() || repository.findByEmail(user.getEmail()).isPresent()) {
+        if (repository.findByUsernameIgnoreCase(user.getUsername()).isPresent()
+                || repository.findByEmail(user.getEmail()).isPresent()
+                || repository.findByUsernameIgnoreCase(user.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY);
         } else if (user.getUsername().isBlank() || user.getPassword().isBlank() || user.getEmail().isBlank()) {
             throw new IllegalArgumentException("This field can't be blank");
