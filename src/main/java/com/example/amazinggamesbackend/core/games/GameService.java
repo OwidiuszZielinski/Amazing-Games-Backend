@@ -2,25 +2,22 @@ package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.Game;
+import com.example.amazinggamesbackend.core.orders.OrderService;
+import com.example.amazinggamesbackend.core.orders.model.Order;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GameService {
     private final GameRepository gameRepository;
 
 
-    @Autowired
-    public GameService(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
 
-    }
 
     public void addGame(GameDTO game){
         if(checkTitle(game)){
@@ -140,6 +137,9 @@ public class GameService {
                 .filter(game -> game.getPrice() == 0)
                 .collect(Collectors.toList());
     }
+
+
+
 
 
 

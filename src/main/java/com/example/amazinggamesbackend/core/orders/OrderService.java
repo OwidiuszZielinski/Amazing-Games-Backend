@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -31,23 +32,22 @@ public class OrderService implements FormatValue {
     private final GameService gameService;
 
     public void createOrder(CreateOrderDTO order) {
-                Order newOrder = Order.builder().status(OrderStatus.CREATED)
+        Order newOrder = Order.builder().status(OrderStatus.CREATED)
                 .date(Order.orderDate())
                 .games(addGamesToOrder(order.getGames()))
                 .value(gameService.calculateOrderValue(order.getGames()))
                 .user(userService.userById(order.getUser()))
                 .build();
-                orderRepository.save(newOrder);
+        orderRepository.save(newOrder);
     }
 
     private Set<Game> addGamesToOrder(List<Integer> gameIds) {
-        if(gameIds.isEmpty()){
+        if (gameIds.isEmpty()) {
             throw new IllegalArgumentException("Empty games list");
         }
-        if(gameService.checkGameExists(gameIds)){
+        if (gameService.checkGameExists(gameIds)) {
             return gameService.gamesInOrder(gameIds);
-        }
-        else
+        } else
             throw new IllegalArgumentException("This game not exists at repository");
 
     }
@@ -64,11 +64,11 @@ public class OrderService implements FormatValue {
         return orderList;
     }
 
-    private List<Order> getOrders() {
+    public List<Order> getOrders() {
         return orderRepository.findAll();
     }
 
-    public void setTax(List<OrderDTO> orderList){
+    public void setTax(List<OrderDTO> orderList) {
         for (OrderDTO y : orderList) {
             y.setValueWithTax(calcTax(y.getValue() ,userService.userById(y.getUser())));
         }
@@ -99,25 +99,11 @@ public class OrderService implements FormatValue {
 
     }
 
+
     private Order getOrderById(int id) {
         return orderRepository.findById(id).orElseThrow(() -> new NoSuchElementException("This order not found"));
     }
 
-    public GameDTO bestseller() {
-        HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
-        for (Order x : getOrders()) {
-            for (Game y : x.getGames()) {
-                if (gameIdFrequency.containsKey(y.getId())) {
-                    gameIdFrequency.put(y.getId() ,gameIdFrequency.get(y.getId()) + 1);
-                } else {
-                    gameIdFrequency.put(y.getId() ,1);
-                }
-            }
-        }
-        int key = Collections.max(gameIdFrequency.entrySet() ,Map.Entry.comparingByValue()).getKey();
-        return GameDTO.from(gameService.getGameById(key));
-
-    }
 
     public double calcTax(double withoutTax ,User user) {
         double tax = 0;
@@ -132,7 +118,7 @@ public class OrderService implements FormatValue {
     @Override
     public double format(double value) {
         DecimalFormat formatValue = new DecimalFormat("##.00");
-            return Double.parseDouble(formatValue.format(value).replace("," ,"."));
+        return Double.parseDouble(formatValue.format(value).replace("," ,"."));
     }
 }
 

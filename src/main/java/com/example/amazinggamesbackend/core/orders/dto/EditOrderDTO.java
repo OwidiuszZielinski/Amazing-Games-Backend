@@ -13,7 +13,7 @@ public class EditOrderDTO {
 
     private List<Integer> games;
     private OrderStatus status;
-    private String date;
+
 
 
 }

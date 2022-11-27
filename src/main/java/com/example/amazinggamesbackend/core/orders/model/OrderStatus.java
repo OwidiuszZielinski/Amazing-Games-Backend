@@ -1,5 +1,7 @@
 package com.example.amazinggamesbackend.core.orders.model;
 
+
+
 public enum OrderStatus {
 
     CREATED,
@@ -9,5 +11,6 @@ public enum OrderStatus {
     POSTED,
     CANCELED,
     ENDED
+
 
 }

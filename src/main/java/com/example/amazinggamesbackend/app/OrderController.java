@@ -7,6 +7,7 @@ import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @RestController
@@ -34,13 +36,12 @@ public class OrderController {
     @Operation(summary = "Create new order")
     @PostMapping("/orders")
     public ResponseEntity<CreateOrderDTO> newOrder(@RequestBody CreateOrderDTO order) {
-       try {
-           orderService.createOrder(order);
-           return ResponseEntity.status(HttpStatus.CREATED).build();
+        try {
+            orderService.createOrder(order);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
-       catch (IllegalArgumentException e){
-           return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-       }
     }
 
     @Operation(summary = "Get all orders")
@@ -55,22 +56,22 @@ public class OrderController {
         try {
             orderService.deleteOrders(ids);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
     }
 
     @Operation(summary = "Edit order by id")
     @PatchMapping("/orders/{Id}")
-    public void editOrder(@PathVariable int Id ,@RequestBody EditOrderDTO order) {
-        orderService.updateOrder(Id ,order);
+    public ResponseEntity<EditOrderDTO> editOrder(@PathVariable int Id ,@RequestBody EditOrderDTO order) {
+        try {
+            orderService.updateOrder(Id ,order);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
 
     }
 
-    @Operation(summary = "Bestseller")
-    @GetMapping("orders/bestseller")
-    public GameDTO getBestseller() {
-        return orderService.bestseller();
-    }
+
 }

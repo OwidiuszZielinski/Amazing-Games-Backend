@@ -1,12 +1,11 @@
 package com.example.amazinggamesbackend.app;
 
 import com.example.amazinggamesbackend.core.games.DiscountService;
-import com.example.amazinggamesbackend.core.games.GameRepository;
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.DeleteArrayDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.model.BestsellerService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +20,14 @@ public class GameController {
     private final GameService gameService;
 
     private final DiscountService discountService;
+    private final BestsellerService bestsellerService;
 
-    @Autowired
-    public GameController(GameService gameService ,DiscountService discountService) {
+    public GameController(GameService gameService ,DiscountService discountService ,BestsellerService bestsellerService) {
         this.gameService = gameService;
         this.discountService = discountService;
+        this.bestsellerService = bestsellerService;
     }
+
 
     @Operation(summary = "Add game")
     @PostMapping("/games")
@@ -73,6 +74,18 @@ public class GameController {
     public ResponseEntity setDiscount(){
         discountService.discountGame();
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Bestseller")
+    @GetMapping("/games/bestseller")
+    public ResponseEntity<GameDTO> getBestsellerService() {
+        try {
+            GameDTO bestseller = bestsellerService.bestseller();
+            return new ResponseEntity<>(bestseller,HttpStatus.ACCEPTED);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        }
+
     }
 
 }
