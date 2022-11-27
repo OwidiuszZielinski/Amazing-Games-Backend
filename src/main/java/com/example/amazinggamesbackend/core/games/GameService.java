@@ -59,14 +59,29 @@ public class GameService {
         if(ids.isEmpty()){
             throw new IllegalArgumentException("ids to delete is empty");
         }
-        clearGamesInCart(ids);
+        if (getAllByIds(ids).isEmpty()) {
+            throw new IllegalArgumentException("Games not found in DB");
+        }
+        otherEntityCleaner(ids);
         gameRepository.deleteAllByIdInBatch(ids);
 
+    }
+
+    private void otherEntityCleaner(List<Integer> ids) {
+        clearGamesInCart(ids);
+        clearGamesInOrder(ids);
     }
 
     public void clearGamesInCart(List<Integer> ids) {
         for (Game x : getAllByIds(ids)) {
             x.getCartDetails().clear();
+            gameRepository.save(x);
+        }
+
+    }
+    public void clearGamesInOrder(List<Integer> ids) {
+        for (Game x : getAllByIds(ids)) {
+            x.getOrders().clear();
             gameRepository.save(x);
         }
 

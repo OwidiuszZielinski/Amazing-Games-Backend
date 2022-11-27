@@ -13,26 +13,22 @@ import com.example.amazinggamesbackend.core.tax.Tax;
 import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.User;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.*;
 
+@RequiredArgsConstructor
 @Service
 public class OrderService implements FormatValue {
 
     private final OrderRepository orderRepository;
-
     private final UserService userService;
-
     private final GameService gameService;
-    @Autowired
-    public OrderService(OrderRepository orderRepository ,UserService userService ,GameService gameService) {
-        this.orderRepository = orderRepository;
-        this.userService = userService;
-        this.gameService = gameService;
-    }
 
     public void createOrder(CreateOrderDTO order) {
                 Order newOrder = Order.builder().status(OrderStatus.CREATED)
@@ -58,12 +54,18 @@ public class OrderService implements FormatValue {
 
     public List<OrderDTO> getAllOrders() {
         List<OrderDTO> orderList = new ArrayList<>();
-        for (Order x : orderRepository.findAll()) {
+        for (Order x : getOrders()) {
             orderList.add(OrderDTO.from(x));
         }
         setTax(orderList);
-        orderList.sort(Comparator.comparing(OrderDTO::getDate).reversed());
+        orderList
+                .sort(Comparator.comparing(OrderDTO::getDate)
+                        .reversed());
         return orderList;
+    }
+
+    private List<Order> getOrders() {
+        return orderRepository.findAll();
     }
 
     public void setTax(List<OrderDTO> orderList){
@@ -73,8 +75,18 @@ public class OrderService implements FormatValue {
     }
 
     public void deleteOrders(List<Integer> ids) {
+        if (ids.isEmpty()) {
+            throw new IllegalArgumentException("Ids is empty");
+        }
+        if (getAllById(ids).isEmpty()) {
+            throw new IllegalArgumentException("Order not found in DB");
+        }
         orderRepository.deleteAllByIdInBatch(ids);
 
+    }
+
+    private List<Order> getAllById(List<Integer> ids) {
+        return orderRepository.findAllById(ids);
     }
 
 
@@ -93,7 +105,7 @@ public class OrderService implements FormatValue {
 
     public GameDTO bestseller() {
         HashMap<Integer, Integer> gameIdFrequency = new HashMap<>();
-        for (Order x : orderRepository.findAll()) {
+        for (Order x : getOrders()) {
             for (Game y : x.getGames()) {
                 if (gameIdFrequency.containsKey(y.getId())) {
                     gameIdFrequency.put(y.getId() ,gameIdFrequency.get(y.getId()) + 1);

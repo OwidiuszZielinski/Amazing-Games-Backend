@@ -51,7 +51,7 @@ public class GameController {
     public ResponseEntity<DeleteArrayDTO> deleteGameById(@RequestBody DeleteArrayDTO dto) {
         try {
             gameService.deleteGamesById(dto.getIds());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         } catch (IllegalArgumentException exception) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }

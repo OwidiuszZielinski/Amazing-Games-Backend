@@ -41,7 +41,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
-    Cart cart;
+    private Cart cart;
 
 
 

@@ -7,6 +7,7 @@ import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,16 +51,14 @@ public class OrderController {
 
     @Operation(summary = "Delete order")
     @DeleteMapping("/orders")
-    public ResponseEntity deleteOrders(@RequestBody List<Integer> ids) {
-        if (ids.isEmpty()) {
+    public ResponseEntity<Integer> deleteOrders(@RequestBody List<Integer> ids) {
+        try {
+            orderService.deleteOrders(ids);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+        }
+        catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
-        if (orderRepository.findAllById(ids).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
-
-        orderService.deleteOrders(ids);
-        return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Edit order by id")
