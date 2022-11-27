@@ -1,8 +1,7 @@
 package com.example.amazinggamesbackend.core.cart.model;
 
 import com.example.amazinggamesbackend.core.users.model.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;

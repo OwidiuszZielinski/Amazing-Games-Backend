@@ -16,8 +16,8 @@ import java.util.UUID;
 public abstract class BaseEntity implements Serializable {
     @Id
     @GeneratedValue
-    private int id;
-    private String uuid = UUID.randomUUID().toString();
+    protected int id;
+    protected String uuid = UUID.randomUUID().toString();
 
     public int hashCode() {
         return Objects.hash(uuid);

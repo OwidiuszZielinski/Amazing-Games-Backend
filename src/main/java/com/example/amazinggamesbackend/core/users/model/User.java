@@ -24,7 +24,6 @@ import java.util.List;
 public class User extends BaseEntity implements UserDetails {
     private String username;
 
-
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -61,6 +60,7 @@ public class User extends BaseEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton((new SimpleGrantedAuthority(roles)));
     }
+
 
     @Override
     public String getPassword() {
