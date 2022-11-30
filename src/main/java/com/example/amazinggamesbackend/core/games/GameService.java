@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.model.Order;
@@ -110,7 +111,7 @@ public class GameService {
 
     //Service method return Entity
     public Game getGameById(int id) {
-        return gameRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Not found"));
+        return gameRepository.findById(id).orElseThrow(()-> new GameNotFound("Not found"));
     }
 
     public List<Game> getAllGames() {

@@ -4,7 +4,7 @@ import com.example.amazinggamesbackend.core.cart.CartRepository;
 import com.example.amazinggamesbackend.core.cart.CartService;
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.exceptions.CartNotFound;
-import com.example.amazinggamesbackend.core.cart.exceptions.GameNotFound;
+import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,9 +69,9 @@ public class CartController {
     @PutMapping("/cart/{userId}")
     public ResponseEntity<CartDTO> addToCart(@PathVariable int userId ,@RequestBody Integer itemId) {
         try {
-            cartService.addGameToCart(userId ,itemId);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (GameNotFound notFound) {
+            CartDTO cartDTO = cartService.addGameToCart(userId ,itemId);
+            return new ResponseEntity<>(cartDTO,HttpStatus.ACCEPTED);
+        } catch (GameNotFound | CartNotFound notFound) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
 
