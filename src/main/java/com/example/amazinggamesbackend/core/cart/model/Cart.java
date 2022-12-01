@@ -12,7 +12,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Cart {
 
     @Id
@@ -26,15 +25,6 @@ public class Cart {
     @JoinColumn(name = "user_id")
 
     private User user;
-
-
-    public void addUser(User user) {
-        this.user = user;
-    }
-
-
-
-
 
 
 }

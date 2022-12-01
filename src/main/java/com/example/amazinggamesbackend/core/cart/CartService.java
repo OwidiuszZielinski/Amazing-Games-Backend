@@ -69,7 +69,7 @@ public class CartService {
 
     public void createCartForUser(int id) {
         final Cart userCart = new Cart();
-        userCart.addUser(userService.userById(id));
+        userCart.setUser(userService.userById(id));
         cartRepository.save(userCart);
     }
 

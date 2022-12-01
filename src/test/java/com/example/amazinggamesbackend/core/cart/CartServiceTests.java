@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.cart;
 
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
+import com.example.amazinggamesbackend.core.cart.exceptions.CartNotFound;
 import com.example.amazinggamesbackend.core.cart.model.Cart;
 import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.games.GameService;
@@ -25,7 +26,6 @@ class CartServiceTests {
 
 
     private CartService cartService;
-
     private CartRepository cartRepository;
     private UserRepository userRepository;
     private UserService userService;
@@ -43,7 +43,7 @@ class CartServiceTests {
 
 
     @Test
-    void should_getCartByUserId() {
+    void should_getCartByUserId_params_OK() {
         Cart cartExample = new Cart();
         User user = new User();
         user.setId(1);
@@ -80,7 +80,7 @@ class CartServiceTests {
 
 
     @Test
-    void should_addGameToCart_with_params_OK() {
+    void should_addGameToCart_params_OK() {
         //given
         Game givenGame = Game.builder().id(1).build();
         User givenUser = new User();
@@ -176,6 +176,18 @@ class CartServiceTests {
     }
 
     @Test
+    void should_increase_integer_oneUp_param_OK(){
+        //given
+        final CartDetail cartDetail = new CartDetail();
+        cartDetail.setQuantity(5);
+        //when
+        cartDetail.increaseQty();
+        //then
+        Assertions.assertEquals(6,cartDetail.getQuantity());
+
+
+    }
+    @Test
     void should_getUserCart_params_OK() {
         User givenUser = new User();
         givenUser.setId(1);
@@ -190,4 +202,18 @@ class CartServiceTests {
         final int givenUserFromCart = givenUser.getId();
         Assertions.assertEquals(expectedUserFromCart ,givenUserFromCart);
     }
+    @Test
+    void should_getUserCart_throw_CartNotFound_params_OK() {
+        User givenUser = new User();
+        givenUser.setId(1);
+        Cart givenCart = Cart.builder().user(givenUser).build();
+        //given
+        when(cartRepository.findByUserId(1)).thenReturn(Optional.of(givenCart));
+
+        //then
+        Assertions.assertThrows(CartNotFound.class,()-> cartService.getUserCart(2));
+        verify(cartRepository,times(1)).findByUserId(2);
+    }
+
+
 }
