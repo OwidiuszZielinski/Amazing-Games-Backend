@@ -49,4 +49,5 @@ public class Game {
         this.availability = gameDTO.isAvailability();
     }
 
+
 }

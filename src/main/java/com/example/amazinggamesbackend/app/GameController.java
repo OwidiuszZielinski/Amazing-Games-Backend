@@ -34,8 +34,8 @@ public class GameController {
     @PostMapping("/games")
     public ResponseEntity<GameDTO> addGame(@RequestBody GameDTO gameDTO) {
         try {
-            gameService.addGame(gameDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            GameDTO gameAdded = gameService.addGame(gameDTO);
+            return new ResponseEntity<>(gameAdded,HttpStatus.CREATED);
         }catch (IllegalArgumentException illegalArgument){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
