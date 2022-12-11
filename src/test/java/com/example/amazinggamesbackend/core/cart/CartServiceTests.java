@@ -27,17 +27,14 @@ class CartServiceTests {
 
     private CartService cartService;
     private CartRepository cartRepository;
-    private UserRepository userRepository;
-    private UserService userService;
-    private GameService gameService;
 
 
     @BeforeEach
     public void setUp() {
         cartRepository = mock(CartRepository.class);
-        userRepository = mock(UserRepository.class);
-        userService = mock(UserService.class);
-        gameService = mock(GameService.class);
+        UserRepository userRepository = mock(UserRepository.class);
+        UserService userService = mock(UserService.class);
+        GameService gameService = mock(GameService.class);
         cartService = new CartService(userService ,cartRepository ,gameService);
     }
 
@@ -57,6 +54,8 @@ class CartServiceTests {
         CartDTO cartByUserId = cartService.getCartByUserId(user.getId());
         //then
         //sprawdzamy czy metoda na repo wywolala sie raz przy wywolaniu cartService.getCartByUserId
+        Assertions.assertNotNull(cartByUserId);
+
         verify(cartRepository ,times(1)).findByUserId(1);
 
 
