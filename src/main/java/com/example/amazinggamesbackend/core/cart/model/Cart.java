@@ -14,8 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Cart {
 
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @GeneratedValue
     private int id;
 
     @OneToMany(mappedBy = "cart",orphanRemoval = true, cascade = CascadeType.ALL)
