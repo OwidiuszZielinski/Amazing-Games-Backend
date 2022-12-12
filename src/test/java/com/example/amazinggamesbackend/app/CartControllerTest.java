@@ -60,34 +60,33 @@ class CartControllerTest {
         //then
     }
 
-//    @Test
-//    public void should_create_cart_from_exist_user() throws Exception {
-//        //given
-//        final int givenUserId = 1;
-//        //when
-//        MvcResult mvcResult = mockMvc.perform(post("/cart")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(String.valueOf(givenUserId)))
-//                .andDo(print())
-//                .andExpect(status().is(422))
-//                .andReturn();
-//
-//    }
-//
-//    @Test
-//    public void should_create_cart_from_user() throws Exception {
-//        //given
-//        final int givenUserId = 5;
-//        //when
-//        MvcResult mvcResult = mockMvc.perform(post("/cart")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(String.valueOf(givenUserId)))
-//                .andDo(print())
-//                .andExpect(status().is(202))
-//                .andReturn();
-//        //then
-//        CartDTO cartDTO = objectMapper.readValue(mvcResult.getResponse().getContentAsString() ,CartDTO.class);
-//        assertNotNull(cartDTO);
-//    }
+    @Test
+    public void should_create_cart_from_exist_user() throws Exception {
+        //given
+        final int givenUserId = 1;
+        //when
+        MvcResult mvcResult = mockMvc.perform(post("/cart")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(givenUserId)))
+                .andDo(print())
+                .andExpect(status().is(422))
+                .andReturn();
+
+    }
+
+    @Test
+    public void should_create_cart_from_user() throws Exception {
+        //given
+        final int givenUserId = 5;
+        //when
+        MvcResult mvcResult = mockMvc.perform(post("/cart")
+                        .content(String.valueOf(givenUserId))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().is(201))
+                        .andReturn();
+        //then
+
+    }
 
 }
