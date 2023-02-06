@@ -20,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -31,17 +33,19 @@ public class OrderService implements FormatValue {
     private final UserService userService;
     private final GameService gameService;
 
-    public void createOrder(CreateOrderDTO order) {
+    public CreateOrderDTO createOrder(CreateOrderDTO order) {
         Order newOrder = Order.builder().status(OrderStatus.CREATED)
                 .date(Order.orderDate())
                 .games(addGamesToOrder(order.getGames()))
                 .value(gameService.calculateOrderValue(order.getGames()))
                 .user(userService.userById(order.getUser()))
                 .build();
+
         orderRepository.save(newOrder);
+        return order;
     }
 
-    private Set<Game> addGamesToOrder(List<Integer> gameIds) {
+    public Set<Game> addGamesToOrder(List<Integer> gameIds) {
         if (gameIds.isEmpty()) {
             throw new IllegalArgumentException("Empty games list");
         }
@@ -68,10 +72,11 @@ public class OrderService implements FormatValue {
         return orderRepository.findAll();
     }
 
-    public void setTax(List<OrderDTO> orderList) {
+    public List<OrderDTO> setTax(List<OrderDTO> orderList) {
         for (OrderDTO y : orderList) {
             y.setValueWithTax(calcTax(y.getValue() ,userService.userById(y.getUser())));
         }
+        return orderList;
     }
 
     public void deleteOrders(List<Integer> ids) {
@@ -85,22 +90,22 @@ public class OrderService implements FormatValue {
 
     }
 
-    private List<Order> getAllById(List<Integer> ids) {
+    public List<Order> getAllById(List<Integer> ids) {
         return orderRepository.findAllById(ids);
     }
 
 
-    public void updateOrder(int id ,EditOrderDTO order) {
+    public EditOrderDTO updateOrder(int id ,EditOrderDTO order) {
         Order orderById = getOrderById(id);
         orderById.setStatus(order.getStatus());
         orderById.setGames(gameService.gamesInOrder(order.getGames()));
         orderById.setValue(format(gameService.calculateOrderValue(order.getGames())));
         orderRepository.save(orderById);
-
+        return order;
     }
 
 
-    private Order getOrderById(int id) {
+    public Order getOrderById(int id) {
         return orderRepository.findById(id).orElseThrow(() -> new NoSuchElementException("This order not found"));
     }
 
@@ -117,8 +122,11 @@ public class OrderService implements FormatValue {
 
     @Override
     public double format(double value) {
-        DecimalFormat formatValue = new DecimalFormat("##.00");
-        return Double.parseDouble(formatValue.format(value).replace("," ,"."));
+        int places = 2;
+        BigDecimal bigDecimal = new BigDecimal(value);
+        bigDecimal = bigDecimal.setScale(places ,RoundingMode.FLOOR);
+
+        return bigDecimal.doubleValue();
     }
 }
 

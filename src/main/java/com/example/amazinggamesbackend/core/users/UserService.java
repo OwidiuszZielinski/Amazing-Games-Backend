@@ -50,7 +50,7 @@ public class UserService {
             throw new IllegalArgumentException("Ids is empty");
         }
         if (getAllById(ids).isEmpty()) {
-            throw new IllegalArgumentException("Order not found in DB");
+            throw new IllegalArgumentException("Users not found in DB");
         }
         userRepository.deleteAllByIdInBatch(ids);
     }
@@ -59,7 +59,7 @@ public class UserService {
        return userRepository.findAllById(ids);
     }
 
-    public void updateUser(int id,UserDTO user){
+    public UserDTO updateUser(int id,UserDTO user){
         User update = userById(id);
         if(validateEmail(user)||validateUsername(user)){
             throw new IllegalArgumentException("email or username exists or to short");
@@ -71,6 +71,7 @@ public class UserService {
             update.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userRepository.save(update);
+        return user;
     }
 
 

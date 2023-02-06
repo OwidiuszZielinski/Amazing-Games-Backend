@@ -1,8 +1,7 @@
 package com.example.amazinggamesbackend.core.cart.model;
 
 import com.example.amazinggamesbackend.core.users.model.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,10 +9,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cart {
 
+
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @GeneratedValue
     private int id;
 
     @OneToMany(mappedBy = "cart",orphanRemoval = true, cascade = CascadeType.ALL)
@@ -23,15 +26,6 @@ public class Cart {
     @JoinColumn(name = "user_id")
 
     private User user;
-
-
-    public void addUser(User user) {
-        this.user = user;
-    }
-
-
-
-
 
 
 }

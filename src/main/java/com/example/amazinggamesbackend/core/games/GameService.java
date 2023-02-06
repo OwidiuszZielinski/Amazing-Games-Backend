@@ -1,6 +1,7 @@
 package com.example.amazinggamesbackend.core.games;
 
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.model.Order;
@@ -19,7 +20,7 @@ public class GameService {
 
 
 
-    public void addGame(GameDTO game){
+    public GameDTO addGame(GameDTO game){
         if(checkTitle(game)){
             throw new IllegalArgumentException("Game exists in DB");
         }
@@ -30,6 +31,7 @@ public class GameService {
         Game newGame = new Game();
         newGame.fromDTO(game);
         gameRepository.save(newGame);
+        return game;
     }
 
     public boolean checkTitle(GameDTO game){
@@ -64,26 +66,29 @@ public class GameService {
 
     }
 
-    private void otherEntityCleaner(List<Integer> ids) {
+    public void otherEntityCleaner(List<Integer> ids) {
         clearGamesInCart(ids);
         clearGamesInOrder(ids);
     }
 
     public void clearGamesInCart(List<Integer> ids) {
+
         for (Game x : getAllByIds(ids)) {
-            x.getCartDetails().clear();
+            x.getCartDetails().remove(x.getCartDetails());
+            //x.getCartDetails().clear();
             gameRepository.save(x);
         }
 
     }
     public void clearGamesInOrder(List<Integer> ids) {
         for (Game x : getAllByIds(ids)) {
-            x.getOrders().clear();
+            x.getCartDetails().remove(x.getCartDetails());
+            //x.getOrders().clear();
             gameRepository.save(x);
         }
 
     }
-    public void updateGame(int id ,GameDTO gameDTO) {
+    public GameDTO updateGame(int id ,GameDTO gameDTO) {
         if(checkTitle(gameDTO)){
             throw new IllegalArgumentException("This title exists");
         }
@@ -91,6 +96,7 @@ public class GameService {
         Game game = getGameById(id);
         game.fromDTO(gameDTO);
         gameRepository.save(game);
+        return gameDTO;
     }
 
     public double calculateOrderValue(List<Integer> games) {
@@ -99,7 +105,7 @@ public class GameService {
                 .sum();
     }
 
-    private List<Game> getAllByIds(List<Integer> games) {
+    public List<Game> getAllByIds(List<Integer> games) {
         return gameRepository.findAllById(games);
     }
 
@@ -110,7 +116,7 @@ public class GameService {
 
     //Service method return Entity
     public Game getGameById(int id) {
-        return gameRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Not found"));
+        return gameRepository.findById(id).orElseThrow(()-> new GameNotFound("Not found"));
     }
 
     public List<Game> getAllGames() {
@@ -121,9 +127,9 @@ public class GameService {
         return getAllByIds(gameIds)
                 .stream()
                 .anyMatch(game -> game.getId()
-                        .equals(gameIds.stream()
+                        == gameIds.stream()
                                 .findAny()
-                                .orElseThrow(()->new NoSuchElementException("No game in reposiotry"))));
+                                .orElseThrow(()->new NoSuchElementException("No game in reposiotry")));
     }
 
     //Nie wiem czy to optymalne zapisywac do pliku przecene codzinnie o 1 w nocy i odczytywac z pliku pobierajac
@@ -132,7 +138,7 @@ public class GameService {
     //@Scheduled(fixedRate = 100000)
     //@Scheduled(fixedRate = 10000)
 
-    public static List<Game> freeGames(List<Game> list) {
+    public List<Game> freeGames(List<Game> list) {
         return list.stream()
                 .filter(game -> game.getPrice() == 0)
                 .collect(Collectors.toList());

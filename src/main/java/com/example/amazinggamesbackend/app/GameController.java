@@ -4,6 +4,7 @@ import com.example.amazinggamesbackend.core.games.DiscountService;
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.DeleteArrayDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.games.model.BestsellerService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
@@ -33,8 +34,8 @@ public class GameController {
     @PostMapping("/games")
     public ResponseEntity<GameDTO> addGame(@RequestBody GameDTO gameDTO) {
         try {
-            gameService.addGame(gameDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            GameDTO gameAdded = gameService.addGame(gameDTO);
+            return new ResponseEntity<>(gameAdded,HttpStatus.CREATED);
         }catch (IllegalArgumentException illegalArgument){
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
@@ -64,7 +65,7 @@ public class GameController {
         try {
             gameService.updateGame(Id ,gameDTO);
             return ResponseEntity.ok().build();
-        }catch (IllegalArgumentException exception){
+        }catch (IllegalArgumentException | GameNotFound exception){
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
         }
     }

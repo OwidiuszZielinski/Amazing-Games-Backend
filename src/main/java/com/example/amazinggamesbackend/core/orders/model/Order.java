@@ -14,18 +14,18 @@ import java.util.Set;
 
 @Entity
 @Data
-@Table(name = "orders")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 //Builder musi posiadac konstruktory ?? UpdateOrder bez setterow jak ?
 //@Data == @Getter, @Setter, @EqualsAndHashcode, @ToString
+@Table(name = "order_table")
 public class Order {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private int id;
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus status;
     private String date;
