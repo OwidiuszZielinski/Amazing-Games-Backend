@@ -127,9 +127,9 @@ public class GameService {
         return getAllByIds(gameIds)
                 .stream()
                 .anyMatch(game -> game.getId()
-                        .equals(gameIds.stream()
+                        == gameIds.stream()
                                 .findAny()
-                                .orElseThrow(()->new NoSuchElementException("No game in reposiotry"))));
+                                .orElseThrow(()->new NoSuchElementException("No game in reposiotry")));
     }
 
     //Nie wiem czy to optymalne zapisywac do pliku przecene codzinnie o 1 w nocy i odczytywac z pliku pobierajac

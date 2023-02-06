@@ -19,8 +19,8 @@ public class Game {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String title;
     private String type;
     private double price;
@@ -30,14 +30,12 @@ public class Game {
     private boolean availability;
 
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "order_game", joinColumns = @JoinColumn(name = "game_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))
-    //private Set<OrderEntity> orders = new HashSet<>();
-    //vs
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orderList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "game",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     public void fromDTO(GameDTO gameDTO) {

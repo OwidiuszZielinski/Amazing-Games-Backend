@@ -16,7 +16,7 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class BaseEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected int id;
     protected String uuid = UUID.randomUUID().toString();
 
