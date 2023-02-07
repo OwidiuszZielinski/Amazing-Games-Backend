@@ -7,10 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
 @EnableCaching
 public class WebConfig implements WebMvcConfigurer {
-
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

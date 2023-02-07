@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Game {
 
-
+    //Powinno sie uzywac id np gameId
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;

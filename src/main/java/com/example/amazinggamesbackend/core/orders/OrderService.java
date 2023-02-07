@@ -1,7 +1,6 @@
 package com.example.amazinggamesbackend.core.orders;
 
 import com.example.amazinggamesbackend.core.games.GameService;
-import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
@@ -14,15 +13,10 @@ import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.User;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -56,10 +50,11 @@ public class OrderService implements FormatValue {
 
     }
 
+    //TODO nie robimy jednoliterkowcow w petlach nigdzie
     public List<OrderDTO> getAllOrders() {
         List<OrderDTO> orderList = new ArrayList<>();
-        for (Order x : getOrders()) {
-            orderList.add(OrderDTO.from(x));
+        for (Order order : getOrders()) {
+            orderList.add(OrderDTO.from(order));
         }
         setTax(orderList);
         orderList
@@ -73,20 +68,20 @@ public class OrderService implements FormatValue {
     }
 
     public List<OrderDTO> setTax(List<OrderDTO> orderList) {
-        for (OrderDTO y : orderList) {
-            y.setValueWithTax(calcTax(y.getValue() ,userService.userById(y.getUser())));
+        for (OrderDTO order : orderList) {
+            order.setValueWithTax(calculateTax(order.getValue(), userService.userById(order.getUser())));
         }
         return orderList;
     }
 
-    public void deleteOrders(List<Integer> ids) {
-        if (ids.isEmpty()) {
+    public void deleteOrders(List<Integer> orderIds) {
+        if (orderIds.isEmpty()) {
             throw new IllegalArgumentException("Ids is empty");
         }
-        if (getAllById(ids).isEmpty()) {
+        if (getAllById(orderIds).isEmpty()) {
             throw new IllegalArgumentException("Order not found in DB");
         }
-        orderRepository.deleteAllByIdInBatch(ids);
+        orderRepository.deleteAllByIdInBatch(orderIds);
 
     }
 
@@ -95,7 +90,7 @@ public class OrderService implements FormatValue {
     }
 
 
-    public EditOrderDTO updateOrder(int id ,EditOrderDTO order) {
+    public EditOrderDTO updateOrder(int id, EditOrderDTO order) {
         Order orderById = getOrderById(id);
         orderById.setStatus(order.getStatus());
         orderById.setGames(gameService.gamesInOrder(order.getGames()));
@@ -110,22 +105,21 @@ public class OrderService implements FormatValue {
     }
 
 
-    public double calcTax(double withoutTax ,User user) {
+    public double calculateTax(double priceWithoutTax, User user) {
         double tax = 0;
         for (Rates x : Tax.getInstance().getRates()) {
             if (x.getCountry_id() == user.getCountry_id()) {
-                tax = withoutTax * (x.getStandard_rate() / 100);
+                tax = priceWithoutTax * (x.getStandard_rate() / 100);
             }
         }
-        return format(withoutTax + tax);
+        return format(priceWithoutTax + tax);
     }
 
     @Override
     public double format(double value) {
-        int places = 2;
+        final int places = 2;
         BigDecimal bigDecimal = new BigDecimal(value);
-        bigDecimal = bigDecimal.setScale(places ,RoundingMode.FLOOR);
-
+        bigDecimal = bigDecimal.setScale(places, RoundingMode.FLOOR);
         return bigDecimal.doubleValue();
     }
 }

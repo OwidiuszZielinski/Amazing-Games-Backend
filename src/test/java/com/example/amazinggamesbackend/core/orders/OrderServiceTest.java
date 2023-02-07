@@ -1,7 +1,5 @@
 package com.example.amazinggamesbackend.core.orders;
 
-import com.example.amazinggamesbackend.core.cart.CartRepository;
-import com.example.amazinggamesbackend.core.cart.CartService;
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
@@ -9,7 +7,6 @@ import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.Order;
 import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
-import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -134,7 +131,7 @@ class OrderServiceTest {
         user.setCountry_id(7);
         when(userService.userById(Mockito.anyInt())).thenReturn(user);
         //when
-        final double calculate = orderService.calcTax(orderValue,user);
+        final double calculate = orderService.calculateTax(orderValue,user);
         //then
         final double expectedTax = 6.15;
         assertEquals(expectedTax,calculate);

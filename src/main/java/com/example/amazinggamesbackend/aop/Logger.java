@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @EnableAspectJAutoProxy
 public class Logger {
     @Pointcut("execution(* com.example.amazinggamesbackend.*(..))")
-    private void anyPublicMethod(){
-
+    private void anyPublicMethod() {
     }
-    @Around("execution(* com.example.amazinggamesbackend.app.QRController.*(..))")
+
+    @Around("execution(* com.example.amazinggamesbackend.app.UtillController.*(..))")
     public Object arroundController(ProceedingJoinPoint point) throws Throwable {
         Object proceed = point.proceed();
         long start = System.nanoTime();

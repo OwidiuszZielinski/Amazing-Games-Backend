@@ -62,7 +62,7 @@ public class User extends BaseEntity implements UserDetails {
 
     }
 
-
+    //Ta dziwna skladnia znaczy ze Klasa musi rozszerzac grandet authroity
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton((new SimpleGrantedAuthority(roles)));

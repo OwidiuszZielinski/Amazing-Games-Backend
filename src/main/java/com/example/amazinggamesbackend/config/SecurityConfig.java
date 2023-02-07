@@ -31,14 +31,14 @@ public class SecurityConfig {
     private final MyUserDetailsService userDetailService;
 
     @Autowired
-    public SecurityConfig(UserRepository userRepository ,JWTFilter filter ,MyUserDetailsService userDetailService) {
+    public SecurityConfig(UserRepository userRepository, JWTFilter filter, MyUserDetailsService userDetailService) {
         this.userRepository = userRepository;
         this.filter = filter;
         this.userDetailService = userDetailService;
     }
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http ,BCryptPasswordEncoder bCryptPasswordEncoder)
+    public AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder)
             throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
@@ -52,7 +52,7 @@ public class SecurityConfig {
                 .cors()
                 .disable()
                 .authorizeHttpRequests()
-                .antMatchers("/auth/**","/orders/**" ,"/games/**" ,"users/**","cart/**")
+                .antMatchers("/auth/**", "/orders/**", "/games/**", "users/**", "cart/**")
                 .permitAll()
 //                .antMatchers(HttpMethod.GET,"/games/**")
 //                .permitAll()
@@ -70,12 +70,12 @@ public class SecurityConfig {
                 .userDetailsService(userDetailService)
                 .exceptionHandling()
                 .authenticationEntryPoint(
-                        ((request ,response ,authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED ,"Unauthorized"))
+                        ((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
                 )
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(filter ,UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable();
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class).headers().frameOptions().disable();
 
         return http.build();
     }

@@ -14,11 +14,9 @@ public class AmazingGamesBackendApplication {
 
 	public static void main(String[] args) {
 
-
 		SpringApplication.run(AmazingGamesBackendApplication.class ,args);
 
 	}
-
 
 }
 

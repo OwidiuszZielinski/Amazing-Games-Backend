@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 
@@ -34,14 +35,14 @@ public class CartController {
 
 
     @Operation(summary = "Get user cart")
-    @GetMapping("/cart/{userId}")
+    @GetMapping("/carts/{userId}")
     CartDTO getCart(@PathVariable int userId) {
         return cartService.getCartByUserId(userId);
 
     }
 
     @Operation(summary = "Create new shopping cart")
-    @PostMapping("/cart")
+    @PostMapping("/carts")
     ResponseEntity<CartDTO> newCart(@RequestBody int userID) {
         CartDTO cartForUser = cartService.createCartForUser(userID);
         return new ResponseEntity<>(cartForUser, HttpStatus.CREATED);
@@ -49,7 +50,7 @@ public class CartController {
 
 
     @Operation(summary = "Add to cart")
-    @PutMapping("/cart/{userId}")
+    @PutMapping("/carts/{userId}")
     public ResponseEntity<CartDTO> addToCart(@PathVariable int userId, @RequestBody Integer itemId) {
         try {
             CartDTO cartDTO = cartService.addGameToCart(userId, itemId);
@@ -61,7 +62,7 @@ public class CartController {
     }
 
     @Operation(summary = "Delete from cart")
-    @DeleteMapping("/cart/{userId}")
+    @DeleteMapping("/carts/{userId}")
     public ResponseEntity<CartDTO> deleteGameById(@PathVariable int userId, @RequestBody Integer itemId) {
         try {
             cartService.deleteGameFromCart(userId, itemId);
@@ -72,7 +73,7 @@ public class CartController {
     }
 
     @Operation(summary = "Clean cart")
-    @PutMapping("/cart/{userId}/clean")
+    @PutMapping("/carts/{userId}/clean")
     public ResponseEntity<CartDTO> clearCart(@PathVariable int userId) {
         CartDTO cartDTO = cartService.cleanCart(userId);
         return new ResponseEntity<>(cartDTO,HttpStatus.ACCEPTED);

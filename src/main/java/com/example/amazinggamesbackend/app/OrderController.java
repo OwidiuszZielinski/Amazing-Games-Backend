@@ -10,6 +10,7 @@ import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,20 +19,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
+@RequiredArgsConstructor
 @RestController
 public class OrderController {
 
 
-    private final OrderRepository orderRepository;
-
     private final OrderService orderService;
 
-    @Autowired
-    public OrderController(OrderRepository orderRepository ,OrderService orderService) {
-        this.orderRepository = orderRepository;
-        this.orderService = orderService;
-    }
+
 
     @Operation(summary = "Create new order")
     @PostMapping("/orders")

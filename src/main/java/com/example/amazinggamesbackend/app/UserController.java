@@ -5,6 +5,7 @@ import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +16,12 @@ import org.webjars.NotFoundException;
 import javax.validation.Valid;
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @RestController
 public class UserController {
 
-
-    private final UserRepository userRepository;
-
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserRepository userRepository ,UserService userService) {
-        this.userRepository = userRepository;
-        this.userService = userService;
-    }
 
     @Operation(summary = "Get users")
     @GetMapping("/users")

@@ -9,19 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class RestConfig {
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/users").allowedMethods("http://localhost:8080");
-                registry.addMapping("/games").allowedMethods("http://localhost:8080");
-                registry.addMapping("/login").allowedMethods("http://localhost:8080");
-                registry.addMapping("/orders").allowedMethods("http://localhost:8080");
-
-            }
-        };
-    }
 
     @Bean
     public GameDayDiscount discount (){

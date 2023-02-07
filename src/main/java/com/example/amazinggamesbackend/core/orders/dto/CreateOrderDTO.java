@@ -17,7 +17,6 @@ public class CreateOrderDTO {
     private int user;
     private List<Integer> games;
 
-
     public static CreateOrderDTO from(Order order) {
         return CreateOrderDTO.builder()
                 .user(order.getUser().getId())

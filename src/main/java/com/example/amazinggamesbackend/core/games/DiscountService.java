@@ -1,8 +1,10 @@
 package com.example.amazinggamesbackend.core.games;
 
-import com.example.amazinggamesbackend.core.games.exceptions.NoPaidGame;
+import com.example.amazinggamesbackend.core.games.exceptions.FreeGame;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.Game;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -14,6 +16,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class DiscountService {
 
@@ -22,20 +25,11 @@ public class DiscountService {
     //Strworzylem beana w configuracji zeby nie tworzyc nowych obiektow
     private GameDayDiscount discount;
 
-    public DiscountService(GameDayDiscountRepository gameDayDiscountRepository ,GameRepository gameRepository ,GameDayDiscount discount) {
-        this.gameDayDiscountRepository = gameDayDiscountRepository;
-        this.gameRepository = gameRepository;
-        this.discount = discount;
-    }
-
+    //TODO: val!
     public void discountGame() {
-        if (isDiscount()) {
-            discount = getDiscount();
-        }
-        int discountId = getDiscountId(discount);
-        while (discountId == discount.getGame().getId()) {
-            discount.setGame(randomGame());
-        }
+        val disc = getDiscount();
+        int discountId = getDiscountId(disc);
+        discount.setGame(randomGame());
         gameDayDiscountRepository.save(discount);
     }
 
@@ -45,33 +39,25 @@ public class DiscountService {
 
 
     private GameDayDiscount getDiscount() {
-        return gameDayDiscountRepository.findAll().stream().findFirst().orElseThrow(() -> new RuntimeException("No discount in DB"));
+        return gameDayDiscountRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No discount in DB"));
     }
 
 
     private Game randomGame() {
         Game discountGame = gameRepository.findById(randomDiscountGameId()).orElse(null);
-
         return discountGame;
     }
 
-    private boolean isDiscount() {
-        return gameDayDiscountRepository.findAll().size() != 0;
-    }
-
     public int randomDiscountGameId() {
-        int discount = new Random().nextInt(0 ,paidGames().size() - 1);
+        int discount = new Random().nextInt(0, paidGames().size() - 1);
         return (paidGames().size() == 1) ? firstGameDiscount() : paidGames().get(discount).getId();
     }
 
 
-
     private int firstGameDiscount() {
-        return paidGames().stream().findFirst().orElseThrow(NoPaidGame::new).getId();
-    }
-
-    public boolean checkPayGames() {
-        return getAllGames().stream().anyMatch(game -> game.getPrice() != 0);
+        return paidGames().stream().findFirst().orElseThrow(FreeGame::new).getId();
     }
 
     public List<Game> paidGames() {
@@ -79,7 +65,8 @@ public class DiscountService {
                 .filter(game -> game.getPrice() > 0)
                 .collect(Collectors.toList());
     }
-
+    //POTESTUJ RANDOMY CZY DZIALA I SKROC TE METODY
+    //Lepiej wstrzyknsac servis
     public List<Game> getAllGames() {
         return gameRepository.findAll();
     }
