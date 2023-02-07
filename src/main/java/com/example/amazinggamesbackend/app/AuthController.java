@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Map<String, Object> registerHandler(@RequestBody UserDTO user) {
+    public Map<String, Object> registerHandler(@Valid @RequestBody UserDTO user) {
 
         if (repository.findByUsernameIgnoreCase(user.getUsername()).isPresent()
                 || repository.findByEmail(user.getEmail()).isPresent()
@@ -68,7 +69,7 @@ public class AuthController {
 
     // Defining the function to handle the POST route for logging in a user
     @PostMapping("/login")
-    public Map<String, Object> loginHandler(@RequestBody LoginCredentials body) {
+    public Map<String, Object> loginHandler(@Valid @RequestBody LoginCredentials body) {
         try {
             // Creating the Authentication Token which will contain the credentials for authenticating
             // This token is used as input to the authentication process

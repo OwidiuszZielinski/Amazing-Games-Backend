@@ -7,30 +7,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class UserService {
-    private final  PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder ,UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
 
-    public UserDTO getUserMapToDTO(int id){
+    public UserDTO getUserMapToDTO(int id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         return UserDTO.from(user);
     }
 
-    public List<UserDTO> getAllUsers(){
+    public List<UserDTO> getAllUsers() {
         List<UserDTO> tempList = new ArrayList<>();
-        for(User x : Users()){
+        for (User x : Users()) {
             tempList.add(UserDTO.fromWithoutPassword(x));
 
         }
@@ -39,13 +40,13 @@ public class UserService {
 
     private List<User> Users() {
         List<User> userRepositoryAll = userRepository.findAll();
-        if(userRepositoryAll.isEmpty()){
+        if (userRepositoryAll.isEmpty()) {
             throw new NotFoundException("No users in DB");
         }
         return userRepositoryAll;
     }
 
-    public void deleteUsers(List<Integer> ids){
+    public void deleteUsers(List<Integer> ids) {
         if (ids.isEmpty()) {
             throw new IllegalArgumentException("Ids is empty");
         }
@@ -56,13 +57,13 @@ public class UserService {
     }
 
     private List<User> getAllById(List<Integer> ids) {
-       return userRepository.findAllById(ids);
+        return userRepository.findAllById(ids);
     }
 
-    public UserDTO updateUser(int id,UserDTO user){
+    public UserDTO updateUser(int id, @Valid UserDTO user) throws IllegalArgumentException{
         User update = userById(id);
-        if(validateEmail(user)||validateUsername(user)){
-            throw new IllegalArgumentException("email or username exists or to short");
+        if(checkUserUsernameExists(user,update) || checkUserEmailExists(user,update)){
+            throw new IllegalArgumentException("email or username exists");
         }
         update.fromDTO(user);
         if (user.getPassword().isBlank()) {
@@ -75,30 +76,32 @@ public class UserService {
     }
 
 
-    public boolean validateUsername(UserDTO user){
-        final String userName = user.getUsername();
-        if(userName.length()<6){
-            return true;
-        }
-       return getAllUsers().stream().anyMatch(u->u.getUsername().equals(userName));
-
+    public boolean validateUsername(UserDTO user) {
+        return user.getEmail().length() < 6;
 
     }
 
-    public boolean validateEmail(UserDTO user){
+    public boolean checkUserUsernameExists(UserDTO user,User updateUser){
+        boolean match = getAllUsers().stream().anyMatch(u -> u.getUsername().equals(user.getUsername()));
+        boolean checkTheSame = user.getUsername().equals(updateUser.getUsername());
+        return match && !checkTheSame;
+    }
 
-        final String userEmail = user.getEmail();
-        if(userEmail.length()<6){
-            return true;
-        }
-        return getAllUsers().stream().anyMatch(u->u.getUsername().equals(userEmail));
+    public boolean validateEmail(UserDTO user) {
+        return user.getEmail().length() < 6;
 
+
+    }
+    public boolean checkUserEmailExists(UserDTO user,User updateUser){
+        boolean match = getAllUsers().stream().anyMatch(u -> u.getUsername().equals(user.getEmail()));
+        boolean checkTheSame = user.getEmail().equals(updateUser.getEmail());
+        return match && !checkTheSame;
     }
 
 
     public User userById(int id) {
-            return userRepository.findById(id).orElseThrow(()-> new NoSuchElementException("User not found"));
-        }
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+    }
 
 
 }

@@ -13,6 +13,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -22,11 +25,15 @@ import java.util.List;
 @Table(name = "users")
 @JsonIgnoreProperties({ "hibernateLazyInitializer" ,"handler" })
 public class User extends BaseEntity implements UserDetails {
+    @NotEmpty(message = "The name is required.")
+    @Size(min = 6, max = 30, message = "The length of name must be between 6 and 30 characters.")
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
+    @Email
+    @NotEmpty(message = "The EMAIL is required.")
+    @Size(min = 6, max = 30, message = "The length of EMAIL must be between 6 and 30 characters.")
     private String email;
     private int country_id;
     private String address;
