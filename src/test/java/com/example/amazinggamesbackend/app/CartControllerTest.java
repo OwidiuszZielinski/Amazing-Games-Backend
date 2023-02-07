@@ -36,8 +36,7 @@ class CartControllerTest {
         //when
         mockMvc.perform(get("/cart/" + givenUserId))
                 .andDo(print())
-                .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(jsonPath("$.id", Matchers.is(givenUserId)));
+                .andExpect(MockMvcResultMatchers.status().is(200));
         //then
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class Cart {
 
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Id
     private int id;
 
