@@ -2,11 +2,13 @@ package com.example.amazinggamesbackend.app;
 
 
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.orders.OrderRepository;
 import com.example.amazinggamesbackend.core.orders.OrderService;
 import com.example.amazinggamesbackend.core.orders.dto.CreateOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
+import com.example.amazinggamesbackend.exceptions.ErrorResponse;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,52 +23,41 @@ import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/orders/")
 public class OrderController {
 
-
+    @ExceptionHandler({ IllegalArgumentException.class, NoSuchElementException.class })
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
     private final OrderService orderService;
 
-
-
     @Operation(summary = "Create new order")
-    @PostMapping("/orders")
+    @PostMapping
     public ResponseEntity<CreateOrderDTO> newOrder(@RequestBody CreateOrderDTO order) {
-        try {
-            orderService.createOrder(order);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
+        CreateOrderDTO create = orderService.createOrder(order);
+        return new ResponseEntity<>(create,HttpStatus.CREATED);
+
     }
 
     @Operation(summary = "Get all orders")
-    @GetMapping("/orders")
+    @GetMapping
     public List<OrderDTO> getOrders() {
         return orderService.getAllOrders();
     }
 
     @Operation(summary = "Delete order")
-    @DeleteMapping("/orders")
-    public ResponseEntity<Integer> deleteOrders(@RequestBody List<Integer> ids) {
-        try {
-            orderService.deleteOrders(ids);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
+    @DeleteMapping
+    public ResponseEntity<Integer> deleteOrders(@RequestBody List<Integer> gameIds) {
+        orderService.deleteOrders(gameIds);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @Operation(summary = "Edit order by id")
-    @PatchMapping("/orders/{Id}")
+    @PatchMapping("/{Id}")
     public ResponseEntity<EditOrderDTO> editOrder(@PathVariable int Id ,@RequestBody EditOrderDTO order) {
-        try {
-            orderService.updateOrder(Id ,order);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
-
+        EditOrderDTO edited = orderService.updateOrder(Id, order);
+        return new ResponseEntity<>(edited, HttpStatus.ACCEPTED);
     }
-
 
 }

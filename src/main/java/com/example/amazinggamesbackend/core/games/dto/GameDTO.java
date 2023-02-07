@@ -16,7 +16,7 @@ public class GameDTO {
     private boolean availability;
 
 
-    public static GameDTO from(Game game){
+    public static GameDTO from(Game game) {
         return GameDTO.builder().id(game.getId())
                 .title(game.getTitle())
                 .type(game.getType())
@@ -25,6 +25,18 @@ public class GameDTO {
                 .rating(game.getRating())
                 .availability(game.isAvailability())
                 .build();
+    }
+
+    public static Game to(GameDTO gameDTO) {
+        Game game = new Game();
+        game.setId(gameDTO.getId());
+        game.setTitle(gameDTO.getTitle());
+        game.setType(gameDTO.getType());
+        game.setPrice(gameDTO.getPrice());
+        game.setDescription(gameDTO.getDescription());
+        game.setRating(gameDTO.getRating());
+        game.setAvailability(gameDTO.isAvailability());
+        return game;
     }
 
 }

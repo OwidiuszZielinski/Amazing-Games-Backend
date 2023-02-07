@@ -5,6 +5,8 @@ import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.LoginCredentials;
 import com.example.amazinggamesbackend.core.users.model.User;
 import com.example.amazinggamesbackend.security.JWTUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,12 +22,10 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.Collections;
 import java.util.Map;
-
-@RestController // Marks the class a rest controller
-@RequestMapping("/auth/") // Requests made to /api/auth/anything will be handles by this class
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/auth/")
 public class AuthController {
-
-    // Injecting Dependencies
 
     private final UserRepository repository;
 
@@ -34,13 +34,6 @@ public class AuthController {
     private final AuthenticationManager authManager;
 
     private final PasswordEncoder passwordEncoder;
-    @Autowired
-    public AuthController(UserRepository repository ,JWTUtil jwtUtil ,AuthenticationManager authManager ,PasswordEncoder passwordEncoder) {
-        this.repository = repository;
-        this.jwtUtil = jwtUtil;
-        this.authManager = authManager;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @PostMapping("/register")
     public Map<String, Object> registerHandler(@Valid @RequestBody UserDTO user) {
@@ -59,37 +52,25 @@ public class AuthController {
             registerUser.setCountry_id(user.getCountry_id());
             repository.save(registerUser);
 
-            // Generating JWT
             String token = jwtUtil.generateToken(user.getEmail());
 
-            // Responding with JWT
-            return Collections.singletonMap("jwt-token" ,token);
+
+            return Collections.singletonMap("jwt-token", token);
         }
     }
 
-    // Defining the function to handle the POST route for logging in a user
     @PostMapping("/login")
     public Map<String, Object> loginHandler(@Valid @RequestBody LoginCredentials body) {
         try {
-            // Creating the Authentication Token which will contain the credentials for authenticating
-            // This token is used as input to the authentication process
+
             UsernamePasswordAuthenticationToken authInputToken =
-                    new UsernamePasswordAuthenticationToken(body.getUsername() ,body.getPassword());
-
-            // Authenticating the Login Credentials
+                    new UsernamePasswordAuthenticationToken(body.getUsername(), body.getPassword());
             authManager.authenticate(authInputToken);
-
-            // If this point is reached it means Authentication was successful
-            // Generate the JWT
             String token = jwtUtil.generateToken(body.getUsername());
-
-            // Respond with the JWT
-            return Collections.singletonMap("jwt-token" ,token);
+            return Collections.singletonMap("jwt-token", token);
         } catch (AuthenticationException authExc) {
-            // Auhentication Failed
             throw new RuntimeException("Invalid Login Credentials");
         }
     }
-
 
 }

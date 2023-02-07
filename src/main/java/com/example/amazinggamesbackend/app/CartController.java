@@ -17,12 +17,12 @@ import java.util.NoSuchElementException;
 
 
 @RestController
+@RequestMapping("/carts/")
 public class CartController {
 
-    //CO POWINNY ZWRACAĆ REQUESTY? RESPONSEENTITY CZY ENCJE?
 
     @ExceptionHandler({ CartNotFound.class, GameNotFound.class, IllegalArgumentException.class })
-    public ResponseEntity<ErrorResponse> handleException(IllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse> handleException(RuntimeException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
@@ -35,48 +35,41 @@ public class CartController {
 
 
     @Operation(summary = "Get user cart")
-    @GetMapping("/carts/{userId}")
+    @GetMapping("/{userId}")
     CartDTO getCart(@PathVariable int userId) {
         return cartService.getCartByUserId(userId);
 
     }
 
     @Operation(summary = "Create new shopping cart")
-    @PostMapping("/carts")
-    ResponseEntity<CartDTO> newCart(@RequestBody int userID) {
-        CartDTO cartForUser = cartService.createCartForUser(userID);
+    @PostMapping
+    ResponseEntity<CartDTO> newCart(@RequestBody int userId) {
+        CartDTO cartForUser = cartService.createCartForUser(userId);
         return new ResponseEntity<>(cartForUser, HttpStatus.CREATED);
     }
 
 
     @Operation(summary = "Add to cart")
-    @PutMapping("/carts/{userId}")
-    public ResponseEntity<CartDTO> addToCart(@PathVariable int userId, @RequestBody Integer itemId) {
-        try {
-            CartDTO cartDTO = cartService.addGameToCart(userId, itemId);
-            return new ResponseEntity<>(cartDTO, HttpStatus.ACCEPTED);
-        } catch (GameNotFound | CartNotFound notFound) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
+    @PutMapping("/{userId}")
+    ResponseEntity<CartDTO> addToCart(@PathVariable int userId, @RequestBody Integer itemId) {
+        CartDTO cartDTO = cartService.addGameToCart(userId, itemId);
+        return new ResponseEntity<>(cartDTO, HttpStatus.ACCEPTED);
 
     }
 
     @Operation(summary = "Delete from cart")
-    @DeleteMapping("/carts/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<CartDTO> deleteGameById(@PathVariable int userId, @RequestBody Integer itemId) {
-        try {
-            cartService.deleteGameFromCart(userId, itemId);
-            return ResponseEntity.ok().build();
-        } catch (CartNotFound | GameNotFound exception) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
-        }
+        cartService.deleteGameFromCart(userId, itemId);
+        return ResponseEntity.ok().build();
+
     }
 
     @Operation(summary = "Clean cart")
-    @PutMapping("/carts/{userId}/clean")
+    @PutMapping("/{userId}/clean")
     public ResponseEntity<CartDTO> clearCart(@PathVariable int userId) {
         CartDTO cartDTO = cartService.cleanCart(userId);
-        return new ResponseEntity<>(cartDTO,HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(cartDTO, HttpStatus.ACCEPTED);
     }
 
 

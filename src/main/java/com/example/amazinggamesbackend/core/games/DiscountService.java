@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.core.games;
 
+import com.example.amazinggamesbackend.core.games.dto.GameDTO;
 import com.example.amazinggamesbackend.core.games.exceptions.FreeGame;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
 import com.example.amazinggamesbackend.core.games.model.Game;
@@ -12,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -21,22 +23,26 @@ import java.util.stream.Collectors;
 public class DiscountService {
 
     private final GameDayDiscountRepository gameDayDiscountRepository;
-    private final GameRepository gameRepository;
-    //Strworzylem beana w configuracji zeby nie tworzyc nowych obiektow
-    private GameDayDiscount discount;
+    private final GameService gameService;
+
 
     //TODO: val!
-    public void discountGame() {
-        val disc = getDiscount();
-        int discountId = getDiscountId(disc);
-        discount.setGame(randomGame());
-        gameDayDiscountRepository.save(discount);
+    public GameDayDiscount discountGame() {
+        if (emptyDiscounts()) {
+            GameDayDiscount gameDayDiscount = new GameDayDiscount();
+            gameDayDiscount.setGame(GameDTO.to(randomGame()));
+            gameDayDiscountRepository.save(gameDayDiscount);
+            return gameDayDiscount;
+        }
+        GameDayDiscount existsDiscount = getDiscount();
+        existsDiscount.setGame(GameDTO.to(randomGame()));
+        gameDayDiscountRepository.save(existsDiscount);
+        return existsDiscount;
     }
 
-    private int getDiscountId(GameDayDiscount gameDayDiscount) {
-        return gameDayDiscount.getGame().getId();
+    public boolean emptyDiscounts() {
+        return gameDayDiscountRepository.findAll().size() == 0;
     }
-
 
     private GameDayDiscount getDiscount() {
         return gameDayDiscountRepository.findAll().stream()
@@ -45,9 +51,8 @@ public class DiscountService {
     }
 
 
-    private Game randomGame() {
-        Game discountGame = gameRepository.findById(randomDiscountGameId()).orElse(null);
-        return discountGame;
+    private GameDTO randomGame() {
+        return GameDTO.from(gameService.getGameById(randomDiscountGameId()));
     }
 
     public int randomDiscountGameId() {
@@ -60,15 +65,14 @@ public class DiscountService {
         return paidGames().stream().findFirst().orElseThrow(FreeGame::new).getId();
     }
 
-    public List<Game> paidGames() {
+    public List<GameDTO> paidGames() {
         return getAllGames().stream()
                 .filter(game -> game.getPrice() > 0)
                 .collect(Collectors.toList());
     }
-    //POTESTUJ RANDOMY CZY DZIALA I SKROC TE METODY
-    //Lepiej wstrzyknsac servis
-    public List<Game> getAllGames() {
-        return gameRepository.findAll();
+
+    public List<GameDTO> getAllGames() {
+        return gameService.getGames();
     }
 
     public void saveDiscountGameToFile(int id) {

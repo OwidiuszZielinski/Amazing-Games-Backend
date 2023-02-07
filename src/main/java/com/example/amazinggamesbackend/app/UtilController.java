@@ -16,11 +16,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 @RestController
-public class UtillController {
+public class UtilController {
 
     private final ObjectMapper objectMapper;
 
-    public UtillController(ObjectMapper objectMapper) {
+    public UtilController(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

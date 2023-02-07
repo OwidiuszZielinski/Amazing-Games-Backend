@@ -17,11 +17,11 @@ public class Logger {
     private void anyPublicMethod() {
     }
 
-    @Around("execution(* com.example.amazinggamesbackend.app.UtillController.*(..))")
-    public Object arroundController(ProceedingJoinPoint point) throws Throwable {
+    @Around("execution(* com.example.amazinggamesbackend.app.UtilController.*(..))")
+    public Object aroundController(ProceedingJoinPoint point) throws Throwable {
         Object proceed = point.proceed();
         long start = System.nanoTime();
-        log.info("::Time:: = " + (System.nanoTime() - start) + " nanosec" + " QR HAS BEEN DOWNLOADED");
+        log.info("::Time:: = " + (System.nanoTime() - start) + " nanoSec" + " QR HAS BEEN DOWNLOADED");
         return proceed;
     }
 
