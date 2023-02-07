@@ -22,7 +22,7 @@ public class CartService {
 
 
     @Autowired
-    public CartService(UserService userService ,CartRepository cartRepository ,GameService gameService) {
+    public CartService(UserService userService, CartRepository cartRepository, GameService gameService) {
         this.userService = userService;
         this.cartRepository = cartRepository;
         this.gameService = gameService;
@@ -33,25 +33,25 @@ public class CartService {
                 .orElseThrow(() -> new CartNotFound("Cart for this user not found")));
     }
 
-    public boolean checkCartExists(int userId) {
+    boolean checkCartExists(int userId) {
         return cartRepository.findByUserId(userId).isPresent();
     }
 
 
-    public CartDTO addGameToCart(int id ,int gameId) {
+    public CartDTO addGameToCart(int id, int gameId) {
         Cart cart = getUserCart(id);
         final List<CartDetail> cartDetails = cart.getCartDetails();
         boolean gameIsInCart = cartDetails.stream().anyMatch(game -> game.getGame().getId() == gameId);
         if (gameIsInCart) {
-            increaseGameQty(cart ,gameId);
+            increaseGameQty(cart, gameId);
         } else {
-            cartDetails.add(new CartDetail(gameService.getGameById(gameId) ,cart ,1));
+            cartDetails.add(new CartDetail(gameService.getGameById(gameId), cart, 1));
         }
         cartRepository.save(cart);
         return CartDTO.from(cart);
     }
 
-    public void deleteGameFromCart(int id ,int gameId) {
+    public void deleteGameFromCart(int id, int gameId) {
         Cart cart = getUserCart(id);
         boolean removeIf = cart.getCartDetails().removeIf(x -> x.getGame().getId() == gameId);
         if (removeIf) {
@@ -61,20 +61,31 @@ public class CartService {
 
     }
 
-    public void cleanCart(int id) {
+    public CartDTO cleanCart(int id) {
+        boolean check = checkCartExists(id);
+        if (!check) {
+            throw new IllegalArgumentException("this cart not exists");
+        }
         final Cart cart = getUserCart(id);
         cart.getCartDetails().clear();
         cartRepository.save(cart);
+        return CartDTO.from(cart);
     }
 
-    public void createCartForUser(int id) {
-        final Cart userCart = new Cart();
-        userCart.setUser(userService.userById(id));
-        cartRepository.save(userCart);
+    public CartDTO createCartForUser(int id) {
+        boolean check = checkCartExists(id);
+        if (check) {
+            throw new IllegalArgumentException("cart for this user exists");
+        } else {
+            final Cart userCart = new Cart();
+            userCart.setUser(userService.userById(id));
+            cartRepository.save(userCart);
+            return CartDTO.from(userCart);
+        }
     }
 
 
-    public void increaseGameQty(Cart cart ,int gameId) {
+    public void increaseGameQty(Cart cart, int gameId) {
         CartDetail cartDetail = cart.getCartDetails()
                 .stream()
                 .filter(e -> e.getGame().getId() == gameId)
