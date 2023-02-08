@@ -9,15 +9,13 @@ import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.User;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -28,12 +26,13 @@ class CartServiceTests {
     private CartService cartService;
     private CartRepository cartRepository;
 
+    private UserService userService;
+
 
     @BeforeEach
     public void setUp() {
         cartRepository = mock(CartRepository.class);
-        UserRepository userRepository = mock(UserRepository.class);
-        UserService userService = mock(UserService.class);
+        userService = mock(UserService.class);
         GameService gameService = mock(GameService.class);
         cartService = new CartService(userService ,cartRepository ,gameService);
     }
@@ -149,9 +148,12 @@ class CartServiceTests {
 
     @Test
     void should_createCartForUser_params_OK() {
-
-        //when
-        cartService.createCartForUser(Mockito.anyInt());
+        User user = new User();
+        user.setId(1);
+        user.setUsername("Example");
+        user.setEmail("Example");
+        when(userService.userById(5)).thenReturn(user);
+        cartService.createCartForUser(5);
         //then
         verify(cartRepository ,times(1)).save(Mockito.any(Cart.class));
 

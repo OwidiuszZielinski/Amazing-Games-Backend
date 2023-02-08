@@ -26,13 +26,13 @@ public class CartService {
                 .orElseThrow(() -> new CartNotFound("Cart for this user not found")));
     }
 
-    boolean checkCartExists(int userId) {
+    public boolean checkCartExists(int userId) {
         return cartRepository.findByUserId(userId).isPresent();
     }
 
 
-    public CartDTO addGameToCart(int id, int gameId) {
-        Cart cart = getUserCart(id);
+    public CartDTO addGameToCart(int cartId, int gameId) {
+        Cart cart = getUserCart(cartId);
         final List<CartDetail> cartDetails = cart.getCartDetails();
         boolean gameIsInCart = cartDetails.stream().anyMatch(game -> game.getGame().getId() == gameId);
         if (gameIsInCart) {
@@ -44,8 +44,8 @@ public class CartService {
         return CartDTO.from(cart);
     }
 
-    public void deleteGameFromCart(int id, int gameId) {
-        Cart cart = getUserCart(id);
+    public void deleteGameFromCart(int userId, int gameId) {
+        Cart cart = getUserCart(userId);
         boolean removeIf = cart.getCartDetails().removeIf(x -> x.getGame().getId() == gameId);
         if (removeIf) {
             cartRepository.save(cart);
@@ -53,24 +53,24 @@ public class CartService {
             throw new GameNotFound("game not found in cart");
     }
 
-    public CartDTO cleanCart(int id) {
-        boolean check = checkCartExists(id);
+    public CartDTO cleanCart(int userId) {
+        boolean check = checkCartExists(userId);
         if (!check) {
             throw new IllegalArgumentException("this cart not exists");
         }
-        final Cart cart = getUserCart(id);
+        final Cart cart = getUserCart(userId);
         cart.getCartDetails().clear();
         cartRepository.save(cart);
         return CartDTO.from(cart);
     }
 
-    public CartDTO createCartForUser(int id) {
-        boolean check = checkCartExists(id);
+    public CartDTO createCartForUser(int userId) {
+        boolean check = checkCartExists(userId);
         if (check) {
             throw new IllegalArgumentException("cart for this user exists");
         } else {
             final Cart userCart = new Cart();
-            userCart.setUser(userService.userById(id));
+            userCart.setUser(userService.userById(userId));
             cartRepository.save(userCart);
             return CartDTO.from(userCart);
         }
@@ -85,8 +85,8 @@ public class CartService {
 
     }
 
-    public Cart getUserCart(int id) {
-        return cartRepository.findByUserId(id)
+    public Cart getUserCart(int userId) {
+        return cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new CartNotFound("Cart for this user not found"));
     }
 

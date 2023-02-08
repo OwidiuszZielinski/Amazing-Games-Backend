@@ -144,14 +144,13 @@ class UserServiceTest {
     @Test
     void should_validate_username_to_short() {
         //given
-        final UserDTO givenUser = UserDTO.builder().username("short").build();
-        final User user = new User();
-        user.setUsername("minimum6characters");
+        User user = new User();
+        user.setUsername("shor");
         user.setEmail("minimum@gmail.com");
         user.setPassword("password");
         when(userRepository.findAll()).thenReturn(Collections.singletonList(user));
         //when
-        boolean validate = userService.validateUsername(givenUser);
+        boolean validate = userService.validateUsername(UserDTO.from(user));
         //then
         assertTrue(validate);
     }

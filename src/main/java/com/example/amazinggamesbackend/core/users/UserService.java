@@ -72,7 +72,7 @@ public class UserService {
 
 
     public boolean validateUsername(UserDTO user) {
-        return user.getEmail().length() < 6;
+        return user.getUsername().length() < 6;
 
     }
 

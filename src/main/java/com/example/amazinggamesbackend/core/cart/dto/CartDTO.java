@@ -2,13 +2,12 @@ package com.example.amazinggamesbackend.core.cart.dto;
 
 import com.example.amazinggamesbackend.core.cart.model.Cart;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
-
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder

@@ -34,7 +34,7 @@ class CartControllerTest {
         //given
         final int givenUserId = 1;
         //when
-        mockMvc.perform(get("/cart/" + givenUserId))
+        mockMvc.perform(get("/carts/" + givenUserId))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().is(200));
         //then
@@ -45,7 +45,7 @@ class CartControllerTest {
         //given
         final int givenUserId = 10;
         //when
-        mockMvc.perform(get("/cart/" + givenUserId))
+        mockMvc.perform(get("/carts/" + givenUserId))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().is(422));
 
@@ -57,7 +57,7 @@ class CartControllerTest {
         //given
         final int givenUserId = 1;
         //when
-        MvcResult mvcResult = mockMvc.perform(post("/cart")
+        MvcResult mvcResult = mockMvc.perform(post("/carts/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(String.valueOf(givenUserId)))
                 .andDo(print())
@@ -72,7 +72,7 @@ class CartControllerTest {
         final int givenUserId = 5;
         //when
 
-        MvcResult mvcResult = mockMvc.perform(post("/cart")
+        MvcResult mvcResult = mockMvc.perform(post("/carts/")
                         .content(String.valueOf(givenUserId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(201))
@@ -81,20 +81,6 @@ class CartControllerTest {
 
     }
 
-    //    @Test
-//    public void should_create_cart_from_user_badUserId() throws Exception {
-//        //given
-//        final int givenUserId = 10;
-//        //when
-//
-//         mockMvc.perform(post("/cart")
-//                        .content(String.valueOf(givenUserId))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                 .andExpect()
-//
-//        //then
-//
-//    }
     @Test
     public void should_add_to_cart() throws Exception {
         //given
@@ -102,7 +88,7 @@ class CartControllerTest {
         final int givenGameId = 1;
         //when
 
-        MvcResult mvcResult = mockMvc.perform(put("/cart/{userId}", givenUserId)
+        MvcResult mvcResult = mockMvc.perform(put("/carts/{userId}", givenUserId)
                         .content(String.valueOf(givenGameId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(202))
@@ -120,7 +106,7 @@ class CartControllerTest {
         final int givenGameId = 10;
         //when
 
-        MvcResult mvcResult = mockMvc.perform(put("/cart/{userId}", givenUserId)
+        MvcResult mvcResult = mockMvc.perform(put("/carts/{userId}", givenUserId)
                         .content(String.valueOf(givenGameId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(422))
@@ -138,7 +124,7 @@ class CartControllerTest {
         final int givenGameId = 1;
         //when
 
-        MvcResult mvcResult = mockMvc.perform(put("/cart/{userId}", givenUserId)
+        MvcResult mvcResult = mockMvc.perform(put("/carts/{userId}", givenUserId)
                         .content(String.valueOf(givenGameId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(422))
@@ -154,12 +140,12 @@ class CartControllerTest {
         //given
         final int givenUserId = 1;
         final int givenGameId = 1;
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameId))
                 .contentType(MediaType.APPLICATION_JSON));
 
         //when
-        mockMvc.perform(delete("/cart/{userId}", givenUserId)
+        mockMvc.perform(delete("/carts/{userId}", givenUserId)
                         .content(String.valueOf(givenGameId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(200)).andReturn();
@@ -172,12 +158,12 @@ class CartControllerTest {
         final int givenUserId = 1;
         final int givenGameId = 1;
         final int badUserId = 2;
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameId))
                 .contentType(MediaType.APPLICATION_JSON));
 
         //when
-        mockMvc.perform(delete("/cart/{userId}", badUserId)
+        mockMvc.perform(delete("/carts/{userId}", badUserId)
                         .content(String.valueOf(givenGameId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(422)).andReturn();
@@ -190,12 +176,12 @@ class CartControllerTest {
         final int givenUserId = 1;
         final int givenGameId = 1;
         final int badGameId = 2;
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameId))
                 .contentType(MediaType.APPLICATION_JSON));
 
         //when
-        mockMvc.perform(delete("/cart/{userId}", givenUserId)
+        mockMvc.perform(delete("/carts/{userId}", givenUserId)
                         .content(String.valueOf(badGameId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is(422)).andReturn();
@@ -208,15 +194,15 @@ class CartControllerTest {
         final int givenUserId = 1;
         final int givenGameId = 1;
         final int givenGameIdTwo = 2;
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameId))
                 .contentType(MediaType.APPLICATION_JSON));
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameIdTwo))
                 .contentType(MediaType.APPLICATION_JSON));
         //when
-        mockMvc.perform(put("/cart/{userId}/clean", givenUserId))
-                .andExpect(status().is(200));
+        mockMvc.perform(put("/carts/{userId}/clean", givenUserId))
+                .andExpect(status().is(202));
 
     }
 
@@ -226,14 +212,14 @@ class CartControllerTest {
         final int givenUserId = 10;
         final int givenGameId = 1;
         final int givenGameIdTwo = 2;
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameId))
                 .contentType(MediaType.APPLICATION_JSON));
-        mockMvc.perform(put("/cart/{userId}", givenUserId)
+        mockMvc.perform(put("/carts/{userId}", givenUserId)
                 .content(String.valueOf(givenGameIdTwo))
                 .contentType(MediaType.APPLICATION_JSON));
         //when
-        mockMvc.perform(put("/cart/{userId}/clean", givenUserId))
+        mockMvc.perform(put("/carts/{userId}/clean", givenUserId))
                 .andExpect(status().is(422));
 
     }
