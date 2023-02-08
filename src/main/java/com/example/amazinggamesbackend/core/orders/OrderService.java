@@ -8,7 +8,7 @@ import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.core.orders.model.Order;
 import com.example.amazinggamesbackend.core.orders.model.OrderStatus;
 import com.example.amazinggamesbackend.core.tax.Rates;
-import com.example.amazinggamesbackend.core.tax.Tax;
+import com.example.amazinggamesbackend.config.Tax;
 import com.example.amazinggamesbackend.core.users.UserService;
 import com.example.amazinggamesbackend.core.users.model.User;
 import com.example.amazinggamesbackend.interfaces.FormatValue;
@@ -107,9 +107,9 @@ public class OrderService implements FormatValue {
 
     public double calculateTax(double priceWithoutTax, User user) {
         double tax = 0;
-        for (Rates x : Tax.getInstance().getRates()) {
-            if (x.getCountry_id() == user.getCountry_id()) {
-                tax = priceWithoutTax * (x.getStandard_rate() / 100);
+        for (Rates rate : Tax.readTaxFromFile()) {
+            if (rate.getCountry_id() == user.getCountry_id()) {
+                tax = priceWithoutTax * (rate.getStandard_rate() / 100);
             }
         }
         return format(priceWithoutTax + tax);
