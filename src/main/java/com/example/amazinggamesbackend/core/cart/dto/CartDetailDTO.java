@@ -19,9 +19,11 @@ public class CartDetailDTO {
     private int quantity;
 
     public static CartDetailDTO from(CartDetail cartDetail) {
-        return CartDetailDTO.builder().quantity(cartDetail.getQuantity()).game(GameDTO.from(cartDetail.getGame())).build();
+        return CartDetailDTO.builder()
+                .quantity(cartDetail.getQuantity())
+                .game(GameDTO.from(cartDetail.getGame()))
+                .build();
     }
-
 
     public static List<CartDetailDTO> fromList(List<CartDetail> cartDetail) {
         List<CartDetailDTO> templist = new ArrayList<>();
@@ -36,11 +38,11 @@ public class CartDetailDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartDetailDTO that = (CartDetailDTO) o;
-        return quantity == that.quantity && Objects.equals(game ,that.game);
+        return quantity == that.quantity && Objects.equals(game, that.game);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(game ,quantity);
+        return Objects.hash(game, quantity);
     }
 }

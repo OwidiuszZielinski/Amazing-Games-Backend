@@ -50,7 +50,7 @@ public class OrderService implements FormatValue {
 
     }
 
-    //TODO nie robimy jednoliterkowcow w petlach nigdzie
+
     public List<OrderDTO> getAllOrders() {
         List<OrderDTO> orderList = new ArrayList<>();
         for (Order order : getOrders()) {
@@ -85,13 +85,13 @@ public class OrderService implements FormatValue {
 
     }
 
-    public List<Order> getAllById(List<Integer> ids) {
-        return orderRepository.findAllById(ids);
+    public List<Order> getAllById(List<Integer> orderIds) {
+        return orderRepository.findAllById(orderIds);
     }
 
 
-    public EditOrderDTO updateOrder(int id, EditOrderDTO order) {
-        Order orderById = getOrderById(id);
+    public EditOrderDTO updateOrder(int orderId, EditOrderDTO order) {
+        Order orderById = getOrderById(orderId);
         orderById.setStatus(order.getStatus());
         orderById.setGames(gameService.gamesInOrder(order.getGames()));
         orderById.setValue(format(gameService.calculateOrderValue(order.getGames())));
@@ -100,8 +100,8 @@ public class OrderService implements FormatValue {
     }
 
 
-    public Order getOrderById(int id) {
-        return orderRepository.findById(id).orElseThrow(() -> new NoSuchElementException("This order not found"));
+    public Order getOrderById(int orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new NoSuchElementException("This order not found"));
     }
 
 

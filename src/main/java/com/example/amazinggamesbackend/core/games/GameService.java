@@ -71,22 +71,22 @@ public class GameService {
 
 
 
-    public void otherEntityCleaner(List<Integer> ids) {
-        clearGamesInCart(ids);
-        clearGamesInOrder(ids);
+    public void otherEntityCleaner(List<Integer> gameIds) {
+        clearGamesInCart(gameIds);
+        clearGamesInOrder(gameIds);
     }
 
-    public void clearGamesInCart(List<Integer> ids) {
+    public void clearGamesInCart(List<Integer> gameIds) {
 
-        for (Game x : getAllByIds(ids)) {
+        for (Game x : getAllByIds(gameIds)) {
             x.getCartDetails().remove(x.getCartDetails());
             gameRepository.save(x);
         }
 
     }
 
-    public void clearGamesInOrder(List<Integer> ids) {
-        for (Game x : getAllByIds(ids)) {
+    public void clearGamesInOrder(List<Integer> gameIds) {
+        for (Game x : getAllByIds(gameIds)) {
             x.getCartDetails().remove(x.getCartDetails());
             gameRepository.save(x);
         }
@@ -101,16 +101,16 @@ public class GameService {
                 .sum();
     }
 
-    public List<Game> getAllByIds(List<Integer> games) {
-        return gameRepository.findAllById(games);
+    public List<Game> getAllByIds(List<Integer> gameIds) {
+        return gameRepository.findAllById(gameIds);
     }
 
-    public Set<Game> gamesInOrder(List<Integer> games) {
-        return new HashSet<>(getAllByIds(games));
+    public Set<Game> gamesInOrder(List<Integer> gameIds) {
+        return new HashSet<>(getAllByIds(gameIds));
     }
 
-    public Game getGameById(int id) {
-        return gameRepository.findById(id).orElseThrow(() -> new GameNotFound("Not found"));
+    public Game getGameById(int gameId) {
+        return gameRepository.findById(gameId).orElseThrow(() -> new GameNotFound("Not found"));
     }
 
     public List<Game> getAllGames() {
@@ -128,8 +128,8 @@ public class GameService {
 
 
     //@Scheduled(fixedRate = 100000)
-    public List<Game> freeGames(List<Game> list) {
-        return list.stream()
+    public List<Game> freeGames(List<Game> games) {
+        return games.stream()
                 .filter(game -> game.getPrice() == 0)
                 .collect(Collectors.toList());
     }

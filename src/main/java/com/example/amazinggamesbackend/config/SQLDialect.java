@@ -59,7 +59,6 @@ public class SQLDialect extends Dialect {
     }
 
 
-
     public boolean supportsTemporaryTables() {
         return true;
     }

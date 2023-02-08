@@ -9,5 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public abstract class Notification {
     protected String message;
+
     protected abstract String getMessage(String msg);
 }

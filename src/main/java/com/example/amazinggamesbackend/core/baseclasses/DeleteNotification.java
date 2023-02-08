@@ -1,6 +1,6 @@
 package com.example.amazinggamesbackend.core.baseclasses;
 
-public class DeleteNotification extends Notification{
+public class DeleteNotification extends Notification {
     public DeleteNotification(String message) {
         super(message);
     }

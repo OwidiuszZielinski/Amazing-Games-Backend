@@ -75,11 +75,11 @@ public class DiscountService {
         return gameService.getGames();
     }
 
-    public void saveDiscountGameToFile(int id) {
+    public void saveDiscountGameToFile(int discountId) {
         try {
             File file = new File("src/main/resources/discount.txt");
             FileWriter fw = new FileWriter(file);
-            fw.write(String.valueOf(id));
+            fw.write(String.valueOf(discountId));
             fw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -2,6 +2,7 @@ package com.example.amazinggamesbackend.security;
 
 import com.example.amazinggamesbackend.core.users.UserRepository;
 import com.example.amazinggamesbackend.core.users.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.Optional;
-
+@RequiredArgsConstructor
 @Component
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

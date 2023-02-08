@@ -23,7 +23,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "users")
-@JsonIgnoreProperties({ "hibernateLazyInitializer" ,"handler" })
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class User extends BaseEntity implements UserDetails {
     @NotEmpty(message = "The name is required.")
     @Size(min = 6, max = 30, message = "The length of name must be between 6 and 30 characters.")
@@ -44,11 +44,9 @@ public class User extends BaseEntity implements UserDetails {
     private List<Order> orders;
 
 
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
     private Cart cart;
-
 
 
     public void fromDTO(UserDTO userDTO) {
@@ -62,7 +60,7 @@ public class User extends BaseEntity implements UserDetails {
 
     }
 
-    //Ta dziwna skladnia znaczy ze Klasa musi rozszerzac grandet authroity
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton((new SimpleGrantedAuthority(roles)));

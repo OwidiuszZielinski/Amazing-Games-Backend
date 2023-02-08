@@ -18,7 +18,7 @@ public class CartDTO {
     private List<CartDetailDTO> cartDetailsInfo;
     private UserDTO user;
 
-    public static CartDTO from(Cart shoppingCart){
+    public static CartDTO from(Cart shoppingCart) {
         return CartDTO.builder()
                 .id(shoppingCart.getId())
                 .cartDetailsInfo(CartDetailDTO.fromList(shoppingCart.getCartDetails()))

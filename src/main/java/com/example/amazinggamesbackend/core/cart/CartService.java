@@ -3,30 +3,23 @@ package com.example.amazinggamesbackend.core.cart;
 
 import com.example.amazinggamesbackend.core.cart.dto.CartDTO;
 import com.example.amazinggamesbackend.core.cart.exceptions.CartNotFound;
-import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
-import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.cart.model.Cart;
+import com.example.amazinggamesbackend.core.cart.model.CartDetail;
 import com.example.amazinggamesbackend.core.games.GameService;
+import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.users.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
 public class CartService {
     private final UserService userService;
     private final CartRepository cartRepository;
     private final GameService gameService;
 
-
-    @Autowired
-    public CartService(UserService userService, CartRepository cartRepository, GameService gameService) {
-        this.userService = userService;
-        this.cartRepository = cartRepository;
-        this.gameService = gameService;
-    }
 
     public CartDTO getCartByUserId(int userId) {
         return CartDTO.from(cartRepository.findByUserId(userId)
@@ -58,7 +51,6 @@ public class CartService {
             cartRepository.save(cart);
         } else
             throw new GameNotFound("game not found in cart");
-
     }
 
     public CartDTO cleanCart(int id) {
@@ -84,7 +76,6 @@ public class CartService {
         }
     }
 
-
     public void increaseGameQty(Cart cart, int gameId) {
         CartDetail cartDetail = cart.getCartDetails()
                 .stream()
@@ -94,9 +85,9 @@ public class CartService {
 
     }
 
-    //Service method return Entity
     public Cart getUserCart(int id) {
-        return cartRepository.findByUserId(id).orElseThrow(() -> new CartNotFound("Cart for this user not found"));
+        return cartRepository.findByUserId(id)
+                .orElseThrow(() -> new CartNotFound("Cart for this user not found"));
     }
 
 

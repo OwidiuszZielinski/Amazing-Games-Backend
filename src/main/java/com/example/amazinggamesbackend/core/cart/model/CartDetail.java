@@ -21,24 +21,23 @@ public class CartDetail {
     private Game game;
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    //@JsonIgnore
     private Cart cart;
 
     private int quantity;
 
-    public CartDetail(Game game,int quantity) {
+    public CartDetail(Game game, int quantity) {
         this.game = game;
         this.quantity = quantity;
     }
 
-    public CartDetail(Game game,Cart cart,int quantity) {
+    public CartDetail(Game game, Cart cart, int quantity) {
         this.game = game;
         this.cart = cart;
         this.quantity = quantity;
     }
 
-    public void increaseQty(){
-        this.quantity = quantity+1;
+    public void increaseQty() {
+        this.quantity = quantity + 1;
     }
 
 

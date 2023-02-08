@@ -5,6 +5,7 @@ import com.example.amazinggamesbackend.core.games.DiscountService;
 import com.example.amazinggamesbackend.core.games.GameService;
 import com.example.amazinggamesbackend.core.games.dto.DeleteArrayDTO;
 import com.example.amazinggamesbackend.core.games.dto.GameDTO;
+import com.example.amazinggamesbackend.core.games.exceptions.FreeGame;
 import com.example.amazinggamesbackend.core.games.exceptions.GameNotFound;
 import com.example.amazinggamesbackend.core.games.model.BestsellerService;
 import com.example.amazinggamesbackend.core.games.model.GameDayDiscount;
@@ -25,7 +26,7 @@ import java.util.NoSuchElementException;
 @RequestMapping("/games/")
 public class GameController {
 
-    @ExceptionHandler({GameNotFound.class, IllegalArgumentException.class, NoSuchElementException.class })
+    @ExceptionHandler({GameNotFound.class, IllegalArgumentException.class, NoSuchElementException.class, FreeGame.class })
     public ResponseEntity<ErrorResponse> handleException(RuntimeException ex) {
         return new ResponseEntity<>(new ErrorResponse(ex.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
