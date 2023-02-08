@@ -48,15 +48,14 @@ public class OrderController {
 
     @Operation(summary = "Delete order")
     @DeleteMapping
-    public ResponseEntity<Integer> deleteOrders(@RequestBody List<Integer> gameIds) {
+    public void deleteOrders(@RequestBody List<Integer> gameIds) {
         orderService.deleteOrders(gameIds);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     @Operation(summary = "Edit order by id")
-    @PatchMapping("/{Id}")
-    public ResponseEntity<EditOrderDTO> editOrder(@PathVariable int Id ,@RequestBody EditOrderDTO order) {
-        EditOrderDTO edited = orderService.updateOrder(Id, order);
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<EditOrderDTO> editOrder(@PathVariable int orderId ,@RequestBody EditOrderDTO order) {
+        EditOrderDTO edited = orderService.updateOrder(orderId, order);
         return new ResponseEntity<>(edited, HttpStatus.ACCEPTED);
     }
 

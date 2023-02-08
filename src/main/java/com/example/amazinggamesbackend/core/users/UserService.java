@@ -26,14 +26,13 @@ public class UserService {
 
     public UserDTO getUserMapToDTO(int id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-        return UserDTO.from(user);
+        return UserDTO.fromWithoutPassword(user);
     }
 
     public List<UserDTO> getAllUsers() {
         List<UserDTO> tempList = new ArrayList<>();
-        for (User x : Users()) {
-            tempList.add(UserDTO.fromWithoutPassword(x));
-
+        for (User user : Users()) {
+            tempList.add(UserDTO.fromWithoutPassword(user));
         }
         return tempList;
     }

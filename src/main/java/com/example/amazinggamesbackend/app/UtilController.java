@@ -7,6 +7,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
+@RequiredArgsConstructor
 @RestController
 public class UtilController {
 
     private final ObjectMapper objectMapper;
-
-    public UtilController(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
 
 
     @GetMapping("/qrcode")
@@ -31,7 +28,7 @@ public class UtilController {
         return ResponseEntity.ok().header("Content-Type", "image/png").body(image);
     }
 
-    @GetMapping("/apinfo")
+    @GetMapping("/info")
     public ResponseEntity<String> getInfo() throws Exception {
         String info = objectMapper.writeValueAsString(new AppInfo("MY-AWESOME-APP","1.0"));
         System.out.println(info);
@@ -45,6 +42,5 @@ public class UtilController {
         MatrixToImageWriter.writeToStream(bitMatrix, "PNG", pngOutputStream);
         return pngOutputStream.toByteArray();
     }
-
 
 }

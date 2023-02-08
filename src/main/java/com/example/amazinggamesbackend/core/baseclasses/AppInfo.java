@@ -13,8 +13,11 @@ public class AppInfo {
     private String name;
     private String version;
 
+    private String author;
+
     public AppInfo(String name, String version) {
         this.name = name;
         this.version = version;
+        this.author = "Owidiusz Zielinski";
     }
 }
