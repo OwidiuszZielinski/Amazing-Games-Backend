@@ -61,6 +61,6 @@ deploy-and-rollout:
     - export HELM_EXPERIMENTAL_OCI=1
     - |
       helm upgrade -i -n amazing-games-master --create-namespace masterbranch oci://reg.k8s.icydusk.io/owi-learning/amazing-games-helmchart/amazing-games --version 0.1.0 \
-      --set backend.path="amazing-games-master.icydusk.io" \
+      --set backend.path="amazing-games-master.k8s.icydusk.io" \
       --set regkey="$REGKEY"
       kubectl -n amazing-games-master rollout restart deployment amazinggames
