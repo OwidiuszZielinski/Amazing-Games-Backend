@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
-
+    private int id;
     @NotEmpty(message = "The name is required.")
     @Size(min = 6, max = 30, message = "The length of name must be between 6 and 30 characters.")
     private String username;
@@ -39,6 +39,7 @@ public class UserDTO {
     }
     public static UserDTO fromWithoutPassword(User user) {
         return UserDTO.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .roles(user.getRoles())
