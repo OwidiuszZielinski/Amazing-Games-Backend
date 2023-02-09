@@ -1,0 +1,66 @@
+stages:
+  - check-cluster
+  - build
+  - push
+  - rollout
+
+check-kube:
+  stage: check-cluster
+  image: 
+    name: bitnami/kubectl:1.24
+    entrypoint: ['']
+  tags: 
+    - xor
+  script:
+    - kubectl config get-contexts
+    - kubectl config use-context owi-learning/kubeconfig:xor
+    - kubectl -n gitlab-agent-owi  get pods -A
+
+build-docker-job:
+  tags:
+    - xor
+  stage: build
+  script:
+    - docker build -t reg.k8s.icydusk.io/owi-learning/amazing-games-backend:latest -t reg.k8s.icydusk.io/owi-learning/amazing-games-backend:$CI_COMMIT_SHA .
+
+publish-test-image:
+  tags:
+    - xor
+  stage: push
+  script:
+    - echo "$DOCKER_PASSWORD" | docker login reg.k8s.icydusk.io -u "$DOCKER_USERNAME" --password-stdin
+    - docker push reg.k8s.icydusk.io/owi-learning/amazing-games-backend:$CI_COMMIT_SHA
+
+
+publish-image:
+  tags:
+    - xor
+  stage: push
+  only:
+    - tags
+    - master
+  script:
+    - echo "$DOCKER_PASSWORD" | docker login reg.k8s.icydusk.io -u "$DOCKER_USERNAME" --password-stdin
+    - docker push reg.k8s.icydusk.io/owi-learning/amazing-games-backend:latest
+
+
+
+deploy-and-rollout:
+  stage: rollout
+  image: 
+    name: dtzar/helm-kubectl:3.10.2
+    entrypoint: ['']
+  tags: 
+    - xor
+  only:
+    - tags
+    - master
+  script:
+    - kubectl config use-context owi-learning/kubeconfig:xor
+    - echo "$DOCKER_PASSWORD" | helm registry login -u "$DOCKER_USERNAME" --password-stdin reg.k8s.icydusk.io
+    - export HELM_EXPERIMENTAL_OCI=1
+    - |
+      helm upgrade -i -n amazing-games-master --create-namespace masterbranch oci://reg.k8s.icydusk.io/owi-learning/amazing-games-helmchart/amazing-games --version 0.1.0 \
+      --set backend.path="amazing-games-master.icydusk.io" \
+      --set regkey="$REGKEY"
+      kubectl -n amazing-games-master rollout restart deployment amazinggames
