@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amazing-games
+  labels:
+    app: amazing-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amazing-backend
+  template:
+    metadata:
+      labels:
+        app: amazing-backend
+    spec:
+      containers:
+      - name: amazing-backend
+        image: reg.k8s.icydusk.io/owi-learning/amazing-games-backend:v1
+        ports:
+        - containerPort: 8082
