@@ -15,11 +15,10 @@ Application running on the cluster
 Description
 </h1>
 
-My first big application made in Spring. It allowed me to learn many mechanisms of frameworks and client-server communication. I created a simple frontend in vue.js. Although I'm currently focusing on Java. 
+My first bigger application made in Spring. It allowed me to learn many mechanisms of Spring framework and client-server communication. I've created a simple frontend in vue.js. Although I'm currently focusing on Java. 
 
-I used in the project
-JUnit5, Mockito, Maven, Spring-Boot, Docker, PostgreSQL, Hibernate, SQLite, SWAGGER
-AOP, Builder, Lombook, Spring Security, JWT, MVC, Exception Handler, Country-specific VAT Converter, DTO, JPA, QRCode Generator
+I've used JUnit5, Mockito, Maven, Spring-Boot, Docker, PostgreSQL, Hibernate, SQLite, SWAGGER
+AOP, Builder, Lombook, Spring Security, JWT, MVC, Exception Handler, Country-specific VAT Converter, DTO, JPA, QRCode Generator in the project.
 
 <h1>
 Screenshots
@@ -34,3 +33,60 @@ Screenshots
   <img src="https://drive.google.com/uc?id=1US1pUzo-7Zdjg4JfezpSDTmQx1iV6Ke8&export=download" style="border-radius:2%" width="1000"/>
   <br>
 </h1>
+
+## Installation
+
+You can clone this repository and use it localy:
+```sh
+$ https://github.com/OwidiuszZielinski/Amazing-Games-Backend.git
+```
+
+**Using Maven plugin**
+
+First you should do clean installation:
+```sh
+$ mvn clean install
+```
+You can start application using Spring Boot custom command:
+```sh
+$ mvn spring-boot:run
+```
+
+**Using Maven plugin and running JAR**
+
+You can create JAR file using:
+```sh
+$ mvn clean package
+```
+and then run it with:
+```sh
+$ java -jar target/amazing-games-backend-x.x.x.jar
+```
+
+## Run with docker
+
+You can build image with tag 
+
+```sh
+$docker build -t amazing-games .
+```
+Run docker image
+
+```sh
+$docker run -p 8080:8082 amazing-games
+```
+
+Open in browser 
+```
+http://localhost:8080/swagger-ui/index.html#/
+```
+
+## Tests
+
+Project has 65 tests
+You can run tests using:
+```sh
+$ mvn test
+```
+
+
