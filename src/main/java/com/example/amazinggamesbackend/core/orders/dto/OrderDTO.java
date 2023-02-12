@@ -31,11 +31,11 @@ public class OrderDTO {
                 .games(order.getGames().stream().mapToInt(Game::getId).boxed().toList())
                 .status(order.getStatus())
                 .date(order.getDate())
-                .value(order.getValue())
+                .value(roundToTwoDecimalPlaces(order.getValue()))
                 .build();
     }
-
-
-
+    public static double roundToTwoDecimalPlaces(double value) {
+        return Math.round(value * 100.0) / 100.0;
+    }
 
 }
