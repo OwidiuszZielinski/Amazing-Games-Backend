@@ -1,44 +1,91 @@
 <h1 align="center">
-  <img src="https://media.licdn.com/dms/image/C5612AQEqPdWopLo2uw/article-cover_image-shrink_720_1280/0/1609084531741?e=2147483647&v=beta&t=dSelVEog8OGV2SI9sRbXGI7p_zonzOaK0T1mi3XKnMw" width="240"/>
+  <img src="https://drive.google.com/uc?id=14qUlQWP3pebMTu1LYt9uIabVJ7ZyhQr1&export=download" style="border-radius:20%" width="1000"/>
   <br>
-  Amazing-Games
 </h1>
-<p align="center">
-  A simple application built with <a href="https://spring.io/projects/spring-boot">Spring Boot</a>, a popular Java-based framework for building microservices and web applications.
-</p>
-Prerequisites
-<p align="center">
-  <img src="https://img.shields.io/badge/-Java%208%2B-red?logo=java" alt="Java 8+"/>
-  <img src="https://img.shields.io/badge/-Maven-lightgrey?logo=apache%20maven" alt="Maven"/>
-</p>
-Running the Application
-You can run the application using the following command:
 
-Copy code
-mvn spring-boot:run
-The application will start up on http://localhost:8080.
 
-Endpoints
-<p align="center">
-  <img src="https://img.shields.io/badge/-GET%20%2F-blue?logo=get-postman" alt="GET /"/>
-</p>
-The following endpoints are available:
+<h1>
+Application running on the cluster
+</h1>
 
-Endpoint	Description
-GET /	A simple greeting message
-Built With
-<p align="center">
-  <img src="https://img.shields.io/badge/-Spring%20Boot-brightgreen?logo=spring" alt="Spring Boot"/>
-  <img src="https://img.shields.io/badge/-Maven-lightgrey?logo=apache%20maven" alt="Maven"/>
-</p>
-Contributing
-<p align="center">
-  <img src="https://img.shields.io/badge/-Contribute-blueviolet?logo=git" alt="Contribute"/>
-</p>
-Contributions are welcome! If you find a bug, please open an issue and if you'd like to contribute, please submit a pull request.
+<p align="center"><h3><a href="https://amazing-games-master.k8s.icydusk.io/swagger-ui/index.html#/">You don't need to download anything, just click here and try this</a></h3></p>
 
-License
-<p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-yellowgreen?logo=MIT" alt="MIT License"/>
-</p>
-This project is licensed under the MIT License. See the LICENSE file for details.
+
+<h1>
+Description
+</h1>
+
+My first bigger application made in Spring. It allowed me to learn many mechanisms of Spring framework and client-server communication. I've created a simple frontend in vue.js. Although I'm currently focusing on Java.
+
+I've used JUnit5, Mockito, Maven, Spring-Boot, Docker, PostgreSQL, Hibernate, SQLite, SWAGGER
+AOP, Builder, Lombook, Spring Security, JWT, MVC, Exception Handler, Country-specific VAT Converter, DTO, JPA, QRCode Generator in the project.
+
+<h1>
+Screenshots
+</h1>
+
+<h1 align="center">
+  <img src="https://drive.google.com/uc?id=1mylwwnkCiOfT4g31j-bjKNbh6cYqN3YF&export=download" width="1000"/>
+  <br>
+</h1>
+
+<h1 align="center">
+  <img src="https://drive.google.com/uc?id=1US1pUzo-7Zdjg4JfezpSDTmQx1iV6Ke8&export=download" style="border-radius:2%" width="1000"/>
+  <br>
+</h1>
+
+## Installation
+
+You can clone this repository and use it localy:
+```sh
+$ https://github.com/OwidiuszZielinski/Amazing-Games-Backend.git
+```
+
+**Using Maven plugin**
+
+First you should do clean installation:
+```sh
+$ mvn clean install
+```
+You can start application using Spring Boot custom command:
+```sh
+$ mvn spring-boot:run
+```
+
+**Using Maven plugin and running JAR**
+
+You can create JAR file using:
+```sh
+$ mvn clean package
+```
+and then run it with:
+```sh
+$ java -jar target/amazing-games-backend-x.x.x.jar
+```
+
+## Run with docker
+
+You can build image with tag
+
+```sh
+$docker build -t amazing-games .
+```
+Run docker image
+
+```sh
+$docker run -p 8080:8082 amazing-games
+```
+
+Open in browser
+```
+http://localhost:8080/swagger-ui/index.html#/
+```
+
+## Tests
+
+Project has 65 tests
+You can run tests using:
+```sh
+$ mvn test
+```
+
