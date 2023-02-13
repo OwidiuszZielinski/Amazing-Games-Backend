@@ -7,22 +7,23 @@ import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-@Data
 @Entity
+@Data
 @Table(name = "users")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class User extends BaseEntity implements UserDetails {
@@ -39,8 +40,7 @@ public class User extends BaseEntity implements UserDetails {
     private int country_id;
     private String address;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String roles;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
     private List<Order> orders;
@@ -50,14 +50,11 @@ public class User extends BaseEntity implements UserDetails {
     @JsonBackReference
     private Cart cart;
 
-    public String getUsername() {
-        return email;
-    }
 
     public void fromDTO(UserDTO userDTO) {
 
         this.username = userDTO.getUsername();
-        this.role = userDTO.getRole();
+        this.roles = userDTO.getRoles();
         this.email = userDTO.getEmail();
         this.password = userDTO.getPassword();
         this.country_id = userDTO.getCountry_id();
@@ -68,7 +65,18 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return Collections.singleton((new SimpleGrantedAuthority(roles)));
+    }
+
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
     }
 
     @Override

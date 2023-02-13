@@ -2,12 +2,12 @@ package com.example.amazinggamesbackend.core.orders.model;
 
 import com.example.amazinggamesbackend.core.games.model.Game;
 import com.example.amazinggamesbackend.core.users.model.User;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;

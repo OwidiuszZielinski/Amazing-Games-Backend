@@ -5,6 +5,7 @@ import com.example.amazinggamesbackend.core.users.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -14,13 +15,13 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
     private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
 
 
     public UserDTO getUserMapToDTO(int userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NoSuchElementException("User not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
         return UserDTO.fromWithoutPassword(user);
     }
 
@@ -35,7 +36,7 @@ public class UserService {
     private List<User> Users() {
         List<User> userRepositoryAll = userRepository.findAll();
         if (userRepositoryAll.isEmpty()) {
-           throw new NoSuchElementException("No users in DB");
+            throw new NotFoundException("No users in DB");
         }
         return userRepositoryAll;
     }
@@ -63,8 +64,7 @@ public class UserService {
         if (user.getPassword().isBlank()) {
             update.setPassword(update.getPassword());
         } else {
-
-            //update.setPassword(passwordEncoder.encode(user.getPassword()));
+            update.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userRepository.save(update);
         return user;

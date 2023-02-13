@@ -10,7 +10,7 @@ import com.example.amazinggamesbackend.core.orders.dto.EditOrderDTO;
 import com.example.amazinggamesbackend.core.orders.dto.OrderDTO;
 import com.example.amazinggamesbackend.exceptions.ErrorResponse;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
