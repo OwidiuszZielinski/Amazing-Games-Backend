@@ -1,9 +1,10 @@
 package com.example.amazinggamesbackend.core.cart.model;
 
 import com.example.amazinggamesbackend.core.users.model.User;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 

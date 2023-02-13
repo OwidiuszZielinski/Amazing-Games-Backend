@@ -11,6 +11,5 @@ public class TaxReader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         List<Rates> rates = Tax.readTaxFromFile();
-        System.out.println(rates);
     }
 }

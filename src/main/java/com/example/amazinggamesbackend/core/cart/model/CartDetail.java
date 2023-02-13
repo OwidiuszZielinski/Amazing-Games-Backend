@@ -1,11 +1,11 @@
 package com.example.amazinggamesbackend.core.cart.model;
 
 import com.example.amazinggamesbackend.core.games.model.Game;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 
 @Entity
 @Getter
