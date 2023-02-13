@@ -8,17 +8,24 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 import java.util.List;
-@Entity
 @Data
+@Entity
 @Table(name = "users")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-public class User extends BaseEntity  {
+public class User extends BaseEntity implements UserDetails {
     @NotEmpty(message = "The name is required.")
     @Size(min = 6, max = 30, message = "The length of name must be between 6 and 30 characters.")
     private String username;
@@ -32,7 +39,8 @@ public class User extends BaseEntity  {
     private int country_id;
     private String address;
 
-    private String roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.MERGE)
     @JsonBackReference
     private List<Order> orders;
@@ -42,11 +50,14 @@ public class User extends BaseEntity  {
     @JsonBackReference
     private Cart cart;
 
+    public String getUsername() {
+        return email;
+    }
 
     public void fromDTO(UserDTO userDTO) {
 
         this.username = userDTO.getUsername();
-        this.roles = userDTO.getRoles();
+        this.role = userDTO.getRole();
         this.email = userDTO.getEmail();
         this.password = userDTO.getPassword();
         this.country_id = userDTO.getCountry_id();
@@ -55,5 +66,28 @@ public class User extends BaseEntity  {
     }
 
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

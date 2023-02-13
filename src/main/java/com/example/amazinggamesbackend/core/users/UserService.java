@@ -3,6 +3,7 @@ package com.example.amazinggamesbackend.core.users;
 import com.example.amazinggamesbackend.core.users.dto.UserDTO;
 import com.example.amazinggamesbackend.core.users.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -14,7 +15,7 @@ import java.util.NoSuchElementException;
 @Service
 public class UserService {
 
-
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
 

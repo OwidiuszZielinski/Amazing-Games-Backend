@@ -1,5 +1,6 @@
 package com.example.amazinggamesbackend.core.users.dto;
 
+import com.example.amazinggamesbackend.core.users.model.Role;
 import com.example.amazinggamesbackend.core.users.model.User;
 import lombok.*;
 
@@ -22,7 +23,7 @@ public class UserDTO {
     @NotEmpty(message = "The EMAIL is required.")
     @Size(min = 6, max = 30, message = "The length of EMAIL must be between 6 and 30 characters.")
     private String email;
-    private String roles;
+    private Role role;
     private String address;
     private int country_id;
 
@@ -32,7 +33,7 @@ public class UserDTO {
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .email(user.getEmail())
-                .roles(user.getRoles())
+                .role(user.getRole())
                 .address(user.getAddress())
                 .country_id(user.getCountry_id())
                 .build();
@@ -42,7 +43,7 @@ public class UserDTO {
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .roles(user.getRoles())
+                .role(user.getRole())
                 .address(user.getAddress())
                 .country_id(user.getCountry_id())
                 .build();
